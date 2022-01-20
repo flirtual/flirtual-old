@@ -1,4 +1,7 @@
-if {!~ $REQUEST_METHOD POST} { return 0 }
+if {!~ $REQUEST_METHOD POST ||
+    ~ $p_from_landingpage true} {
+    return 0
+}
 
 (uexists eexists reserved) = `` \n {redis graph read 'OPTIONAL MATCH (uu:user)
                                                       WHERE toLower(uu.username) = '''`^{echo $p_username | tr 'A-Z' 'a-z'}^'''

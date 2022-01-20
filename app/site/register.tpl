@@ -37,7 +37,7 @@
                   </tr>
               </table>
 
-              <input type="hidden" name="referred_via" value="%(`{if {! isempty $p_referred_via} { echo $p_referred_via | escape_html } {! isempty $q_invite} { echo $q_invite | escape_html }}%)">
+              <input type="hidden" name="referred_via" value="%(`{if {! isempty $p_referred_via} { echo $p_referred_via | escape_html }}%)">
               <input type="hidden" name="theme" value="light">
 
               <br />

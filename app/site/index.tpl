@@ -32,11 +32,19 @@
           <h2>using any VR app or headset</h2>
 
           <br />
-%         if {~ $q_invite [A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9]} {
-              <a href="/register?invite=%($q_invite%)" class="btn btn-mango" style="white-space: nowrap; transform: translateY(24px)">Sign me up</a>
-%         } {
-              <a href="/register" class="btn btn-mango" style="white-space: nowrap; transform: translateY(24px)">Sign me up</a>
-%         }
+          <form action="/register" method="POST">
+              <input type="hidden" name="referred_via" value="%($q_invite%)">
+              <table style="max-width: 800px; margin: 0 auto">
+                  <tr>
+                      <td style="width: 100%">
+                          <input type="email" name="email" required placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
+                      </td>
+                      <td>
+                          <button type="submit" name="from_landingpage" value="true" class="btn btn-mango" style="white-space: nowrap; transform: translateY(24px)">Sign me up</button>
+                      </td>
+                  </tr>
+              </table>
+          </form>
       </div></div>
 
       <div id="s2" class="section"><div class="row grid">
@@ -83,11 +91,19 @@
               <h1>Ready to get social?</h1>
 
               <br />
-%             if {~ $q_invite [A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9][A-Z0-9]} {
-                  <a href="/register?invite=%($q_invite%)" class="btn btn-blueraspberry" style="white-space: nowrap; transform: translate(8px, 20px)">Sign me up</a>
-%             } {
-                  <a href="/register" class="btn btn-blueraspberry" style="white-space: nowrap; transform: translate(8px, 20px)">Sign me up</a>
-%             }
+              <form action="/register" method="POST">
+                  <input type="hidden" name="referred_via" value="%($q_invite%)">
+                  <table style="max-width: 800px; margin: 0 auto 15px auto">
+                      <tr>
+                          <td style="width: 100%">
+                              <input type="email" name="email" required placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
+                          </td>
+                          <td>
+                              <button type="submit" name="from_landingpage" value="true" class="btn btn-blueraspberry" style="white-space: nowrap; transform: translate(8px, 20px)">Sign me up</button>
+                          </td>
+                      </tr>
+                  </table>
+              </form>
           </div>
       </div>
 
