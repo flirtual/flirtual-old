@@ -17,8 +17,8 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
 # Remove user from friends list
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[f:FRIENDS]-(b:user {username: '''$p_user'''})
                    DELETE f'
-xmpp delete_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'", "nick": "'$p_user'", "group": "Friends", "subs": "both"}'
-xmpp delete_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'", "nick": "'$logged_user'", "group": "Friends", "subs": "both"}'
+xmpp delete_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'"}'
+xmpp delete_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'"}'
 
 if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
     # Follow redirect
