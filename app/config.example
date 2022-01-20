@@ -1,2 +1,17 @@
-app = My kwerc app
-debug = false
+app = 'My awesome app'
+domain = 'example.com'
+email = 'noreply@example.com'
+debug = 'false'
+
+REDISCLI_HOST = 'redis.example.com'
+REDISCLI_PORT = '12345'
+REDISCLI_AUTH = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+REDISCLI_DB = 'kwerc'
+
+XMPP_HOST = 'chat.example.com'
+XMPP_PORT = '5443'
+XMPP_USER = 'chatadmin'
+XMPP_PASSWORD = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
+HCAPTCHA_SITEKEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+HCAPTCHA_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'

@@ -1,0 +1,21 @@
+<p>Please click here to confirm your email:</p>
+
+<p><a href="https://rovrapp.com/confirm?id=$confirm" class="btn">Confirm</a></p>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "description": "Confirm your email",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "url": "$confirm",
+    "name": "Confirm"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ROVR",
+    "url": "https://rovrapp.com/"
+  }
+}
+</script>

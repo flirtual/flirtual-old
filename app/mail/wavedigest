@@ -1,0 +1,25 @@
+<p>$numwaves waved at you this week on ROVR.</p>
+
+<p>Visit your <a href="https://rovrapp.com/notifications">notifications page</a> to check out their $profiles and add them as a friend! Once you're friends, you'll be able to message each other and meet up in VR.</p>
+
+<a href="https://rovrapp.com/notifications" class="btn">Check your waves</a>
+
+$newfriends
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "description": "Check your waves",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "url": "https://rovrapp.com/notifications",
+    "name": "Notifications"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ROVR",
+    "url": "https://rovrapp.com/"
+  }
+}
+</script>

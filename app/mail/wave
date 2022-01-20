@@ -1,0 +1,21 @@
+<p>Check out their profile to add them as a friend:</p>
+
+<p><a href="https://rovrapp.com/notifications" class="btn">Check your waves</a></p>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "description": "Check your waves",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "url": "https://rovrapp.com/notifications",
+    "name": "Notifications"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ROVR",
+    "url": "https://rovrapp.com/"
+  }
+}
+</script>

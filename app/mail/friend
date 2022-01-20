@@ -1,0 +1,21 @@
+<p>$user waved back&mdash;they want to meet you too!</p>
+
+<p><a href="https://rovrapp.com/$user" class="btn">Send them a message</a></p>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "description": "Send them a message",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "url": "https://rovrapp.com/$user",
+    "name": "Message"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ROVR",
+    "url": "https://rovrapp.com/"
+  }
+}
+</script>

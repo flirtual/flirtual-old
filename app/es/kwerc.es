@@ -1,11 +1,16 @@
 #!../../bin/es
-path = (`{../../bin/pwd | ../../bin/sed 's,app/es,bin,'})
+path = (`{../../bin/pwd | ../../bin/sed 's,app/es,bin,'} /bin)
 
 LANG = 'C.UTF-8'
 
 . ./cgi.es
 . ./util.es
-. ./auth.es
+. ./redis.es
+. ./rgauth.es
+. ./email.es
+. ./hcaptcha.es
+. ./ejabberd.es
+. ./matchmaking.es
 cd ..
 
 kwerc_root = `{pwd}

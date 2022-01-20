@@ -92,9 +92,9 @@ fn os cmd args {
 
 # Benchmark command
 fn time cmd {
-    t = `{/usr/bin/date +%s.%N}
+    t = `{/bin/date +%s.%N}
     $cmd
-    echo `{- `{/usr/bin/date +%s.%N} $t}
+    echo `{- `{/bin/date +%s.%N} $t}
 }
 
 # date(1) output -> YYYYMMDD format
@@ -128,7 +128,9 @@ fn require_login {
 }
 
 # http://werc.cat-v.org/docs/rc-template-lang
-fn template file {
+fn template file arg {
+    targ = $arg # Optionally pass a variable, for e.g. rendering multiple profiles on the guest list
+
     awk '
     function pr(str) {
         if (lastc !~ "[{(]")
@@ -212,9 +214,10 @@ fn setup_handlers {
         handler_body = (template $local_file)
     } {~ $req_path /api/*} {
         handler_body = (echo)
+    } {~ $req_path /g/*} {
+        handler_body = (template tpl/group.tpl)
     } {
-        handler_body = (template tpl/404.tpl)
-        echo 'Status: 404 Not Found'
+        handler_body = (template tpl/profile.tpl)
     }
 }
 

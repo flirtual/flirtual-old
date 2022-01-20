@@ -8,11 +8,11 @@ YACC        := $(PREFIX)/vendor/9base/yacc/yacc -S
 EDIT        := null
 GO111MODULE := off
 
-.PHONY: all deps permissions 9base es mawk kryptgo cgd clean
+.PHONY: all deps permissions 9base es mawk redis kryptgo bluemonday-cli cgd clean
 
 all: permissions deps
 
-deps: 9base es mawk kryptgo cgd
+deps: 9base es mawk redis kryptgo bluemonday-cli cgd
 
 9base:
 	$(MAKE) -C vendor/9base LDFLAGS=$(LDFLAGS) OBJTYPE=$(OBJTYPE) PREFIX=$(PREFIX) MANPREFIX=$(MANPREFIX) install
@@ -26,10 +26,18 @@ mawk:
 	cd vendor/mawk && ./configure --prefix=$(PREFIX) --mandir=$(MANPREFIX) --program-transform-name='s/mawk/awk/'
 	$(MAKE) -C vendor/mawk install
 
+redis:
+	$(MAKE) -C vendor/redis install
+
 kryptgo:
 	go get -u golang.org/x/crypto/bcrypt
 	cd vendor/kryptgo && go build -ldflags "-extldflags -static"
 	mkdir -p $(PREFIX)/bin && cp vendor/kryptgo/kryptgo $(PREFIX)/bin/
+
+bluemonday-cli:
+	go get -u github.com/microcosm-cc/bluemonday
+	cd vendor/bluemonday-cli && go build -ldflags "-extldflags -static"
+	mkdir -p $(PREFIX)/bin && cp vendor/bluemonday-cli/bluemonday-cli $(PREFIX)/bin/bluemonday
 
 cgd:
 	cd vendor/cgd && go build -ldflags "-linkmode external -extldflags -static"
@@ -44,5 +52,7 @@ clean:
 	$(MAKE) -C vendor/9base PREFIX=$(PREFIX) MANPREFIX=$(MANPREFIX) uninstall clean
 	rm $(PREFIX)/bin/es $(PREFIX)/bin/esdebug $(MANPREFIX)/man1/es.1; $(MAKE) -C vendor/es clean
 	$(MAKE) -C vendor/mawk uninstall clean
+	$(MAKE) -C vendor/redis uninstall distclean
 	rm $(PREFIX)/bin/kryptgo; cd vendor/kryptgo && go clean
+	rm $(PREFIX)/bin/bluemonday; cd vendor/bluemonday-cli && go clean
 	rm $(PREFIX)/bin/cgd; cd vendor/cgd && go clean
