@@ -98,7 +98,7 @@ fn isvisible field {
 %       # Wave/friend/message button/info as applicable
 %       if {logged_in && !~ $profile $logged_user} {
 %           if {~ $isfriend true} {
-                <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn btn-blueraspberry" style="margin-top: 1.5em">Message</a>
+                <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn btn-blueraspberry" style="margin-top: 1.5em">Message</a><br />
 %           } {~ $luwaved true} {
                 <p style="margin-bottom: 1.4em"><strong>You waved at %($displayname%).</strong></p>
 %           } {~ $uwaved true} {
