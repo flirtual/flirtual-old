@@ -29,7 +29,7 @@ for (var = new vrchat discord steam twitter instagram twitch youtube reddit spot
 <div class="box" style="margin-top: 0">
 %   if {! isempty $onboarding} {
         <h1>Almost done!</h1>
-        <p>This is all optional&mdash;feel free to skip this page and come back in the settings later.</p>
+        <p>You can edit everything here in your profile settings later!</p>
 %   } {
         <h1>Some social info</h1>
 %   }

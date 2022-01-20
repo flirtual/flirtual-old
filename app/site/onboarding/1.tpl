@@ -14,7 +14,7 @@ for (var = $tags_noncustom) {
 <form action="" method="POST" accept-charset="utf-8">
     <div class="box">
         <h1>Choose your profile tags</h1>
-        <p>These help ROVR find new people and events you'll like, and helps other users get to know you.</p>
+        <p>Profile tags let ROVR connect you with new people and events you'll like, and helps other users get to know you!</p>
 %       if {! isempty $onboarding} {
             <p>Don't overthink it &ndash; you can update these later.</p>
 %       }
