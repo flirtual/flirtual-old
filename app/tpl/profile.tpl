@@ -135,10 +135,6 @@ fn isvisible field {
                 <p>Last online: This week</p>
 %           } {lt $since_lastlogin 2764800} {
                 <p>Last online: This month</p>
-%           } {lt $since_lastlogin 31622400} {
-                <p>Last online: This year</p>
-%           } {
-                <p>Last online: Long, long ago</p>
 %           }
 %       }
 
