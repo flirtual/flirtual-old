@@ -11,6 +11,12 @@
           <a href="/g/" class="btn btn-mango">Browse groups</a>
       </div>
 
+      <div class="box">
+          <h1>Events</h1>
+          <p>A calendar of weekly and one-time events happening in VRChat. Find cool things to do or add your own!</p>
+          <a href="/calendar" class="btn btn-mango">View calendar</a>
+      </div>
+
       <span id="invite"></span>
       <div class="box">
           <h1>Invite a friend</h1>
