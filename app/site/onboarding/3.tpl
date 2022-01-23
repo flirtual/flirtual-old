@@ -34,7 +34,7 @@ for (var = displayname dob gender country languages platform) {
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label for="displayname">Display name (optional)</label>
         <input type="text" name="displayname" id="displayname" value="%($displayname%)">
-        <p class="help_text">This is how you'll appear around ROVR. Unlike your username (%($logged_user%)), your display name can contain special characters and doesn't need to be unique. Your profile link (ROVRapp.com/%($logged_user%)) will still use your username.</p>
+        <p class="help_text">This is how you'll appear around VRLFP . Unlike your username (%($logged_user%)), your display name can contain special characters and doesn't need to be unique. Your profile link (vrlfp.com/%($logged_user%)) will still use your username.</p>
 
         <label for="dob">Date of birth (optional, only your age will be visible)</label>
         <input type="date" name="dob" id="dob" autocomplete="bday" placeholder="YYYY-MM-DD" value="%($dob%)">

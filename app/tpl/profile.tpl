@@ -43,7 +43,7 @@ bio = `{/bin/echo -en `{echo $bio | sed 's/\\"/"/g'} | sed 's//''/g'}
 # Authenticate against privacy settings
 fn isvisible field {
     {~ $(privacy_$field) public} ||
-    {~ $(privacy_$field) rovr && logged_in} ||
+    {~ $(privacy_$field) vrlfp && logged_in} ||
     {~ $(privacy_$field) friends && ~ $isfriend true} ||
     {~ $profile $logged_user}
 }
@@ -53,7 +53,7 @@ fn isvisible field {
 
 % if {! logged_in} {
     <div class="banner">
-        Want a profile like this? <a href="/" target="_blank">Join ROVR</a>, the VR social network.
+        Want a profile like this? <a href="/" target="_blank">Join VRLFP</a>, the VR social network.
 	Meet cool people around the world based on common interests, personality traits, and
         friends; join and organize events across any Social VR app/game; build communities; and
         more.

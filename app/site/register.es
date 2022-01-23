@@ -33,7 +33,7 @@ if {isempty $p_password ||
 
 # Check ToS/PP, newsletter, theme
 if {!~ $p_tos true} {
-    throw error 'You must agree to the Terms of Service and the Privacy Policy to use ROVR'
+    throw error 'You must agree to the Terms of Service and the Privacy Policy to use VRLFP'
 }
 
 if {!~ $p_newsletter true} { p_newsletter = false }
@@ -53,8 +53,8 @@ redis graph write 'CREATE (u:user {username: '''$p_username''',
                                    newsletter: '$p_newsletter',
                                    email_wave: ''each'',
                                    onboarding: 1,
-                                   privacy_age: ''rovr'', privacy_gender: ''rovr'',
-                                   privacy_country: ''public'', privacy_interests_common: ''rovr'',
+                                   privacy_age: ''vrlfp'', privacy_gender: ''vrlfp'',
+                                   privacy_country: ''public'', privacy_interests_common: ''vrlfp'',
                                    privacy_interests_uncommon: ''public'', privacy_bio: ''public'',
                                    privacy_language: ''public'', privacy_platform: ''public'',
                                    privacy_games: ''public'', privacy_socials: ''public'',

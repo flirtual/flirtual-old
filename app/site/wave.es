@@ -24,7 +24,7 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})-[r:WAVED]->(b
     xmpp add_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'", "nick": "'$logged_user'", "group": "Friends", "subs": "both"}'
 
     # Email notification for first waver
-    sed 's/\$user/'$logged_user'/' < mail/friend | email $p_user 'You have a new friend on ROVR!'
+    sed 's/\$user/'$logged_user'/' < mail/friend | email $p_user 'You have a new match on VRLFP!'
 } {
     # Create new wave
     redis graph write 'MATCH (a:user {username: '''$logged_user'''}),

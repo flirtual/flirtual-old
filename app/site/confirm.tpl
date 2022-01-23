@@ -1,7 +1,7 @@
 <div class="box">
 %   if {~ $confirm_success true} {
         <h1>Email confirmed</h1>
-        <p>Welcome to ROVR!</p>
+        <p>Welcome to VRLFP!</p>
 %   } {
         <h1>Confirm your email</h1>
 %   }

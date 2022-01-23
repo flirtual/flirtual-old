@@ -13,17 +13,17 @@ if {~ $p_changetheme true &&
 
 # Privacy settings
 if {~ $p_changeprivacy true &&
-    {~ $p_age public || ~ $p_age rovr || ~ $p_age friends || ~ $p_age me} &&
-    {~ $p_gender public || ~ $p_gender rovr || ~ $p_gender friends || ~ $p_gender me} &&
-    {~ $p_country public || ~ $p_country rovr || ~ $p_country friends || ~ $p_country me} &&
-    {~ $p_interests_common rovr || ~ $p_interests_common friends || ~ $p_interests_common me} &&
-    {~ $p_interests_uncommon public || ~ $p_interests_uncommon rovr || ~ $p_interests_uncommon friends || ~ $p_interests_uncommon me} &&
-    {~ $p_bio public || ~ $p_bio rovr || ~ $p_bio friends || ~ $p_bio me} &&
-    {~ $p_language public || ~ $p_language rovr || ~ $p_language friends || ~ $p_language me} &&
-    {~ $p_platform public || ~ $p_platform rovr || ~ $p_platform friends || ~ $p_platform me} &&
-    {~ $p_games public || ~ $p_games rovr || ~ $p_games friends || ~ $p_games me} &&
-    {~ $p_socials public || ~ $p_socials rovr || ~ $p_socials friends || ~ $p_socials me} &&
-    {~ $p_friends rovr || ~ $p_friends friends || ~ $p_friends hidden} &&
+    {~ $p_age public || ~ $p_age vrlfp || ~ $p_age friends || ~ $p_age me} &&
+    {~ $p_gender public || ~ $p_gender vrlfp || ~ $p_gender friends || ~ $p_gender me} &&
+    {~ $p_country public || ~ $p_country vrlfp || ~ $p_country friends || ~ $p_country me} &&
+    {~ $p_interests_common vrlfp || ~ $p_interests_common friends || ~ $p_interests_common me} &&
+    {~ $p_interests_uncommon public || ~ $p_interests_uncommon vrlfp || ~ $p_interests_uncommon friends || ~ $p_interests_uncommon me} &&
+    {~ $p_bio public || ~ $p_bio vrlfp || ~ $p_bio friends || ~ $p_bio me} &&
+    {~ $p_language public || ~ $p_language vrlfp || ~ $p_language friends || ~ $p_language me} &&
+    {~ $p_platform public || ~ $p_platform vrlfp || ~ $p_platform friends || ~ $p_platform me} &&
+    {~ $p_games public || ~ $p_games vrlfp || ~ $p_games friends || ~ $p_games me} &&
+    {~ $p_socials public || ~ $p_socials vrlfp || ~ $p_socials friends || ~ $p_socials me} &&
+    {~ $p_friends vrlfp || ~ $p_friends friends || ~ $p_friends hidden} &&
     {~ $p_invite public || ~ $p_invite hidden} &&
     {~ $p_optout true || ~ $p_optout false}} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})

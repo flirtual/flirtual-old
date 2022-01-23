@@ -3,7 +3,7 @@
           <h1>Login</h1>
           <form action="" method="POST" accept-charset="utf-8">
               <label for="username">Username<small>(or email... you do you)</small></label>
-              <input type="text" name="username" id="username" required autocomplete="username" placeholder="rovrfan42" value="%(`{echo $^p_username | escape_html}%)">
+              <input type="text" name="username" id="username" required autocomplete="username" placeholder="vrlfpfan42" value="%(`{echo $^p_username | escape_html}%)">
 
               <label for="password">Password</label>
               <input type="password" name="password" id="password" required autocomplete="current-password" placeholder="••••••••••••••••">

@@ -4,7 +4,7 @@
 
           <form action="" method="POST" accept-charset="utf-8">
               <label for="username">Username</label>
-              <input type="text" name="username" id="username" required autocomplete="username" placeholder="rovrfan42" value="%(`{echo $^p_username | escape_html}%)">
+              <input type="text" name="username" id="username" required autocomplete="username" placeholder="vrlfpfan42" value="%(`{echo $^p_username | escape_html}%)">
 
               <label for="email">Email</label>
               <input type="email" name="email" id="email" required autocomplete="email" placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
@@ -33,7 +33,7 @@
                   <tr><td></td></tr>
                   <tr>
                       <td><input type="checkbox" name="newsletter" id="newsletter" value="true" checked></td>
-                      <td><label for="newsletter" style="display: inline-block; width: 100%; transform: translateY(4px)">Bless my inbox with monthly ROVR updates (we won't spam you)</label></td>
+                      <td><label for="newsletter" style="display: inline-block; width: 100%; transform: translateY(4px)">Bless my inbox with monthly VRLFP updates (we won't spam you)</label></td>
                   </tr>
               </table>
 

@@ -15,7 +15,7 @@ fn email user subject {
     sed 's/\\n /\n\n/g; s/\\n$//' << --EOF-- | /usr/sbin/sendmail -tif $mailfrom
 From: $app <$mailfrom>
 To: $to
-Subject: [ROVR] $subject
+Subject: [VRLFP] $subject
 MIME-Version: 1.0
 Content-Type: multipart/alternative; boundary="BOUNDARY"
 
@@ -24,9 +24,9 @@ Content-Type: text/plain; charset=utf-8
 
 $plaintext
 
-Happy ROVR-ing!
+Happy matching!
 
-Twitter: https://twitter.com/rovrofficial
+Twitter: https://twitter.com/vrlfp
 Discord: https://$domain/discord
 Unsubscribe: https://$domain/settings#notifications
 
@@ -43,7 +43,7 @@ Content-Type: text/html; charset=utf-8
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow">
-        <title>[ROVR] $subject^</title>
+        <title>[VRLFP] $subject^</title>
         <style>
             .btn {
                 color: #fff;
@@ -110,7 +110,7 @@ Content-Type: text/html; charset=utf-8
                                 <td align="center" valign="top" width="660">
                                 <![endif]-->
                                 <div data-slot-container="1" class="ui-sortable">
-                                    <div data-slot="text"><table align="center" bgcolor="#00bf9a" border="0" cellpadding="0" cellspacing="0&quot;" style="max-width: 660px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td align="center" bgcolor="#25c9d0" class="shrinker" height="124" style="background-repeat: no-repeat;background-size: 100%;background-color: #25c9d0;max-width: 660px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" class="shrinker" style="width: 100%;max-width: 550px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td height="60" style="font-size: 60px;line-height: 60px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;</td></tr><tr><td align="center" valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><a href="https://$domain/" style="text-decoration: none;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">&nbsp;<img src="https://newsletter.rovrapp.com/media/images/rovr/rovr-transparent-128.png" style="padding: 0px;border: medium none;width: 335px;height: 91.249px;line-height: 100%;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" alt="ROVR" class="fr-fil fr-dib" border="0" width="335" height="91.249">&nbsp;</a></td></tr><tr><td height="30" style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;<br><br></td></tr></tbody></table></td></tr></tbody></table></div>
+                                    <div data-slot="text"><table align="center" bgcolor="#00bf9a" border="0" cellpadding="0" cellspacing="0&quot;" style="max-width: 660px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td align="center" bgcolor="#25c9d0" class="shrinker" height="124" style="background-repeat: no-repeat;background-size: 100%;background-color: #25c9d0;max-width: 660px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" class="shrinker" style="width: 100%;max-width: 550px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td height="60" style="font-size: 60px;line-height: 60px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;</td></tr><tr><td align="center" valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><a href="https://$domain/" style="text-decoration: none;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">&nbsp;<img src="https://newsletter.vrlfp.net/media/images/VRLFP/logo.png" style="padding: 0px;border: medium none;width: 335px;height: 91.249px;line-height: 100%;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" alt="VRLFP" class="fr-fil fr-dib" border="0" width="335" height="91.249">&nbsp;</a></td></tr><tr><td height="30" style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;<br><br></td></tr></tbody></table></td></tr></tbody></table></div>
                                 </div>
                             </td>
                         </tr>
@@ -151,7 +151,7 @@ Content-Type: text/html; charset=utf-8
                                             <div data-slot="text"><table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width: 550px;background: #ffffff;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td height="30" style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;<br></td></tr><tr><td align="center" style="padding: 0 30px;text-align: left;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top">
 <h1 style="font-family: filicudi-solid, Roboto, Verdana, Arial, sans-serif;">$subject^</h1>
 $html
-<p>Happy ROVR-ing!</p>
+<p>Happy matching!</p>
 </td></tr><tr><td style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" height="30">&nbsp;<br></td></tr><tr><td style="padding: 0 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top" align="center"><table style="max-width: 550px;background: #ffffff;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr><td style="font-size: 0px;line-height: 0px;border-bottom: 1px solid #e8e8e8;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" height="0">&nbsp;<br></td></tr></tbody></table>
 </td></tr></tbody></table></div>
                                         </td>
@@ -268,7 +268,7 @@ $html
                                     </tr>
                                     <tr>
                                         <td style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;color: #212121;text-transform: uppercase;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" data-slot-container="1" class="ui-sortable" align="center">
-                                            <div data-slot="text"><a href="https://twitter.com/rovrofficial" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
+                                            <div data-slot="text"><a href="https://twitter.com/vrlfp" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>
 <a href="https://$domain/discord" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Discord</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>

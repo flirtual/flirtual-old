@@ -116,9 +116,9 @@ description = `{/bin/echo -en `{echo $description | sed 's/\\"/"/g'} | sed 's/î€
                     <tr>
                         <td style="width: 1px; white-space: nowrap"><label for="invite">Invite link:</label></td>
 %                       if {~ $type public} {
-                            <td><input id="invite" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://ROVRapp.com/g/%($url%)"></td>
+                            <td><input id="invite" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://vrlfp.com/g/%($url%)"></td>
 %                       } {
-                            <td><input id="invite" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://ROVRapp.com/g/%($invite%)"></td>
+                            <td><input id="invite" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://vrlfp.com/g/%($invite%)"></td>
 %                       }
                     </tr>
                 </table>

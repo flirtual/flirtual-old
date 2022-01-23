@@ -1,6 +1,6 @@
 <p>Check out their profile to add them as a friend:</p>
 
-<p><a href="https://rovrapp.com/notifications" class="btn">Check your waves</a></p>
+<p><a href="https://vrlfp.com/notifications" class="btn">Check your waves</a></p>
 
 <script type="application/ld+json">
 {
@@ -9,13 +9,13 @@
   "description": "Check your waves",
   "potentialAction": {
     "@type": "ViewAction",
-    "url": "https://rovrapp.com/notifications",
+    "url": "https://vrlfp.com/notifications",
     "name": "Notifications"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "ROVR",
-    "url": "https://rovrapp.com/"
+    "name": "VRLFP",
+    "url": "https://vrlfp.com/"
   }
 }
 </script>

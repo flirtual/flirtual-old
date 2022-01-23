@@ -16,7 +16,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
 
 <div class="box">
     <h1>A few personality questions</h1>
-    <p>These help ROVR show you people with similar vibes and values. Other users won't see your answers.</p>
+    <p>These help VRLFP show you people with similar vibes and values. Other users won't see your answers.</p>
 
     <form action="" method="POST" accept-charset="utf-8">
         <table id="survey">

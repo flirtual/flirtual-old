@@ -1,6 +1,6 @@
-<p>Please click here to reset your ROVR password:</p>
+<p>Please click here to reset your VRLFP password:</p>
 
-<p><a href="https://rovrapp.com/reset?id=$reset" class="btn">Reset your password</a></p>
+<p><a href="https://vrlfp.com/reset?id=$reset" class="btn">Reset your password</a></p>
 
 <p>If you did not request this email, please ignore it.</p>
 
@@ -16,8 +16,8 @@
   },
   "publisher": {
     "@type": "Organization",
-    "name": "ROVR",
-    "url": "https://rovrapp.com/"
+    "name": "VRLFP",
+    "url": "https://vrlfp.com/"
   }
 }
 </script>

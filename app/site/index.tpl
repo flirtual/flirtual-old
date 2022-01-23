@@ -23,7 +23,7 @@
           <table style="width: 100%">
               <tr>
                   <td style="width: 1px; white-space: nowrap"><label for="invitecode">Invite link:</label></td>
-                  <td><input id="invitecode" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://ROVRapp.com/?invite=%(`{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:REFERRAL]->(r:referral) RETURN r.id'}}%)"></td>
+                  <td><input id="invitecode" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://vrlfp.com/?invite=%(`{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:REFERRAL]->(r:referral) RETURN r.id'}}%)"></td>
               </tr>
           </table>
       </div>
@@ -65,7 +65,7 @@
           </div>
           <div>
               <h2>Meet cool people</h2>
-              <p>Each day, ROVR shows you five VR users who share common interests or traits with you.</p>
+              <p>Each day, VRLFP shows you five VR users who share common interests or traits with you.</p>
               <p>You can add each other as friends, then message and meet up in VR!</p>
           </div>
       </div></div>

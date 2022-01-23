@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ROVR</title>
+        <title>VRLFP</title>
 
 %       if {~ $req_path /onboarding/* || ~ $req_path /g/create} {
             <link rel="stylesheet" href="/css/tagify.css" media="print" onload="this.media='all'; this.onload=null;">
@@ -19,8 +19,8 @@
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="manifest" href="/site.webmanifest">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#25c9d0">
-        <meta name="apple-mobile-web-app-title" content="ROVR">
-        <meta name="application-name" content="ROVR">
+        <meta name="apple-mobile-web-app-title" content="VRLFP">
+        <meta name="application-name" content="VRLFP">
         <meta name="msapplication-TileColor" content="#25c9d0">
         <meta name="theme-color" content="#ffffff">
 
@@ -167,7 +167,7 @@
 
                             <a href="https://rovr.atlassian.net/servicedesk/customer/portal/3" target="_blank">Contact</a>
                             <a href="/discord" target="_blank">Discord</a>
-                            <a href="https://twitter.com/ROVRofficial" target="_blank">Twitter</a><br />
+                            <a href="https://twitter.com/vrlfp" target="_blank">Twitter</a><br />
 
                             <a href="/about">About</a>
                             <a href="/principles">Principles</a>

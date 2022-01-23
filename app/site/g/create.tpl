@@ -11,7 +11,7 @@
 
         <label for="url">Group URL</label>
         <div class="inline-label">
-            <span>ROVRapp.com/g/</span>
+            <span>vrlfp.com/g/</span>
             <input type="text" name="url" id="url" required placeholder="awesome" value="%(`{echo $^p_url | escape_html}%)">
         </div>
 
