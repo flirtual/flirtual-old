@@ -46,13 +46,14 @@
         [{ 'color': [] }, { 'background': [] }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
-        [{ 'align': [] }]
+        [{ 'align': [] }],
+        ['link']
     ]
     var quill = new Quill('#description', {
         modules: {
             toolbar: quillToolbar
         },
-        formats: ['header', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'list', 'blockquote', 'code-block', 'align', 'code', 'script', 'indent', 'direction'],
+        formats: ['header', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'list', 'blockquote', 'code-block', 'align', 'code', 'script', 'indent', 'direction', 'link'],
         theme: 'snow'
     });
 

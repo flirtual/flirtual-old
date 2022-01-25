@@ -131,13 +131,14 @@ for (var = new vrchat discord steam twitter instagram twitch youtube reddit spot
         [{ 'color': [] }, { 'background': [] }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
-        [{ 'align': [] }]
+        [{ 'align': [] }],
+        ['link']
     ]
     var quill = new Quill('#bio', {
         modules: {
             toolbar: quillToolbar
         },
-        formats: ['header', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'list', 'blockquote', 'code-block', 'align', 'code', 'script', 'indent', 'direction'],
+        formats: ['header', 'bold', 'italic', 'underline', 'strike', 'color', 'background', 'list', 'blockquote', 'code-block', 'align', 'code', 'script', 'indent', 'direction', 'link'],
         theme: 'snow'
     });
 

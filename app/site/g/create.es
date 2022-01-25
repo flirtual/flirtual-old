@@ -24,7 +24,10 @@ if {!~ $p_type public && !~ $p_type private} {
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                    CREATE (u)-[:ADMINS]->(g:group {name: '''`^{echo $^p_name | escape_redis}^''',
                                                    url: '''$p_url''',
-                                                   description: '''`^{echo $p_description | sed 's/\\//g' | bluemonday | escape_redis}^''',
+                                                   description: '''`^{echo $p_description |
+                                                                      sed 's/\\//g' | bluemonday |
+                                                                      sed 's/<a /<a onclick="external_link(event, this)" /g' |
+                                                                      escape_redis}^''',
                                                    type: '''$p_type''',
                                                    invite: '''`^{kryptgo genid}^'''}),
                           (u)-[:MEMBER]->(g)'

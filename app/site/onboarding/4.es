@@ -73,7 +73,9 @@ if {! isempty $p_customurl} {
 
 # Write
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                   SET u.bio = '''`^{echo $^p_bio | sed 's/\\//g' | bluemonday | escape_redis}^''',
+                   SET u.bio = '''`^{echo $^p_bio | sed 's/\\//g' | bluemonday | 
+                                     sed 's/<a /<a onclick="external_link(event, this)" /g' |
+                                     escape_redis}^''',
                        u.new = '$p_new',
                        u.vrchat = '''`^{echo $^p_vrchat | escape_redis}^''',
                        u.discord = '''`^{echo $^p_discord | escape_redis}^''',
