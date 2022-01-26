@@ -21,6 +21,7 @@ sed 's/\$reset/'$reset'/' < mail/reset | email $username 'Password reset request
 
 # Create reset
 redis graph write 'MATCH (u:user {username: '''$username'''})
-                   CREATE (u)-[:RESET]->(r:reset {id: '''$reset''', expiry: '`{+ $dateun 86400}^'})'
+                   MERGE (r:reset {id: '''$reset''', expiry: '`{+ $dateun 86400}^'})
+                   MERGE (u)-[:RESET]->(r)'
 
 forgot_success = true

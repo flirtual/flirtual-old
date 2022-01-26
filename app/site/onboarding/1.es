@@ -59,7 +59,7 @@ for (category = social gaming genre life creation) {
     for (tag = $(tags_$category)) {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                                  (t:tag {name: '''$tag''', category: '''$category'''})
-                           CREATE (u)-[:INTERESTED_IN]->(t)'
+                           MERGE (u)-[:INTERESTED_IN]->(t)'
     }
 }
 
@@ -72,12 +72,13 @@ if {! isempty $p_custom} {
         if {isempty $existingtag} {
             # Create new tag
             redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                               CREATE (u)-[:INTERESTED_IN]->(t:tag {name: '''$tag''', category: ''custom''})'
+                               MERGE (t:tag {name: '''$tag''', category: ''custom''})
+                               MERGE (u)-[:INTERESTED_IN]->(t)'
         } {
             # Existing tag; link to user
             redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                                      (t:tag {name: '''$existingtag''', category: ''custom''})
-                               CREATE (u)-[:INTERESTED_IN]->(t)'
+                               MERGE (u)-[:INTERESTED_IN]->(t)'
         }
     }
 }

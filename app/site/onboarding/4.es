@@ -18,7 +18,7 @@ for (game = `{echo $^p_games | sed 's/ /_/g; s/,/ /g'}) {
     if {in $game $games} {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                                  (g:game {name: '''$game'''})
-                           CREATE (u)-[:PLAYS]->(g)'
+                           MERGE (u)-[:PLAYS]->(g)'
     }
 }
 

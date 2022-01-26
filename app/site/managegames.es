@@ -9,7 +9,7 @@ p_name = `{echo $^p_name | sed 's/''//g; s/ /_/g'}
 
 # Create game if it doesn't already exist
 if {!~ `{redis graph read 'MATCH (g:game {name: '''$^p_name'''}) RETURN exists(g)'} true} {
-    redis graph write 'CREATE (g:game {name: '''$p_name'''})'
+    redis graph write 'MERGE (g:game {name: '''$p_name'''})'
 }
 
 # Set type
@@ -60,7 +60,7 @@ for (category = social gaming genre life creation) {
     for (tag = $(tags_$category)) {
         redis graph write 'MATCH (g:game {name: '''$p_name'''}),
                                  (t:tag {name: '''$tag''', category: '''$category'''})
-                           CREATE (g)-[:TAGGED]->(t)'
+                           MERGE (g)-[:TAGGED]->(t)'
     }
 }
 
@@ -69,6 +69,6 @@ for (platform = `{redis graph read 'MATCH (p:platform) RETURN p.name'}) {
     if {~ $(p_$platform) true} {
         redis graph write 'MATCH (g:game {name: '''$p_name'''}),
                                  (p:platform {name: '''$platform'''})
-                           CREATE (g)-[:SUPPORTS]->(p)'
+                           MERGE (g)-[:SUPPORTS]->(p)'
     }
 }

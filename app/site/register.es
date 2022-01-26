@@ -47,25 +47,25 @@ if {! hcaptcha $p_hcaptcharesponse} {
 
 # Create user and confirmation
 confirm = `{kryptgo genid}
-redis graph write 'CREATE (u:user {username: '''$p_username''',
-                                   email: '''$p_email''',
-                                   password: '''`{kryptgo genhash -p $p_password}^''',
-                                   newsletter: '$p_newsletter',
-                                   email_wave: ''each'',
-                                   onboarding: 1,
-                                   privacy_age: ''rovr'', privacy_gender: ''rovr'',
-                                   privacy_country: ''public'', privacy_interests_common: ''rovr'',
-                                   privacy_interests_uncommon: ''public'', privacy_bio: ''public'',
-                                   privacy_language: ''public'', privacy_platform: ''public'',
-                                   privacy_games: ''public'', privacy_socials: ''public'',
-                                   privacy_friends: ''friends'', privacy_invite: ''public'',
-                                   optout: false,
-                                   theme: '''$p_theme''',
-                                   avatar: ''defaults/01'',
-				   volume: 0.5,
-                                   registered: '''`{date -ui}^'''})
-                          -[:CONFIRM]->
-                          (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})'
+redis graph write 'MERGE (u:user {username: '''$p_username''',
+                                  email: '''$p_email''',
+                                  password: '''`{kryptgo genhash -p $p_password}^''',
+                                  newsletter: '$p_newsletter',
+                                  email_wave: ''each'',
+                                  onboarding: 1,
+                                  privacy_age: ''rovr'', privacy_gender: ''rovr'',
+                                  privacy_country: ''public'', privacy_interests_common: ''rovr'',
+                                  privacy_interests_uncommon: ''public'', privacy_bio: ''public'',
+                                  privacy_language: ''public'', privacy_platform: ''public'',
+                                  privacy_games: ''public'', privacy_socials: ''public'',
+                                  privacy_friends: ''friends'', privacy_invite: ''public'',
+                                  optout: false,
+                                  theme: '''$p_theme''',
+                                  avatar: ''defaults/01'',
+				  volume: 0.5,
+                                  registered: '''`{date -ui}^'''})
+                   MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
+                   MERGE (u)-[:CONFIRM]->(c)'
 
 # Email confirmation
 sed 's/\$confirm/'$confirm'/' < mail/confirm | email $p_username 'Please confirm your email'
@@ -74,13 +74,13 @@ sed 's/\$confirm/'$confirm'/' < mail/confirm | email $p_username 'Please confirm
 redis graph write 'MATCH (u:user {username: '''$p_username'''}),
                          (r:referral {id: '''`^{echo $p_referred_via | tr 'a-z' 'A-Z'}^'''}),
                          (ru:user)-[:REFERRAL]->(r)
-                   CREATE (u)-[:REFERRED_BY]->(ru),
-                          (u)-[:REFERRED_VIA]->(r)
-                   SET r.uses = r.uses - 1'
+                   MERGE (u)-[:REFERRED_BY]->(ru)
+                   MERGE (u)-[:REFERRED_VIA]->(r)'
 
 # Create referral for new user
 referral = `{kryptgo genid -l 6 | sed 's/-/A/g; s/_/B/g' | tr 'a-z' 'A-Z'}
 redis graph write 'MATCH (u:user {username: '''$p_username'''})
-                   CREATE (u)-[:REFERRAL]->(r:referral {id: '''$referral''', uses: 10})'
+                   MERGE (r:referral {id: '''$referral'''})
+                   MERGE (u)-[:REFERRAL]->(r)'
 
 login_user $p_username $p_password

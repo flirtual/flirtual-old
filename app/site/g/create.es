@@ -22,15 +22,16 @@ if {!~ $p_type public && !~ $p_type private} {
 
 # Create group
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                   CREATE (u)-[:ADMINS]->(g:group {name: '''`^{echo $^p_name | escape_redis}^''',
-                                                   url: '''$p_url''',
-                                                   description: '''`^{echo $p_description |
-                                                                      sed 's/\\//g' | bluemonday |
-                                                                      sed 's/<a /<a onclick="external_link(event, this)" /g' |
-                                                                      escape_redis}^''',
-                                                   type: '''$p_type''',
-                                                   invite: '''`^{kryptgo genid}^'''}),
-                          (u)-[:MEMBER]->(g)'
+                   MERGE (g:group {name: '''`^{echo $^p_name | escape_redis}^''',
+                                   url: '''$p_url''',
+                                   description: '''`^{echo $p_description |
+                                                      sed 's/\\//g' | bluemonday |
+                                                      sed 's/<a /<a onclick="external_link(event, this)" /g' |
+                                                      escape_redis}^''',
+                                   type: '''$p_type''',
+                                   invite: '''`^{kryptgo genid}^'''})
+                   MERGE (u)-[:ADMINS]->(g)
+                   MERGE (u)-[:MEMBER]->(g)'
 
 # Validate and write interests
 defaultset = false
@@ -41,7 +42,7 @@ for (tag = `{echo $^p_interests_default | sed 's/ /_/g; s/,/ /g'}) {
         redis graph write 'MATCH (g:group {url: '''$p_url'''}),
                                  (t:tag {name: '''$tag'''})
                            WHERE t.category <> ''custom''
-                           CREATE (g)-[:TAGGED]->(t)'
+                           MERGE (g)-[:TAGGED]->(t)'
     }
 }
 if {~ $defaultset false} {
@@ -55,12 +56,13 @@ for (tag = `{echo $^p_interests_custom | sed 's/ /_/g; s/,/ /g' | escape_redis})
     if {isempty $existingtag} {
         # Create new tag
         redis graph write 'MATCH (g:group {url: '''$p_url'''})
-                           CREATE (g)-[:TAGGED]->(t:tag {name: '''$tag''', category: ''custom''})'
+                           MERGE (t:tag {name: '''$tag''', category: ''custom''})
+                           MERGE (g)-[:TAGGED]->(t)'
     } {
         # Existing tag; link to group
         redis graph write 'MATCH (g:group {url: '''$p_url'''}),
                                  (t:tag {name: '''$existingtag''', category: ''custom''})
-                           CREATE (g)-[:TAGGED]->(t)'
+                           MERGE (g)-[:TAGGED]->(t)'
     }
 }
 

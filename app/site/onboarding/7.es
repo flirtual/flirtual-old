@@ -21,7 +21,8 @@ if {~ $p_resend yes} {
 
     # Create confirmation with expiry in 24 hours
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       CREATE (u)-[:CONFIRM]->(c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})'
+                       MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
+                       MERGE (u)-[:CONFIRM]->(c)'
 } {! isempty $p_email} {
     # Change email
     # Format email, check availability
@@ -36,7 +37,8 @@ if {~ $p_resend yes} {
     # Update email and create confirmation with expiry in 24 hours
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.email = '''$p_email'''
-                       CREATE (u)-[:CONFIRM]->(c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})'
+                       MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
+                       MERGE (u)-[:CONFIRM]->(c)'
 
     # Email confirmation
     sed 's/\$confirm/'$confirm'/' < mail/confirm | email $logged_user 'Please confirm your email'

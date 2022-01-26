@@ -59,7 +59,7 @@ if {! isempty $p_country} {
     }
     redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                              (c:country {id: '''$p_country'''})
-                       CREATE (u)-[:COUNTRY]->(c)'
+                       MERGE (u)-[:COUNTRY]->(c)'
 } {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country)
                        DELETE r'
@@ -74,7 +74,7 @@ for (language = `{echo $^p_language | sed 's/ /_/g; s/,/ /g'}) {
         languageset = true
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                                  (l:language {id: '''$language'''})
-                           CREATE (u)-[:KNOWS]->(l)'
+                           MERGE (u)-[:KNOWS]->(l)'
     }
 }
 if {~ $languageset false} {
@@ -89,7 +89,7 @@ for (platform = `{redis graph read 'MATCH (p:platform) RETURN p.name'}) {
         platformset = true
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                                  (p:platform {name: '''$platform'''})
-                           CREATE (u)-[:USES]->(p)'
+                           MERGE (u)-[:USES]->(p)'
     }
 }
 if {~ $platformset false} {

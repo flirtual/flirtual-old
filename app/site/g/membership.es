@@ -12,7 +12,7 @@ if {! echo $p_group | grep -s '^[a-zA-Z0-9_\-]+$' ||
 if {~ $p_action join} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
                              (g:group {invite: '''$p_group'''})
-                       CREATE (u)-[:MEMBER]->(g)'
+                       MERGE (u)-[:MEMBER]->(g)'
 } {~ $p_action leave} {
     # Admins can't leave groups
     if {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[a:ADMINS]->(g:group {invite: '''$p_group'''})
