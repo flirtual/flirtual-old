@@ -7,78 +7,94 @@ if {!~ $REQUEST_METHOD POST} { return 0 }
 
 # Back button -> return to previous onboarding page
 if {~ $p_back true} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}) SET u.onboarding = 2'
-    post_redirect /onboarding/2
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}) SET u.onboarding = 1'
+    post_redirect /onboarding/1
 }
 
-# Validate survey
-for (q = p_`{seq 9}) {
-    if {!~ $$q true && !~ $$q false} {
-        throw error 'Please answer all of the questions'
+# Set display name, or if none is chosen, copy username
+# This makes our life easier later
+if {!isempty $p_displayname} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.displayname = '''$^p_displayname''''
+    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$^p_displayname'"}'
+} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.displayname = '''$logged_user''''
+    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$logged_user'"}'
+}
+
+# Validate and set date of birth
+if {! isempty $p_dob} {
+    if {!~ $^p_dob [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ||
+    ~ `{echo $p_dob | sed 's/^.*-(.*)-.*$/\1/' | awk '{ print ($1 >= 1 && $1 <= 12) }'} 0 ||
+    ~ `{echo $p_dob | sed 's/^.*-.*-(.*)$/\1/' | awk '{ print ($1 >= 1 && $1 <= 31) }'} 0} {
+        throw error 'Invalid date of birth'
+    }
+    if {gt `{echo $p_dob | tr -d '-'} `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} 180000}} {
+        throw error 'You must be at least 18 years of age to use this website'
+    }
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.dob = '''$p_dob''''
+} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.dob = NULL'
+}
+
+# Set gender
+if {!~ $p_gender Man && !~ $p_gender Woman && ! isempty $p_gender_other} {
+    p_gender = $p_gender_other
+}
+if {! isempty $p_gender} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.gender = '''`^{echo $p_gender | escape_redis}^''''
+} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.gender = NULL'
+}
+
+# Validate and set country
+if {! isempty $p_country} {
+    if {!~ `{redis graph read 'MATCH (c:country {id: '''$p_country'''}) RETURN exists(c)'} true} {
+        throw error 'Invalid country'
+    }
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (c:country {id: '''$p_country'''})
+                       MERGE (u)-[:COUNTRY]->(c)'
+} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country)
+                       DELETE r'
+}
+
+# Validate and write language
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:KNOWS]->(l:language) DELETE e'
+languageset = false
+languages = `^{redis graph read 'MATCH (l:language) RETURN l.id'}
+for (language = `{echo $^p_language | sed 's/ /_/g; s/,/ /g'}) {
+    if {in $language $languages} {
+        languageset = true
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                                 (l:language {id: '''$language'''})
+                           MERGE (u)-[:KNOWS]->(l)'
     }
 }
-
-# Compute personality traits
-openness = 0
-conscientiousness = 0
-agreeableness = 0
-
-if {~ $p_1 true} {
-    ++ openness
-} {
-    -- openness
-}
-if {~ $p_2 true} {
-    ++ openness
-} {
-    -- openness
-}
-if {~ $p_3 false} {
-    ++ openness
-} {
-    -- openness
+if {~ $languageset false} {
+    throw error 'Missing language'
 }
 
-if {~ $p_4 true} {
-    ++ conscientiousness
-} {
-    -- conscientiousness
+# Validate and write platforms
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:USES]->(p:platform) DELETE e'
+platformset = false
+for (platform = `{redis graph read 'MATCH (p:platform) RETURN p.name'}) {
+    if {~ $(p_$platform) true} {
+        platformset = true
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                                 (p:platform {name: '''$platform'''})
+                           MERGE (u)-[:USES]->(p)'
+    }
 }
-if {~ $p_5 true} {
-    ++ conscientiousness
-} {
-    -- conscientiousness
+if {~ $platformset false} {
+    throw error 'Missing VR platform'
 }
-if {~ $p_6 false} {
-    ++ conscientiousness
-} {
-    -- conscientiousness
-}
-
-if {~ $p_7 true} {
-    ++ agreeableness
-} {
-    -- agreeableness
-}
-if {~ $p_8 true} {
-    ++ agreeableness
-} {
-    -- agreeableness
-}
-if {~ $p_9 false} {
-    ++ agreeableness
-} {
-    -- agreeableness
-}
-
-# Write
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                   SET u.survey_1 = '$p_1', u.survey_2 = '$p_2', u.survey_3 = '$p_3',
-                       u.survey_4 = '$p_4', u.survey_5 = '$p_5', u.survey_6 = '$p_6',
-                       u.survey_7 = '$p_7', u.survey_8 = '$p_8', u.survey_9 = '$p_9',
-                       u.openness = '$openness',
-                       u.conscientiousness = '$conscientiousness',
-                       u.agreeableness = '$agreeableness
 
 # Proceed
 if {! isempty $onboarding} {

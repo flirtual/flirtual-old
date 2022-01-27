@@ -1,137 +1,240 @@
 %{
-(survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9) = \
-    `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
-                        RETURN u.survey_1, u.survey_2, u.survey_3, u.survey_4, u.survey_5,
-                               u.survey_6, u.survey_7, u.survey_8, u.survey_9'}
+(displayname dob gender country) = \
+    `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
+                             OPTIONAL MATCH (u)-[:COUNTRY]->(c:country)
+                             RETURN u.displayname, u.dob, u.gender, c.id'}
 
-for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9) {
+languages = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:KNOWS]->(l:language)
+                                RETURN l.id'}
+
+for (p = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:USES]->(p:platform) RETURN p.name'}) {
+    $p = checked
+}
+
+for (var = displayname dob gender country languages platform) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }
-    if {isempty $var} {
+    $var = `{redis_html $$var}
+    if {isempty $$var} {
         $var = ()
     }
 }
 %}
 
-<div class="box">
-    <h1>A few personality questions</h1>
-    <p>These help VRLFP show you people with similar vibes and values. Other users won't see your answers.</p>
+<script src="/js/intlpolyfill.js"></script>
 
-    <form action="" method="POST" accept-charset="utf-8">
-        <table id="survey">
+<div class="box" style="margin-top: 0">
+%   if {! isempty $onboarding} {
+        <h1>More about you</h1>
+%   } {
+        <h1>Some basic info</h1>
+%   }
+
+    <form id="form" action="" method="POST" accept-charset="utf-8">
+        <label for="displayname">Display name (optional)</label>
+        <input type="text" name="displayname" id="displayname" value="%($displayname%)">
+        <p class="help_text">This is how you'll appear around VRLFP . Unlike your username (%($logged_user%)), your display name can contain special characters and doesn't need to be unique. Your profile link (vrlfp.com/%($logged_user%)) will still use your username.</p>
+
+        <label for="dob">Date of birth (optional, only your age will be visible)</label>
+        <input type="date" name="dob" id="dob" autocomplete="bday" placeholder="YYYY-MM-DD" value="%($dob%)">
+
+        <label for="gender">Gender</label><br />
+        <input type="checkbox" name="gender" id="man" value="Man" class="gendercheckbox" onclick="checkGender(this)" %(`{if {~ $gender Man} { echo checked }}%)>
+        <label for="man">Man</label><br />
+        <input type="checkbox" name="gender" id="woman" value="Woman" class="gendercheckbox" onclick="checkGender(this)" style="margin-top: 12px" %(`{if {~ $gender Woman} { echo checked }}%)>
+        <label for="woman">Woman</label><br />
+        <table>
             <tr>
-                <td><p>I daydream a lot</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="1_yes" type="radio" name="1" value="true" required %(`{if {~ $survey_1 true} { echo checked }}%)>
-                        <label for="1_yes">Yes</label>
-                        <input id="1_no" type="radio" name="1" value="false" %(`{if {~ $survey_1 false} { echo checked }}%)>
-                        <label for="1_no">No</label>
-                    </div>
+                <td style="width: 1px; white-space: nowrap; transform: translateX(-2px)">
+                    <input type="checkbox" name="gender" id="other" value="Other" class="gendercheckbox" onclick="checkGender(this)" %(`{if {! isempty $gender && !~ $gender Man && !~ $gender Woman} { echo checked }}%)>
+                    <label for="other">Other:</label>
                 </td>
-            </tr>
-            <tr>
-                <td><p>I find many things beautiful</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="2_yes" type="radio" name="2" value="true" required %(`{if {~ $survey_2 true} { echo checked }}%)>
-                        <label for="2_yes">Yes</label>
-                        <input id="2_no" type="radio" name="2" value="false" %(`{if {~ $survey_2 false} { echo checked }}%)>
-                        <label for="2_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>I don't like it when things change</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="3_yes" type="radio" name="3" value="true" required %(`{if {~ $survey_3 true} { echo checked }}%)>
-                        <label for="3_yes">Yes</label>
-                        <input id="3_no" type="radio" name="3" value="false" %(`{if {~ $survey_3 false} { echo checked }}%)>
-                        <label for="3_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>I plan my life out</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="4_yes" type="radio" name="4" value="true" required %(`{if {~ $survey_4 true} { echo checked }}%)>
-                        <label for="4_yes">Yes</label>
-                        <input id="4_no" type="radio" name="4" value="false" %(`{if {~ $survey_4 false} { echo checked }}%)>
-                        <label for="4_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>Rules are important to follow</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="5_yes" type="radio" name="5" value="true" required %(`{if {~ $survey_5 true} { echo checked }}%)>
-                        <label for="5_yes">Yes</label>
-                        <input id="5_no" type="radio" name="5" value="false" %(`{if {~ $survey_5 false} { echo checked }}%)>
-                        <label for="5_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>I often do spontaneous things</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="6_yes" type="radio" name="6" value="true" required %(`{if {~ $survey_6 true} { echo checked }}%)>
-                        <label for="6_yes">Yes</label>
-                        <input id="6_no" type="radio" name="6" value="false" %(`{if {~ $survey_6 false} { echo checked }}%)>
-                        <label for="6_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>Deep down most people are good people</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="7_yes" type="radio" name="7" value="true" required %(`{if {~ $survey_7 true} { echo checked }}%)>
-                        <label for="7_yes">Yes</label>
-                        <input id="7_no" type="radio" name="7" value="false" %(`{if {~ $survey_7 false} { echo checked }}%)>
-                        <label for="7_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>I love helping people</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="8_yes" type="radio" name="8" value="true" required %(`{if {~ $survey_8 true} { echo checked }}%)>
-                        <label for="8_yes">Yes</label>
-                        <input id="8_no" type="radio" name="8" value="false" %(`{if {~ $survey_8 false} { echo checked }}%)>
-                        <label for="8_no">No</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><p>The truth is more important than people's feelings</p></td>
-                <td>
-                    <div class="tags">
-                        <input id="9_yes" type="radio" name="9" value="true" required %(`{if {~ $survey_9 true} { echo checked }}%)>
-                        <label for="9_yes">Yes</label>
-                        <input id="9_no" type="radio" name="9" value="false" %(`{if {~ $survey_9 false} { echo checked }}%)>
-                        <label for="9_no">No</label>
-                    </div>
+                <td style="width: 100%">
+                    <input name="gender_other" id="gender_other" value="%(`{if {! isempty $gender && !~ $gender Man && !~ $gender Woman} { echo $gender }}%)"></input>
                 </td>
             </tr>
         </table>
+
+        <label for="country">Country (optional)</label>
+        <input name="country" id="country" class="countries" value="%($country%)">
+
+        <label for="language">Language(s)</label>
+        <input name="language" id="language" required>
+
+        <label>VR platform(s)</label>
+        <div class="tags">
+            <input id="quest" type="checkbox" name="Oculus_Quest" value="true" class="vrcheckbox" onclick="haveVR(this)" %($Oculus_Quest%)>
+            <label for="quest">Oculus Quest</label>
+            <input id="link" type="checkbox" name="Oculus_Link" value="true" class="vrcheckbox" onclick="haveVR(this)" %($Oculus_Link%)>
+            <label for="link">Oculus Quest with Link</label>
+            <input id="rift" type="checkbox" name="Oculus_Rift" value="true" class="vrcheckbox" onclick="haveVR(this)" %($Oculus_Rift%)>
+            <label for="rift">Oculus Rift (S)</label>
+            <input id="steamvr" type="checkbox" name="SteamVR" value="true" class="vrcheckbox" onclick="haveVR(this)" %($SteamVR%)>
+            <label for="steamvr">SteamVR (Index, Vive, Pimax, etc.)</label>
+            <input id="wmr" type="checkbox" name="Windows_Mixed_Reality" value="true" class="vrcheckbox" onclick="haveVR(this)" %($Windows_Mixed_Reality%)>
+            <label for="wmr">Windows Mixed Reality (Reverb, Odyssey, etc.)</label>
+            <input id="psvr" type="checkbox" name="PlayStation_VR" value="true" class="vrcheckbox" onclick="haveVR(this)" %($PlayStation_VR%)>
+            <label for="psvr">PlayStation VR</label>
+            <input id="desktop" type="checkbox" name="Desktop" value="true" onclick="noVR(this)" %($Desktop%)>
+            <label for="desktop">I don't have a supported headset yet</label>
+        </div>
+
 %       if {! isempty $onboarding} {
-            <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back" formnovalidate>Back</button>
             <button type="submit" class="btn btn-mango">Next page</button>
 %       } {
             <button type="submit" class="btn btn-mango">Save</button>
 %       }
     </form>
+%   if {! isempty $onboarding} {
+        <form id="form" action="" method="POST" accept-charset="utf-8">
+            <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back">Back</button>
+        </form>
+%   }
 </div>
 
+<style>
+    td:last-child {
+        width: 65%;
+        padding-left: 1em;
+    }
+</style>
+
 <script type="text/javascript">
-    var survey = document.querySelector('#survey > tbody');
-    for (var i = survey.children.length; i >= 0; i--) {
-        survey.appendChild(survey.children[Math.random() * i | 0]);
+    var tagify_gender = new Tagify(document.querySelector('input[name=gender_other]'), {
+        whitelist: ["Agender", "Androgynous", "Bigender", "Demiman", "Demiwoman", "Gender Fluid", "Gender Nonconforming", "Gender Questioning", "Gender Variant", "Genderqueer", "Hijra", "Intersex", "Neutrois", "Non-Binary", "Other", "Pangender", "Polygender", "Two-Spirit", "Trans Man", "Trans Person", "Trans Woman", "Transfeminine", "Transgender", "Transgender Man", "Transgender Person", "Transgender Woman", "Transmasculine", "Transsexual", "Transsexual Man", "Transsexual Woman"],
+        maxTags: 1,
+        skipInvalid: true,
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
+        dropdown: {
+            enabled: 0,
+            maxItems: 0
+        }
+    })
+    tagify_gender.on('add', gender_onAddTag)
+    tagify_gender.on('remove', gender_onRemoveTag)
+    function gender_onAddTag() {
+        document.querySelector('#other').checked = true
+        tagify_gender.dropdown.enabled = false
+    }
+    function gender_onRemoveTag() {
+        tagify_gender.dropdown.enabled = 0
+    }
+
+    var tagify_country = new Tagify(document.querySelector('input[name=country]'), {
+        delimiters: null,
+        templates: {
+            tag: function(tagData) {
+                try {
+                    return `<tag title='${tagData.value}' contenteditable='false' spellcheck="false" class='tagify__tag ${tagData.class ? tagData.class : ""}' ${this.getAttributes(tagData)}>
+                                <x title='remove tag' class='tagify__tag__removeBtn'></x>
+                                <div>
+                                    ${tagData.value ?
+                                    `<img onerror="this.style.visibility='hidden'" src='/img/flags/${tagData.value.toLowerCase()}.svg'>` : ''
+                                    }
+                                    <span class='tagify__tag-text'>${tagData.searchBy}</span>
+                                </div>
+                            </tag>`
+                } catch(err) {}
+            },
+            dropdownItem: function(tagData) {
+                try {
+                    return `<div class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}' tagifySuggestionIdx="${tagData.tagifySuggestionIdx}">
+                                <img onerror="this.style.visibility = 'hidden'"
+                                      src='/img/flags/${tagData.value.toLowerCase()}.svg'>
+                                <span>${tagData.searchBy}</span>
+                            </div>`
+                } catch(err) {}
+            }
+        },
+        enforceWhitelist: true,
+        whitelist: [
+%           for (country = `{redis graph read 'MATCH (c:country) RETURN c.id ORDER BY c.id'}) {
+                { value:'%($country%)', searchBy: new Intl.DisplayNames([], {type: 'region'}).of('%($country%)') },
+%           }
+        ],
+        maxTags: 1,
+        skipInvalid: true,
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
+        dropdown: {
+            enabled: 0,
+            maxItems: 0,
+            classname: 'extra-properties'
+        }
+    })
+
+    function checkGender(checkbox) {
+        if (checkbox.checked) {
+            [].forEach.call(document.getElementsByClassName('gendercheckbox'), function(el) {
+                el.checked = false;
+            })
+            checkbox.checked = true;
+        }
+    }
+    function checkOther() {
+        document.getElementById('other').checked = true;
+        checkGender(document.getElementById('other'));
+    }
+    document.getElementById('gender_other').addEventListener('change', checkOther);
+
+    var tagify_language = new Tagify(document.querySelector('input[name=language]'), {
+        delimiters: null,
+        templates: {
+            tag: function(tagData) {
+                try {
+                    return `<tag title='${tagData.value}' contenteditable='false' spellcheck="false" class='tagify__tag ${tagData.class ? tagData.class : ""}' ${this.getAttributes(tagData)}>
+                                <x title='remove tag' class='tagify__tag__removeBtn'></x>
+                                <div>
+                                    <span class='tagify__tag-text'>${tagData.searchBy}</span>
+                                </div>
+                            </tag>`
+                } catch(err) {}
+            },
+            dropdownItem: function(tagData) {
+                try {
+                    return `<div class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}' tagifySuggestionIdx="${tagData.tagifySuggestionIdx}">
+                                <span>${tagData.searchBy}</span>
+                            </div>`
+                } catch(err) {}
+            }
+        },
+        enforceWhitelist: true,
+        whitelist: [
+%           for (language = `{redis graph read 'MATCH (l:language) RETURN l.id ORDER BY l.id'}) {
+                { value:'%($language%)', searchBy: new Intl.DisplayNames([], {type: 'language'}).of('%($language%)') },
+%           }
+        ],
+        maxTags: 5,
+        skipInvalid: true,
+        editTags: false,
+	transformTag: transformLanguage,
+        dropdown: {
+            enabled: 0,
+            maxItems: 0
+        },
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+    })
+
+    function transformLanguage(tagData) {
+        tagData.innerHTML = new Intl.DisplayNames([navigator.language.slice(0, 2)], {type: 'language'}).of(tagData.value);
+    }
+
+%   if {! isempty $languages} {
+%       for (language = $languages) {
+            tagify_language.addTags(new Intl.DisplayNames([navigator.language.slice(0, 2)], {type: 'language'}).of('%($language%)'));
+%       }
+%   }
+
+    function haveVR(checkbox) {
+        if (checkbox.checked) {
+            document.getElementById('desktop').checked = false;
+        }
+    }
+    function noVR(checkbox) {
+        if (checkbox.checked) {
+            [].forEach.call(document.getElementsByClassName('vrcheckbox'), function(el) {
+                el.checked = false;
+            })
+        }
     }
 </script>

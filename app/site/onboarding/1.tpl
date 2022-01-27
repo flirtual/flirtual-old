@@ -1,104 +1,136 @@
 %{
-tags_noncustom = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:INTERESTED_IN]->(t:tag)
-                                                  WHERE NOT t.category = ''custom''
-                                                  RETURN t.name'}}
-tags_custom = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:INTERESTED_IN]->(t:tag)
-                                               WHERE t.category = ''custom''
-                                               RETURN t.name ORDER BY toLower(t.name)'} | sed 's/ /,/g; s/_/ /g'}
+(survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9) = \
+    `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
+                        RETURN u.survey_1, u.survey_2, u.survey_3, u.survey_4, u.survey_5,
+                               u.survey_6, u.survey_7, u.survey_8, u.survey_9'}
 
-for (var = $tags_noncustom) {
-    $var = checked
+for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9) {
+    if {! isempty $(p_$var)} {
+        $var = $(p_$var)
+    }
+    if {isempty $var} {
+        $var = ()
+    }
 }
 %}
 
-<form action="" method="POST" accept-charset="utf-8">
-    <div class="box">
-        <h1>Choose your profile tags</h1>
-        <p>Profile tags let VRLFP connect you with new people and events you'll like, and helps other users get to know you!</p>
+<div class="box">
+    <h1>A few personality questions</h1>
+    <p>These help VRLFP show you people with similar vibes and values. Other users won't see your answers.</p>
+
+    <form action="" method="POST" accept-charset="utf-8">
+        <table id="survey">
+            <tr>
+                <td><p>I daydream a lot</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="1_yes" type="radio" name="1" value="true" required %(`{if {~ $survey_1 true} { echo checked }}%)>
+                        <label for="1_yes">Yes</label>
+                        <input id="1_no" type="radio" name="1" value="false" %(`{if {~ $survey_1 false} { echo checked }}%)>
+                        <label for="1_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>I find many things beautiful</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="2_yes" type="radio" name="2" value="true" required %(`{if {~ $survey_2 true} { echo checked }}%)>
+                        <label for="2_yes">Yes</label>
+                        <input id="2_no" type="radio" name="2" value="false" %(`{if {~ $survey_2 false} { echo checked }}%)>
+                        <label for="2_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>I don't like it when things change</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="3_yes" type="radio" name="3" value="true" required %(`{if {~ $survey_3 true} { echo checked }}%)>
+                        <label for="3_yes">Yes</label>
+                        <input id="3_no" type="radio" name="3" value="false" %(`{if {~ $survey_3 false} { echo checked }}%)>
+                        <label for="3_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>I plan my life out</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="4_yes" type="radio" name="4" value="true" required %(`{if {~ $survey_4 true} { echo checked }}%)>
+                        <label for="4_yes">Yes</label>
+                        <input id="4_no" type="radio" name="4" value="false" %(`{if {~ $survey_4 false} { echo checked }}%)>
+                        <label for="4_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>Rules are important to follow</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="5_yes" type="radio" name="5" value="true" required %(`{if {~ $survey_5 true} { echo checked }}%)>
+                        <label for="5_yes">Yes</label>
+                        <input id="5_no" type="radio" name="5" value="false" %(`{if {~ $survey_5 false} { echo checked }}%)>
+                        <label for="5_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>I often do spontaneous things</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="6_yes" type="radio" name="6" value="true" required %(`{if {~ $survey_6 true} { echo checked }}%)>
+                        <label for="6_yes">Yes</label>
+                        <input id="6_no" type="radio" name="6" value="false" %(`{if {~ $survey_6 false} { echo checked }}%)>
+                        <label for="6_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>Deep down most people are good people</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="7_yes" type="radio" name="7" value="true" required %(`{if {~ $survey_7 true} { echo checked }}%)>
+                        <label for="7_yes">Yes</label>
+                        <input id="7_no" type="radio" name="7" value="false" %(`{if {~ $survey_7 false} { echo checked }}%)>
+                        <label for="7_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>I love helping people</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="8_yes" type="radio" name="8" value="true" required %(`{if {~ $survey_8 true} { echo checked }}%)>
+                        <label for="8_yes">Yes</label>
+                        <input id="8_no" type="radio" name="8" value="false" %(`{if {~ $survey_8 false} { echo checked }}%)>
+                        <label for="8_no">No</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><p>The truth is more important than people's feelings</p></td>
+                <td>
+                    <div class="tags">
+                        <input id="9_yes" type="radio" name="9" value="true" required %(`{if {~ $survey_9 true} { echo checked }}%)>
+                        <label for="9_yes">Yes</label>
+                        <input id="9_no" type="radio" name="9" value="false" %(`{if {~ $survey_9 false} { echo checked }}%)>
+                        <label for="9_no">No</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
 %       if {! isempty $onboarding} {
-            <p>Don't overthink it &ndash; you can update these later.</p>
-%       }
-    </div>
-
-    <div class="box">
-        <h1>Life</h1>
-        <p>Important things about you.</p>
-
-        <div class="tags">
-%           for (tag = `{redis graph read 'MATCH (t:tag {category: ''life''}) RETURN t.name ORDER BY t.name'}) {
-                <input id="%($tag%)" type="checkbox" name="%($tag%)" value="yes" %($$tag%)>
-                <label for="%($tag%)">%(`{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}%)</label>
-%           }
-        </div>
-    </div>
-
-    <div class="box">
-        <h1>Creative</h1>
-        <p>Beginners, pros, and fans are all welcome!</p>
-
-        <div class="tags">
-%           for (tag = `{redis graph read 'MATCH (t:tag {category: ''creation''}) RETURN t.name ORDER BY t.name'}) {
-                <input id="%($tag%)" type="checkbox" name="%($tag%)" value="yes" %($$tag%)>
-                <label for="%($tag%)">%(`{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}%)</label>
-%           }
-        </div>
-    </div>
-
-    <div class="box">
-        <h1>Genre</h1>
-        <p>Where you like to nerd out.</p>
-
-        <div class="tags">
-%           for (tag = `{redis graph read 'MATCH (t:tag {category: ''genre''}) RETURN t.name ORDER BY t.name'}) {
-                <input id="%($tag%)" type="checkbox" name="%($tag%)" value="yes" %($$tag%)>
-                <label for="%($tag%)">%(`{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}%)</label>
-%           }
-        </div>
-    </div>
-
-    <div class="box">
-        <h1>Gaming</h1>
-        <p>What are your favorite kinds of games?</p>
-
-        <div class="tags">
-%           for (tag = `{redis graph read 'MATCH (t:tag {category: ''gaming''}) RETURN t.name ORDER BY t.name'}) {
-                <input id="%($tag%)" type="checkbox" name="%($tag%)" value="yes" %($$tag%)>
-                <label for="%($tag%)">%(`{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}%)</label>
-%           }
-        </div>
-    </div>
-
-    <div class="box">
-        <h1>VR Social</h1>
-        <p>Things you like doing or want to try in VR.</p>
-
-        <div class="tags">
-%           for (tag = `{redis graph read 'MATCH (t:tag {category: ''social''}) RETURN t.name ORDER BY t.name'}) {
-                <input id="%($tag%)" type="checkbox" name="%($tag%)" value="yes" %($$tag%)>
-                <label for="%($tag%)">%(`{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}%)</label>
-%           }
-        </div>
-    </div>
-
-    <div class="box">
-        <h1>Custom tags</h1>
-        <p>Input up to 15 things you love. For example, hobbies, passions, topics you're an expert on, or your favorite games and shows.</p>
-        <input name="custom" id="custom" %(`{if {! isempty $tags_custom} { echo 'value="'$^tags_custom'"' }}%)>
-        <p>Hit <span class="desktop">"tab" or </span>"enter" to input multiple tags.</p>
-
-%       if {! isempty $onboarding} {
-            <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back">Back</button>
             <button type="submit" class="btn btn-mango">Next page</button>
 %       } {
             <button type="submit" class="btn btn-mango">Save</button>
 %       }
-    </div>
-</form>
+    </form>
+</div>
 
 <script type="text/javascript">
-    var tagify_custom = new Tagify(document.querySelector('input[name=custom]'), {
-        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
-        maxTags: 15,
-        pattern: /^.{0,50}$/
-    })
+    var survey = document.querySelector('#survey > tbody');
+    for (var i = survey.children.length; i >= 0; i--) {
+        survey.appendChild(survey.children[Math.random() * i | 0]);
+    }
 </script>

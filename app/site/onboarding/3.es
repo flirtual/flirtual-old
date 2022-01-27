@@ -11,95 +11,87 @@ if {~ $p_back true} {
     post_redirect /onboarding/2
 }
 
-# Set display name, or if none is chosen, copy username
-# This makes our life easier later
-if {!isempty $p_displayname} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.displayname = '''$^p_displayname''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$^p_displayname'"}'
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.displayname = '''$logged_user''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$logged_user'"}'
-}
-
-# Validate and set date of birth
-if {! isempty $p_dob} {
-    if {!~ $^p_dob [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ||
-    ~ `{echo $p_dob | sed 's/^.*-(.*)-.*$/\1/' | awk '{ print ($1 >= 1 && $1 <= 12) }'} 0 ||
-    ~ `{echo $p_dob | sed 's/^.*-.*-(.*)$/\1/' | awk '{ print ($1 >= 1 && $1 <= 31) }'} 0} {
-        throw error 'Invalid date of birth'
-    }
-    if {gt `{echo $p_dob | tr -d '-'} `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} 180000}} {
-        throw error 'You must be at least 18 years of age to use this website'
-    }
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.dob = '''$p_dob''''
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.dob = NULL'
-}
-
-# Set gender
-if {!~ $p_gender Man && !~ $p_gender Woman && ! isempty $p_gender_other} {
-    p_gender = $p_gender_other
-}
-if {! isempty $p_gender} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.gender = '''`^{echo $p_gender | escape_redis}^''''
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.gender = NULL'
-}
-
-# Validate and set country
-if {! isempty $p_country} {
-    if {!~ `{redis graph read 'MATCH (c:country {id: '''$p_country'''}) RETURN exists(c)'} true} {
-        throw error 'Invalid country'
-    }
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                             (c:country {id: '''$p_country'''})
-                       MERGE (u)-[:COUNTRY]->(c)'
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country)
-                       DELETE r'
-}
-
-# Validate and write language
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:KNOWS]->(l:language) DELETE e'
-languageset = false
-languages = `^{redis graph read 'MATCH (l:language) RETURN l.id'}
-for (language = `{echo $^p_language | sed 's/ /_/g; s/,/ /g'}) {
-    if {in $language $languages} {
-        languageset = true
+# Validate and write games
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:PLAYS]->(g:game) DELETE e'
+games = `^{redis graph read 'MATCH (g:game) RETURN g.name'}
+for (game = `{echo $^p_games | sed 's/ /_/g; s/,/ /g'}) {
+    if {in $game $games} {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (l:language {id: '''$language'''})
-                           MERGE (u)-[:KNOWS]->(l)'
+                                 (g:game {name: '''$game'''})
+                           MERGE (u)-[:PLAYS]->(g)'
     }
 }
-if {~ $languageset false} {
-    throw error 'Missing language'
+
+# Check newness
+if {!~ $^p_new true} {
+    p_new = false
 }
 
-# Validate and write platforms
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:USES]->(p:platform) DELETE e'
-platformset = false
-for (platform = `{redis graph read 'MATCH (p:platform) RETURN p.name'}) {
-    if {~ $(p_$platform) true} {
-        platformset = true
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (p:platform {name: '''$platform'''})
-                           MERGE (u)-[:USES]->(p)'
+# Fix URLs
+if {! isempty $p_vrchat} {
+    p_vrchat = `{echo $p_vrchat | sed 's/\/$//; s/.*\///; s/^/https:\/\/vrchat.com\/home\/search\//' | sanitize_url}
+}
+if {! isempty $p_steam} {
+    p_steam = `{echo $p_steam | sed 's/\/$//; s/.*\///; s/^/https:\/\/steamcommunity.com\/id\//' | sanitize_url}
+}
+if {! isempty $p_twitter} {
+    p_twitter = `{echo $p_twitter | sed 's/^@//; s/\/$//; s/.*\///; s/^/https:\/\/twitter.com\//' | sanitize_url}
+}
+if {! isempty $p_instagram} {
+    p_instagram = `{echo $p_instagram | sed 's/\/$//; s/.*\///; s/^/https:\/\/instagram.com\//' | sanitize_url}
+}
+if {! isempty $p_twitch} {
+    p_twitch = `{echo $p_twitch | sed 's/\/$//; s/.*\///; s/^/https:\/\/twitch.tv\//' | sanitize_url}
+}
+if {! isempty $p_youtube} {
+    if {echo $p_youtube | grep -s '\..*/.'} {
+        if {~ $p_youtube */channel/*} {
+            p_youtube = https://www.youtube.com/channel/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
+        } {~ $p_youtube */c/*} {
+            p_youtube = https://www.youtube.com/c/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
+        } {~ $p_youtube */user/*} {
+            p_youtube = https://www.youtube.com/user/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
+        } {
+            p_youtube = https://www.youtube.com/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
+        }
+    } {echo $p_youtube | grep -s '^UC......................$'} {
+        p_youtube = https://www.youtube.com/channel/$p_youtube
+    } {
+        p_youtube = https://www.youtube.com/$p_youtube
     }
+    p_youtube = `{echo $p_youtube | sanitize_url}
 }
-if {~ $platformset false} {
-    throw error 'Missing VR platform'
+if {! isempty $p_reddit} {
+    p_reddit = `{echo $p_reddit | sed 's/\/$//; s/.*\///; s/^/https:\/\/www.reddit.com\/user\//' | sanitize_url}
+}
+if {! isempty $p_spotify} {
+    p_spotify = `{echo $p_spotify | sed 's/\/$//; s/.*\///; s/^/https:\/\/open.spotify.com\/user\//' | sanitize_url}
+}
+if {! isempty $p_customurl} {
+    p_customurl = `{echo $p_customurl | sanitize_url}
 }
 
-# Proceed
+# Write
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.bio = '''`^{echo $^p_bio | sed 's/\\//g' | bluemonday | 
+                                     sed 's/<a /<a onclick="external_link(event, this)" /g' |
+                                     escape_redis}^''',
+                       u.new = '$p_new',
+                       u.vrchat = '''`^{echo $^p_vrchat | escape_redis}^''',
+                       u.discord = '''`^{echo $^p_discord | escape_redis}^''',
+                       u.steam = '''`^{echo $^p_steam | escape_redis}^''',
+                       u.twitter = '''`^{echo $^p_twitter | escape_redis}^''',
+                       u.instagram = '''`^{echo $^p_instagram | escape_redis}^''',
+                       u.twitch = '''`^{echo $^p_twitch | escape_redis}^''',
+                       u.youtube = '''`^{echo $^p_youtube | escape_redis}^''',
+                       u.reddit = '''`^{echo $^p_reddit | escape_redis}^''',
+                       u.spotify = '''`^{echo $^p_spotify | escape_redis}^''',
+                       u.customurl = '''`^{echo $^p_customurl | escape_redis}^''''
+
+# Start computing matches and proceed
 if {! isempty $onboarding} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.onboarding = 4'
+                       SET u.genguestlist = true, u.onboarding = 4'
     post_redirect /onboarding/4
 } {
     post_redirect '/settings#edit'

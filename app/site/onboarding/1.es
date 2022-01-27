@@ -5,83 +5,74 @@ if {! isempty $onboarding && !~ $onboarding 1} {
 
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
-# Back button -> return to previous onboarding page
-if {~ $p_back true} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}) SET u.onboarding = 1'
-    post_redirect /onboarding/1
-}
-
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[i:INTERESTED_IN]->(t:tag) DELETE i'
-
-# Validate non-custom tags
-tags_social = ()
-for (tag = `{redis graph read 'MATCH (t:tag {category: ''social''}) RETURN t.name'}) {
-    if {~ $(p_$tag) yes } {
-        tags_social = ($tags_social $tag)
+# Validate survey
+for (q = p_`{seq 9}) {
+    if {!~ $$q true && !~ $$q false} {
+        throw error 'Please answer all of the questions'
     }
 }
 
-tags_gaming = ()
-for (tag = `{redis graph read 'MATCH (t:tag {category: ''gaming''}) RETURN t.name'}) {
-    if {~ $(p_$tag) yes } {
-        tags_gaming = ($tags_gaming $tag)
-    }
+# Compute personality traits
+openness = 0
+conscientiousness = 0
+agreeableness = 0
+
+if {~ $p_1 true} {
+    ++ openness
+} {
+    -- openness
+}
+if {~ $p_2 true} {
+    ++ openness
+} {
+    -- openness
+}
+if {~ $p_3 false} {
+    ++ openness
+} {
+    -- openness
 }
 
-tags_genre = ()
-for (tag = `{redis graph read 'MATCH (t:tag {category: ''genre''}) RETURN t.name'}) {
-    if {~ $(p_$tag) yes } {
-        tags_genre = ($tags_genre $tag)
-    }
+if {~ $p_4 true} {
+    ++ conscientiousness
+} {
+    -- conscientiousness
+}
+if {~ $p_5 true} {
+    ++ conscientiousness
+} {
+    -- conscientiousness
+}
+if {~ $p_6 false} {
+    ++ conscientiousness
+} {
+    -- conscientiousness
 }
 
-tags_life = ()
-for (tag = `{redis graph read 'MATCH (t:tag {category: ''life''}) RETURN t.name'}) {
-    if {~ $(p_$tag) yes } {
-        tags_life = ($tags_life $tag)
-    }
+if {~ $p_7 true} {
+    ++ agreeableness
+} {
+    -- agreeableness
+}
+if {~ $p_8 true} {
+    ++ agreeableness
+} {
+    -- agreeableness
+}
+if {~ $p_9 false} {
+    ++ agreeableness
+} {
+    -- agreeableness
 }
 
-tags_creation = ()
-for (tag = `{redis graph read 'MATCH (t:tag {category: ''creation''}) RETURN t.name'}) {
-    if {~ $(p_$tag) yes } {
-        tags_creation = ($tags_creation $tag)
-    }
-}
-
-tags = ($tags_social $tags_gaming $tags_genre $tags_life $tags_creation)
-if {lt $#tags 3} {
-    throw error 'Please select at least 3 tags'
-}
-
-# Write non-custom tags
-for (category = social gaming genre life creation) {
-    for (tag = $(tags_$category)) {
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (t:tag {name: '''$tag''', category: '''$category'''})
-                           MERGE (u)-[:INTERESTED_IN]->(t)'
-    }
-}
-
-# Write custom tags
-if {! isempty $p_custom} {
-    for (tag = `{echo $p_custom | sed 's/ /_/g; s/,/ /g' | escape_redis}) {
-        existingtag = `{redis graph read 'MATCH (t:tag {category: ''custom''})
-                                          WHERE toLower(t.name) = '''`^{echo $tag | tr 'A-Z' 'a-z'}^'''
-                                          RETURN t.name'}
-        if {isempty $existingtag} {
-            # Create new tag
-            redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                               MERGE (t:tag {name: '''$tag''', category: ''custom''})
-                               MERGE (u)-[:INTERESTED_IN]->(t)'
-        } {
-            # Existing tag; link to user
-            redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                     (t:tag {name: '''$existingtag''', category: ''custom''})
-                               MERGE (u)-[:INTERESTED_IN]->(t)'
-        }
-    }
-}
+# Write
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.survey_1 = '$p_1', u.survey_2 = '$p_2', u.survey_3 = '$p_3',
+                       u.survey_4 = '$p_4', u.survey_5 = '$p_5', u.survey_6 = '$p_6',
+                       u.survey_7 = '$p_7', u.survey_8 = '$p_8', u.survey_9 = '$p_9',
+                       u.openness = '$openness',
+                       u.conscientiousness = '$conscientiousness',
+                       u.agreeableness = '$agreeableness
 
 # Proceed
 if {! isempty $onboarding} {
