@@ -4,29 +4,6 @@
           <p>Contains five (awesome) people who share common interests and traits with you. Refreshes each day.</p>
           <a href="/guestlist" class="btn btn-mango">Guest list</a>
       </div>
-
-      <div class="box">
-          <h1>Community Groups</h1>
-          <p>A list of cool VR community groups and Discords to join.</p>
-          <a href="/g/" class="btn btn-mango">Browse groups</a>
-      </div>
-
-      <div class="box">
-          <h1>Events</h1>
-          <p>A calendar of weekly and one-time events happening in VRChat. Find cool things to do or add your own!</p>
-          <a href="/calendar" class="btn btn-mango">View calendar</a>
-      </div>
-
-      <span id="invite"></span>
-      <div class="box">
-          <h1>Invite a friend</h1>
-          <table style="width: 100%">
-              <tr>
-                  <td style="width: 1px; white-space: nowrap"><label for="invitecode">Invite link:</label></td>
-                  <td><input id="invitecode" type="text" readonly="" onclick="this.select(); document.execCommand('copy'); this.value = 'Copied!'; this.onclick = ''" style="width: 100%; color: #000" value="https://vrlfp.com/?invite=%(`{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:REFERRAL]->(r:referral) RETURN r.id'}}%)"></td>
-              </tr>
-          </table>
-      </div>
 % } {
       <div id="s0">
           <img src="/img/logo.png" class="left" />
