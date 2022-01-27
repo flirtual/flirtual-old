@@ -23,11 +23,10 @@
 <span id="edit"></span>
 <div class="box">
     <h1>Edit profile</h1><br />
-    <a href="/onboarding/3" class="btn btn-blueraspberry btn-normal">Basic info</a><br /><br />
-    <a href="/onboarding/4" class="btn btn-blueraspberry btn-normal">Bio and socials</a><br /><br />
-    <a href="/onboarding/5" class="btn btn-blueraspberry btn-normal">Profile picture</a><br /><br />
-    <a href="/onboarding/1" class="btn btn-blueraspberry btn-normal">Interests</a><br /><br />
-    <a href="/onboarding/2" class="btn btn-blueraspberry btn-normal">Personality</a>
+    <a href="/onboarding/2" class="btn btn-blueraspberry btn-normal">Basic info</a><br /><br />
+    <a href="/onboarding/3" class="btn btn-blueraspberry btn-normal">Bio and socials</a><br /><br />
+    <a href="/onboarding/4" class="btn btn-blueraspberry btn-normal">Profile picture</a><br /><br />
+    <a href="/onboarding/1" class="btn btn-blueraspberry btn-normal">Personality</a>
 </div>
 
 <span id="preferences"></span>
