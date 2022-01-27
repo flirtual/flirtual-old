@@ -16,7 +16,6 @@
 
           <br />
           <form action="/register" method="POST">
-              <input type="hidden" name="referred_via" value="%($q_invite%)">
               <table style="max-width: 800px; margin: 0 auto">
                   <tr>
                       <td style="width: 100%">
@@ -75,7 +74,6 @@
 
               <br />
               <form action="/register" method="POST">
-                  <input type="hidden" name="referred_via" value="%($q_invite%)">
                   <table style="max-width: 800px; margin: 0 auto 15px auto">
                       <tr>
                           <td style="width: 100%">
@@ -195,10 +193,6 @@
           }
           #s5 {
               background-color: var(--mango);
-          }
-
-          .haveinvite {
-              font-size: 150%;
           }
       </style>
 % }

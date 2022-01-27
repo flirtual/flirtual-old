@@ -37,14 +37,13 @@
                   </tr>
               </table>
 
-              <input type="hidden" name="referred_via" value="%(`{if {! isempty $p_referred_via} { echo $p_referred_via | escape_html }}%)">
               <input type="hidden" name="theme" value="light">
 
               <br />
               <div id="captcha" class="h-captcha"></div>
               <script src="https://js.hcaptcha.com/1/api.js?onload=renderCaptcha&render=explicit" async defer></script>
 
-              <button type="submit" class="btn btn-mango">Get ROVING</button>
+              <button type="submit" class="btn btn-mango">Sign up</button>
           </form>
       </div>
 

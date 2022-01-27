@@ -54,14 +54,11 @@ redis graph write 'MERGE (u:user {username: '''$p_username''',
                                   email_wave: ''each'',
                                   onboarding: 1,
                                   privacy_age: ''vrlfp'', privacy_gender: ''vrlfp'',
-                                  privacy_country: ''public'', privacy_interests_common: ''vrlfp'',
-                                  privacy_interests_uncommon: ''public'', privacy_bio: ''public'',
-                                  privacy_language: ''public'', privacy_platform: ''public'',
-                                  privacy_games: ''public'', privacy_socials: ''public'',
-                                  privacy_friends: ''friends'', privacy_invite: ''public'',
+                                  privacy_country: ''vrlfp'', privacy_bio: ''vrlfp'',
+                                  privacy_language: ''vrlfp'', privacy_platform: ''vrlfp'',
+                                  privacy_games: ''vrlfp'', privacy_socials: ''friends'',
                                   optout: false,
                                   theme: '''$p_theme''',
-                                  avatar: ''defaults/01'',
 				  volume: 0.5,
                                   registered: '''`{date -ui}^'''})
                    MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
@@ -69,18 +66,5 @@ redis graph write 'MERGE (u:user {username: '''$p_username''',
 
 # Email confirmation
 sed 's/\$confirm/'$confirm'/' < mail/confirm | email $p_username 'Please confirm your email'
-
-# Link referral and decrement uses
-redis graph write 'MATCH (u:user {username: '''$p_username'''}),
-                         (r:referral {id: '''`^{echo $p_referred_via | tr 'a-z' 'A-Z'}^'''}),
-                         (ru:user)-[:REFERRAL]->(r)
-                   MERGE (u)-[:REFERRED_BY]->(ru)
-                   MERGE (u)-[:REFERRED_VIA]->(r)'
-
-# Create referral for new user
-referral = `{kryptgo genid -l 6 | sed 's/-/A/g; s/_/B/g' | tr 'a-z' 'A-Z'}
-redis graph write 'MATCH (u:user {username: '''$p_username'''})
-                   MERGE (r:referral {id: '''$referral'''})
-                   MERGE (u)-[:REFERRAL]->(r)'
 
 login_user $p_username $p_password
