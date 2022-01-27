@@ -84,7 +84,7 @@ fn login_user username password {
 
     # "Stay logged in" unchecked -> delete cookie when the browser closes
     # Otherwise, set session cookie with expiration as min($expiry, $expiryabs)
-    if {~ $session_length 2592000} {
+    if {~ $session_length 1800} {
         set_cookie id $sessionid
     } {lt $expiry $expiryabs} {
         set_cookie id $sessionid `{cookiedate `{date -u $expiry}}

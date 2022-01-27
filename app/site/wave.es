@@ -19,7 +19,7 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})-[r:WAVED]->(b
     # User had already waved at logged_user, add friend
     redis graph write 'MATCH (a:user {username: '''$p_user'''})-[r:WAVED]->(b:user {username: '''$logged_user'''})
                        DELETE r
-                       CREATE (a)-[:FRIENDS {new: true}]->(b)'
+                       MERGE (a)-[:FRIENDS {new: true}]->(b)'
     xmpp add_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'", "nick": "'$p_user'", "group": "Friends", "subs": "both"}'
     xmpp add_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'", "nick": "'$logged_user'", "group": "Friends", "subs": "both"}'
 
@@ -29,7 +29,7 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})-[r:WAVED]->(b
     # Create new wave
     redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                              (b:user {username: '''$p_user'''})
-                       CREATE (a)-[:WAVED {email: true}]->(b)'
+                       MERGE (a)-[:WAVED {email: true}]->(b)'
 
     # Email notification
     send = `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN u.email_wave'}

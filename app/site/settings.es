@@ -98,7 +98,8 @@ if {~ $p_changeemail true &&
                        SET u.email = '''$p_newemail''',
                            u.confirmed = false,
                            u.onboarding = 7
-                       CREATE (u)-[:CONFIRM]->(c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})'
+                       MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
+                       MERGE (u)-[:CONFIRM]->(c)'
 
     # Email confirmation
     sed 's/\$confirm/'$confirm'/' < mail/confirm | email $logged_user 'Please confirm your email'

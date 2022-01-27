@@ -17,7 +17,8 @@ if {isempty $expiry} {
 
     # Create confirmation with expiry in 24 hours
     redis graph write 'MATCH (u:user {username: '''$u'''})
-                       CREATE (u)-[:CONFIRM]->(c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})'
+                       MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
+                       MERGE (u)-[:CONFIRM]->(c)'
 
     throw error 'Your confirmation link has expired. We''ve sent you a new one. Please check your email and confirm again'
 }
