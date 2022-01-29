@@ -32,7 +32,7 @@
                   </tr>
                   <tr><td></td></tr>
                   <tr>
-                      <td><input type="checkbox" name="newsletter" id="newsletter" value="true" checked></td>
+                      <td><input type="checkbox" name="newsletter" id="newsletter" value="true" %(`{if {~ $p_newsletter true} { echo checked }}%)></td>
                       <td><label for="newsletter" style="display: inline-block; width: 100%; transform: translateY(4px)">Bless my inbox with monthly VRLFP updates (we won't spam you)</label></td>
                   </tr>
               </table>
@@ -40,6 +40,7 @@
               <input type="hidden" name="theme" value="light">
 
               <br />
+              <label for="captcha">Are you a robot?</label>
               <div id="captcha" class="h-captcha"></div>
               <script src="https://js.hcaptcha.com/1/api.js?onload=renderCaptcha&render=explicit" async defer></script>
 
