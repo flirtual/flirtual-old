@@ -1,6 +1,6 @@
 ---
 name: Missing tag
-about: Suggest a profile tag for ROVR
+about: Suggest a profile tag for VRLFP
 title: ''
 labels: enhancement
 assignees: ''

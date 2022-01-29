@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for ROVR
+about: Suggest an idea for VRLFP
 title: ''
 labels: enhancement
 assignees: ''
