@@ -23,7 +23,7 @@ if {! isempty $q_user && echo $q_user | grep -s '^'$allowed_user_chars'+$'} {
               <label for="details">Details</label>
               <textarea id="details" name="details"></textarea><br /><br />
 
-              <button type="submit" class="btn btn-mango">Submit</button>
+              <button type="submit" class="btn">Submit</button>
           </form>
       </div>
 % } {

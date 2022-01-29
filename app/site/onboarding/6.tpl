@@ -1,18 +1,18 @@
 <div class="box">
-    <h1>One more step!</h1>
+    <h1>Email confirmation</h1>
     <p>Please check your email for a confirmation link to activate your account. If you don't see it in your inbox, please check your spam folder!</p>
 
 %   if {~ $p_resend yes} {
         <p>Sent! Please check your email for a confirmation link.</p>
 %   } {
         <form action="" method="POST" accept-charset="utf-8">
-            <button type="submit" name="resend" value="yes" class="btn btn-mango">Resend email</button>
+            <button type="submit" name="resend" value="yes" class="btn btn-gradient">Resend email</button>
         </form>
 %   }
 </div>
 
 <div class="box">
-    <h1>Didn't get an email?</h1>
+    <h1>No email?</h1>
 %   if {~ $update_success true} {
         <p>Success! Your email has been updated and we've sent you a new confirmation link.</p>
         <p>Please <a href="https://vrlfp.atlassian.net/servicedesk/customer/portal/3/group/4/create/46" target="_blank">contact us</a> if you're still having trouble.</p>
@@ -27,7 +27,7 @@
                 </tr>
             </table>
 
-            <button type="submit" class="btn btn-mango">Update email</button>
+            <button type="submit" class="btn btn-gradient">Update email</button>
         </form>
 %   }
 </div>

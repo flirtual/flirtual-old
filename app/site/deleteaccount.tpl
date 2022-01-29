@@ -5,7 +5,7 @@
         <label for="password">Confirm password</label>
         <input type="password" name="password" id="password" required autocomplete="current-password" placeholder="••••••••••••••••">
 
-        <button type="submit" class="btn btn-mango">Delete account</button>
+        <button type="submit" class="btn btn-gradient">Delete account</button>
     </form>
-    <a href="/settings#account" class="btn btn-blueraspberry btn-back">Back</a>
+    <a href="/settings#account" class="btn btn-back">Back</a>
 </div>

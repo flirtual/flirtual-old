@@ -1,9 +1,5 @@
 % if {logged_in} {
-      <div class="box">
-          <h1>Your Guest List</h1>
-          <p>Contains five (awesome) people who share common interests and traits with you. Refreshes each day.</p>
-          <a href="/guestlist" class="btn btn-mango">Guest list</a>
-      </div>
+%     template tpl/profile.tpl kyle
 % } {
       <div id="s0">
           <img src="/img/logo.png" class="left" />
@@ -22,7 +18,7 @@
                           <input type="email" name="email" required placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
                       </td>
                       <td>
-                          <button type="submit" name="from_landingpage" value="true" class="btn btn-mango" style="white-space: nowrap; transform: translateY(24px)">Sign me up</button>
+                          <button type="submit" name="from_landingpage" value="true" class="btn" style="white-space: nowrap; transform: translateY(24px)">Sign me up</button>
                       </td>
                   </tr>
               </table>
@@ -37,7 +33,7 @@
                   <li><img src="/img/s2c.png" /></li>
               </ul>-->
               <img src="/img/s2.gif" />
-              <p style="color: var(--blueraspberry); font-family: filicudi-solid, sans-serif; text-align: center;">+&nbsp;1000's of custom profile&nbsp;tags</p>
+              <p style="font-family: filicudi-solid, sans-serif; text-align: center;">+&nbsp;1000's of custom profile&nbsp;tags</p>
           </div>
           <div>
               <h2>Meet cool people</h2>
@@ -59,7 +55,7 @@
       <div id="s4" class="section"><div class="row grid">
           <div>
               <img src="/img/s4.jpg" />
-              <p style="color: var(--mango); font-family: filicudi-solid, sans-serif; text-align: center">+&nbsp;1000's more games&nbsp;and&nbsp;worlds</p>
+              <p style="color: var(--pink); font-family: filicudi-solid, sans-serif; text-align: center">+&nbsp;1000's more games&nbsp;and&nbsp;worlds</p>
           </div>
           <div>
               <h2>Make friends in VR</h2>
@@ -80,7 +76,7 @@
                               <input type="email" name="email" required placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
                           </td>
                           <td>
-                              <button type="submit" name="from_landingpage" value="true" class="btn btn-blueraspberry" style="white-space: nowrap; transform: translate(8px, 20px)">Sign me up</button>
+                              <button type="submit" name="from_landingpage" value="true" class="btn" style="white-space: nowrap; transform: translate(8px, 20px)">Sign me up</button>
                           </td>
                       </tr>
                   </table>
@@ -157,7 +153,6 @@
           }
 
           #s0 {
-              background-color: var(--blueraspberry);
               padding: 2.5em;
           }
           #s0 a {
@@ -171,7 +166,6 @@
           }
           #s0 a:hover {
               background-color: #fff;
-              color: var(--blueraspberry);
           }
 
           #s1 {
@@ -188,11 +182,10 @@
           }
 
           #s1, #s3 {
-              background-color: var(--blueraspberry);
               color: #fff;
           }
           #s5 {
-              background-color: var(--mango);
+              background-color: var(--pink);
           }
       </style>
 % }

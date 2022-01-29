@@ -21,7 +21,7 @@ guests = `{redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:GU
       <div class="box">
           <h1>Guest List</h1>
           <p>We're still generating your guest list! Please check back in a couple minutes.</p>
-	  <a href="/guestlist" class="btn btn-mango">Reload</a>
+	  <a href="/guestlist" class="btn">Reload</a>
       </div>
 % } {
       <div class="box">

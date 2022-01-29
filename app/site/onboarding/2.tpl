@@ -26,9 +26,9 @@ for (var = displayname dob gender country languages platform) {
 
 <div class="box" style="margin-top: 0">
 %   if {! isempty $onboarding} {
-        <h1>More about you</h1>
+        <h1>About you</h1>
 %   } {
-        <h1>Some basic info</h1>
+        <h1>Basic info</h1>
 %   }
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
@@ -81,14 +81,14 @@ for (var = displayname dob gender country languages platform) {
         </div>
 
 %       if {! isempty $onboarding} {
-            <button type="submit" class="btn btn-mango">Next page</button>
+            <button type="submit" class="btn btn-gradient">Next page</button>
 %       } {
-            <button type="submit" class="btn btn-mango">Save</button>
+            <button type="submit" class="btn btn-gradient">Save</button>
 %       }
     </form>
 %   if {! isempty $onboarding} {
         <form id="form" action="" method="POST" accept-charset="utf-8">
-            <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back">Back</button>
+            <button type="submit" name="back" value="true" class="btn btn-back">Back</button>
         </form>
 %   }
 </div>

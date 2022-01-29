@@ -20,7 +20,7 @@
                       } else {
                           p.type = 'text';
                           p.classList.add('password_shown');
-                          document.querySelector('#password_toggle').style.color = 'var(--cherry)';
+                          document.querySelector('#password_toggle').style.color = 'var(--pink)';
                       }
                   }
               </script>
@@ -43,7 +43,7 @@
               <div id="captcha" class="h-captcha"></div>
               <script src="https://js.hcaptcha.com/1/api.js?onload=renderCaptcha&render=explicit" async defer></script>
 
-              <button type="submit" class="btn btn-mango">Sign up</button>
+              <button type="submit" class="btn btn-gradient">Sign up</button>
           </form>
       </div>
 
@@ -65,6 +65,6 @@
       <div class="box">
           <h1>Register</h1>
           <p>You're already logged in!</p>
-          <a href="/logout" class="btn btn-mango">Logout</a>
+          <a href="/logout" class="btn">Logout</a>
       </div>
 % }

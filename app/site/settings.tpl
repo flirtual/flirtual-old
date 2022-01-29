@@ -14,19 +14,21 @@
     <div class="notice success">%($q_update_success%) updated successfully!</div>
 % }
 
-<a onclick="document.getElementById('edit').scrollIntoView()" class="btn btn-blueraspberry" style="margin: 0 1em 1em 0">Edit profile</a>
-<a onclick="document.getElementById('preferences').scrollIntoView()" class="btn btn-blueraspberry" style="margin: 0 1em 1em 0">Preferences</a>
-<a onclick="document.getElementById('notifications').scrollIntoView()" class="btn btn-blueraspberry" style="margin: 0 1em 1em 0">Notifications</a>
-<a onclick="document.getElementById('privacy').scrollIntoView()" class="btn btn-blueraspberry" style="margin: 0 1em 1em 0">Privacy</a>
-<a onclick="document.getElementById('account').scrollIntoView()" class="btn btn-blueraspberry" style="margin: 0 1em 1em 0">Account</a>
+<div style="margin-top: -100px">
+    <a onclick="document.getElementById('edit').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Edit profile</a>
+    <a onclick="document.getElementById('preferences').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Preferences</a>
+    <a onclick="document.getElementById('notifications').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Notifications</a>
+    <a onclick="document.getElementById('privacy').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Privacy</a>
+    <a onclick="document.getElementById('account').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Account</a>
+</div>
 
 <span id="edit"></span>
 <div class="box">
     <h1>Edit profile</h1><br />
-    <a href="/onboarding/2" class="btn btn-blueraspberry btn-normal">Basic info</a><br /><br />
-    <a href="/onboarding/3" class="btn btn-blueraspberry btn-normal">Bio and socials</a><br /><br />
-    <a href="/onboarding/4" class="btn btn-blueraspberry btn-normal">Profile picture</a><br /><br />
-    <a href="/onboarding/1" class="btn btn-blueraspberry btn-normal">Personality</a>
+    <a href="/onboarding/2" class="btn btn-normal">Basic info</a><br /><br />
+    <a href="/onboarding/3" class="btn btn-normal">Bio and socials</a><br /><br />
+    <a href="/onboarding/4" class="btn btn-normal">Profile picture</a><br /><br />
+    <a href="/onboarding/1" class="btn btn-normal">Personality</a>
 </div>
 
 <span id="preferences"></span>
@@ -39,7 +41,7 @@
         <label for="light">Light</label><br />
         <input type="radio" name="theme" id="dark" value="dark" style="margin-top: 12px" %(`{if {~ $theme dark} { echo checked }}%)>
         <label for="dark">Dark</label><br />
-        <button type="submit" name="changetheme" value="true" class="btn btn-mango">Save</button>
+        <button type="submit" name="changetheme" value="true" class="btn btn-gradient">Save</button>
     </form>
 </div>
 
@@ -57,10 +59,10 @@
             <option value="disabled" %(`{if {~ $email_wave disabled} { echo 'selected' }}%)>Disabled</option>
         </select>
 
-        <label for="volume">Message notification volume</label><a onclick="document.getElementById('message_audio').currentTime = 0; document.getElementById('message_audio').play()" class="btn btn-blueraspberry" style="font-size: 70%; transform: translate(-15px, 8px) rotate(-5deg)">Test</a><br />
+        <label for="volume">Message notification volume</label><a onclick="document.getElementById('message_audio').currentTime = 0; document.getElementById('message_audio').play()" class="btn btn-small">Test</a><br />
         <input type="range" min="0" max="1" step="0.01" id="volume" name="volume" value="%($volume%)" onchange="document.getElementById('message_audio').volume = this.value" style="width: 100%"><br /><br />
 
-        <button type="submit" name="changenotifications" value="true" class="btn btn-mango">Save</button>
+        <button type="submit" name="changenotifications" value="true" class="btn btn-gradient">Save</button>
     </form>
 </div>
 
@@ -166,7 +168,7 @@
             <option value="true" %(`{if {~ $optout true} { echo 'selected' }}%)>Do not include me in statistics</option>
         </select>
 
-        <button type="submit" class="btn btn-mango">Save</button>
+        <button type="submit" class="btn btn-gradient">Save</button>
     </form>
 </div>
 
@@ -188,9 +190,7 @@
         <label for="confirmpassword">Confirm password</label>
         <input type="password" name="confirmpassword" id="confirmpassword" required autocomplete="current-password" placeholder="••••••••••••••••">
 
-        <div style="text-align: right">
-            <button type="submit" name="changeemail" value="true" class="btn btn-mango btn-normal" style="transform: rotate(-12deg) translate(50px, -5px)">Update</button>
-        </div>
+        <button type="submit" name="changeemail" value="true" class="btn btn-gradient" style="margin: 1em 0 0.5em auto">Update</button>
     </form>
 
     <h2>Change your password</h2>
@@ -201,13 +201,11 @@
         <label for="newpassword">New password</label>
         <input type="password" name="newpassword" id="newpassword" required autocomplete="new-password" placeholder="••••••••••••••••">
 
-        <div style="text-align: right">
-            <button type="submit" name="changepassword" value="true" class="btn btn-mango btn-normal" style="transform: rotate(-12deg) translate(50px, -5px)">Update</button>
-        </div>
+        <button type="submit" name="changepassword" value="true" class="btn btn-gradient" style="margin: 1em 0 0.5em auto">Update</button>
     </form>
 
     <h2>Danger Zone</h2>
-    <a href="/deleteaccount" class="btn btn-blueraspberry btn-close btn-normal" style="top: 0 !important; right: 0 !important">Delete account</a>
+    <a href="/deleteaccount" class="btn btn-normal" style="top: 0 !important; right: 0 !important">Delete account</a>
 </div>
 
 <script>

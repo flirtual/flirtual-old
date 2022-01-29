@@ -1,5 +1,5 @@
 <div class="box">
-    <h1>Forgot your password?</h1>
+    <h1>Reset password</h1>
 
 %   if {~ $forgot_success true} {
         <p>Sent! Please check your email for a link to reset your password.</p>
@@ -10,7 +10,7 @@
             <label for="email">Account email</label>
             <input type="email" name="email" id="email" required placeholder="whomstever@example.com" value="%(`{echo $^p_email | escape_html}%)">
 
-            <button type="submit" class="btn btn-mango">Submit</button>
+            <button type="submit" class="btn btn-gradient">Submit</button>
         </form>
 %   }
 </div>

@@ -12,7 +12,7 @@ if {!~ $^debug true ||
         <table>
             <tr>
                 <td><input type="text" name="command" value="%($^p_command%)" autofocus style="width: calc(100% + 35px); font-family: monospace"></td>
-                <td><button type="submit" class="btn btn-mango" style="transform: rotate(-12deg) translate(54px, 29px)">Run</button><br /></td>
+                <td><button type="submit" class="btn" style="transform: rotate(-12deg) translate(54px, 29px)">Run</button><br /></td>
             </tr>
         </table>
     </form>

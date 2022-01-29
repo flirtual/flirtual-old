@@ -9,7 +9,7 @@
 %}
 
 <div class="box">
-    <h1>Confirm your privacy settings</h1>
+    <h1>Privacy</h1>
 
     <form action="" method="POST" accept-charset="utf-8">
         <label>Who can see your age?</label>
@@ -74,7 +74,7 @@
             <option value="true" %(`{if {~ $optout true} { echo 'selected' }}%)>Do not include me in statistics</option>
         </select>
 
-        <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back">Back</button>
-        <button type="submit" class="btn btn-mango">Next page</button>
+        <button type="submit" name="back" value="true" class="btn btn-back">Back</button>
+        <button type="submit" class="btn btn-gradient">Next page</button>
     </form>
 </div>

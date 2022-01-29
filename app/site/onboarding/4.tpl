@@ -8,7 +8,7 @@ if {isempty $avatar} {
 %}
 
 <div class="box">
-    <h1>Choose your look</h1>
+    <h1>Profile pic</h1>
 
     <form action="" method="POST" accept-charset="utf-8" class="avatar_picker">
         <div class="tabs">
@@ -77,14 +77,14 @@ if {isempty $avatar} {
         <p>Custom profile pics coming soon!</p>
 
 %       if {! isempty $onboarding} {
-            <button type="submit" class="btn btn-mango">Next page</button>
+            <button type="submit" class="btn btn-gradient">Next page</button>
 %       } {
-            <button type="submit" class="btn btn-mango">Save</button>
+            <button type="submit" class="btn btn-gradient">Save</button>
 %       }
     </form>
 %   if {! isempty $onboarding} {
         <form id="form" action="" method="POST" accept-charset="utf-8">
-            <button type="submit" name="back" value="true" class="btn btn-blueraspberry btn-back">Back</button>
+            <button type="submit" name="back" value="true" class="btn btn-back">Back</button>
         </form>
 %   }
 </div>

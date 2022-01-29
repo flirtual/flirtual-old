@@ -15,7 +15,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
 %}
 
 <div class="box">
-    <h1>A few personality questions</h1>
+    <h1>Personality</h1>
     <p>These help VRLFP show you people with similar vibes and values. Other users won't see your answers.</p>
 
     <form action="" method="POST" accept-charset="utf-8">
@@ -121,9 +121,9 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
             </tr>
         </table>
 %       if {! isempty $onboarding} {
-            <button type="submit" class="btn btn-mango">Next page</button>
+            <button type="submit" class="btn btn-gradient">Next page</button>
 %       } {
-            <button type="submit" class="btn btn-mango">Save</button>
+            <button type="submit" class="btn btn-gradient">Save</button>
 %       }
     </form>
 </div>

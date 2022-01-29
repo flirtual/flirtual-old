@@ -50,13 +50,11 @@
         <table>
             <tr>
                 <td><input type="checkbox" name="distinct" id="distinct" value="true" checked>
-                <label for="distinct" style="display: inline-block; transform: translateY(4px)">Unique</label></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="login_query" value="%($^p_login_query%)" style="width: calc(100% + 35px); font-family: monospace"></td>
-                <td><button type="submit" class="btn btn-mango btn-normal" style="transform: rotate(-12deg) translate(54px, 29px)">Run</button><br /></td>
+                <label for="distinct" style="display: inline-block">Unique</label></td>
             </tr>
         </table>
+        <input type="text" name="login_query" value="%($^p_login_query%)" style="width: calc(100% + 35px); font-family: monospace"><br /><br />
+        <button type="submit" class="btn btn-normal">Run</button><br />
     </form>
     <p>
 %       if {! isempty $p_login_query} {
@@ -77,12 +75,8 @@
         <li>Month: <span style="font-family: monospace">u.registered starts with '2021-01-'</span></li>
     </ul>
     <form method="POST" accept-charset="utf-8">
-        <table>
-            <tr>
-                <td><input type="text" name="registration_query" value="%($^p_registration_query%)" style="width: calc(100% + 35px); font-family: monospace"></td>
-                <td><button type="submit" class="btn btn-mango btn-normal" style="transform: rotate(-12deg) translate(54px, 29px)">Run</button><br /></td>
-            </tr>
-        </table>
+        <input type="text" name="registration_query" value="%($^p_registration_query%)" style="width: calc(100% + 35px); font-family: monospace"><br /><br />
+        <button type="submit" class="btn btn-normal">Run</button><br />
     </form>
     <p>
 %       if {! isempty $p_registration_query} {

@@ -7,7 +7,7 @@ if {isempty $waves} {
     echo '<div class="box">'
     echo '    <h1>No notifications</h1>'
     echo '    <p>You''re all caught up!</p>'
-    echo '    <a href="/" class="btn btn-mango">Go home</a>'
+    echo '    <a href="/" class="btn">Go home</a>'
     echo '</div>'
 } {
     for (profile = $waves) {

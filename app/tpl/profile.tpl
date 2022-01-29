@@ -9,8 +9,7 @@ if {! isempty $targ} {
  inviter_displayname lastlogin new lunew open luopen conscientious luconscientious \
  agreeable luagreeable bio vrchat discord steam twitter instagram twitch youtube \
  reddit spotify customurl ponboarding privacy_age privacy_gender privacy_country \
- privacy_socials privacy_games privacy_interests_common \
- privacy_interests_uncommon privacy_bio privacy_language privacy_platform \
+ privacy_socials privacy_games privacy_bio privacy_language privacy_platform \
  privacy_friends privacy_invite avatar) = \
     `` \n {redis graph read 'MATCH (u:user)
                              WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^'''
@@ -29,7 +28,6 @@ if {! isempty $targ} {
                                     u.twitter, u.instagram, u.twitch, u.youtube, u.reddit, u.spotify,
                                     u.customurl, u.onboarding, u.privacy_age, u.privacy_gender,
                                     u.privacy_country, u.privacy_socials, u.privacy_games,
-                                    u.privacy_interests_common, u.privacy_interests_uncommon,
                                     u.privacy_bio, u.privacy_language, u.privacy_platform,
                                     u.privacy_friends, i.privacy_invite, u.avatar'}
 
@@ -62,12 +60,12 @@ fn isvisible field {
 
 % # User doesn't exist, was banned/deleted, or hasn't finished filling out their profile
 % if {isempty $profile || ! isempty $ponboarding} {
-    <div class="box profile" style="margin-top: 0">
-        <h1>Profile not found</h1>
+    <div class="box">
+        <h1>404</h1>
         <p>Sorry, the profile you're looking for doesn't exist!</p>
     </div>
 % } {
-    <div class="box profile" style="margin-top: 0; padding: 40px 60px 25px 60px">
+    <div class="box profile">
 %       # Basic profile info: avatar, display name, age, gender, country
         <table>
             <tr>
@@ -92,13 +90,13 @@ fn isvisible field {
 
 %       # Your profile? -> Edit button
 %       if {~ $profile $logged_user} {
-            <br /><a href="/settings#edit" class="btn btn-blueraspberry">Edit profile</a>
+            <br /><a href="/settings#edit" class="btn">Edit profile</a>
 %       }
 
 %       # Wave/friend/message button/info as applicable
 %       if {logged_in && !~ $profile $logged_user} {
 %           if {~ $isfriend true} {
-                <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn btn-blueraspberry" style="margin-top: 1.5em">Message</a><br />
+                <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn" style="margin-top: 1.5em">Message</a><br />
 %           } {~ $luwaved true} {
                 <p style="margin-bottom: 1.4em"><strong>You waved at %($displayname%).</strong></p>
 %           } {~ $uwaved true} {
@@ -106,13 +104,13 @@ fn isvisible field {
                 <form action="/wave" method="POST" accept-charset="utf-8" style="margin-top: 2.5em">
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
-                    <button type="submit" class="btn btn-mango btn-normal">Add friend</button>
+                    <button type="submit" class="btn btn-normal">Add friend</button>
                 </form>
 %           } {
                 <form action="/wave" method="POST" accept-charset="utf-8" style="margin-top: 2.5em">
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
-                    <button type="submit" class="btn btn-mango btn-normal" title="This will send a friend request.">Wave</button>
+                    <button type="submit" class="btn btn-normal" title="This will send a friend request.">Wave</button>
                 </form>
 %           }
 %       }
@@ -122,7 +120,7 @@ fn isvisible field {
             <form action="/pass" method="POST" accept-charset="utf-8">
                 <input type="hidden" name="return" value="%($req_path%)">
                 <input type="hidden" name="user" value="%($profile%)">
-                <button type="submit" class="btn btn-blueraspberry btn-close">X</button>
+                <button type="submit" class="btn btn-close">X</button>
             </form>
 %       }
 
@@ -301,40 +299,6 @@ fn isvisible field {
             }
         }
 
-        # Interests
-        if {isvisible interests_common || isvisible interests_uncommon} {
-            echo '<h2>Interests</h2>'
-            for (category = custom life creation genre gaming social; heading = Custom Life Creative Genre Gaming Social) {
-                if {logged_in} {
-                    common_tags = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:INTERESTED_IN]->(t:tag {category: '''$category'''}),
-                                                                         (lu:user {username: '''$logged_user'''})
-                                                                   WHERE (lu)-[:INTERESTED_IN]->(t)
-                                                                   RETURN t.name ORDER BY toLower(t.name)'}}
-                    tags = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:INTERESTED_IN]->(t:tag {category: '''$category'''}),
-                                                                  (lu:user {username: '''$logged_user'''})
-                                                            WHERE NOT (lu)-[:INTERESTED_IN]->(t)
-                                                            RETURN t.name ORDER BY toLower(t.name)'}}
-                } {
-                    tags = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:INTERESTED_IN]->(t:tag {category: '''$category'''})
-                                                            RETURN t.name ORDER BY toLower(t.name)'}}
-                }
-
-                if {{isvisible interests_common && ! isempty $common_tags} || {isvisible interests_uncommon && ! isempty $tags}} {
-                    echo '<h3>'$heading'</h3>'
-                    if {isvisible interests_common && ! isempty $common_tags} {
-                        for(tag = $common_tags) {
-                            echo '<span class="tag common">'`^{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}^'</span>'
-                        }
-                    }
-                    if {isvisible interests_uncommon && ! isempty $tags} {
-                        for(tag = $tags) {
-                            echo '<span class="tag">'`^{echo $tag | sed 's/____/+/g; s/___/\//g; s/__/-/g; s/_/ /g'}^'</span>'
-                        }
-                    }
-                }
-            }
-        }
-
         # Language
         if {isvisible language} {
             echo '<h2>Language</h2>'
@@ -409,13 +373,13 @@ fn isvisible field {
             <form action="/unfriend" method="POST" accept-charset="utf-8" style="display: inline-block; margin-right: 1em">
                     <input type="hidden" name="return" value="%($req_path%)">
                 <input type="hidden" name="user" value="%($profile%)">
-                <button type="submit" class="btn btn-blueraspberry btn-normal">Remove friend</button>
+                <button type="submit" class="btn btn-normal">Remove friend</button>
             </form>
 %       }
 
 %       # Report button
 %       if {!~ $profile $logged_user} {
-            <a href="/report?user=%($profile%)" class="btn btn-cherry btn-normal">Report user</a>
+            <a href="/report?user=%($profile%)" class="btn btn-normal">Report user</a>
 %       }
 
 %       # Wave/friend button/info as applicable
@@ -424,13 +388,13 @@ fn isvisible field {
                 <form action="/wave" method="POST" accept-charset="utf-8" style="margin-top: 2.5em">
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
-                    <button type="submit" class="btn btn-mango">Add friend</button>
+                    <button type="submit" class="btn">Add friend</button>
                 </form>
 %           } {
                 <form action="/wave" method="POST" accept-charset="utf-8" style="margin-top: 2.5em">
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
-                    <button type="submit" class="btn btn-mango" title="This will send a friend request.">Wave</button>
+                    <button type="submit" class="btn" title="This will send a friend request.">Wave</button>
                 </form>
 %           }
 %       }
