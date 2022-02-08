@@ -1,12 +1,8 @@
 %{
-(theme age gender country interests_common interests_uncommon bio language platform games \
- socials friends invite optout newsletter email_wave volume) = \
+(theme nsfw personality socials sexuality kinks optout newsletter email_wave volume) = \
     `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
-                             RETURN u.theme, u.privacy_age, u.privacy_gender,
-                                    u.privacy_country, u.privacy_interests_common,
-                                    u.privacy_interests_uncommon, u.privacy_bio, u.privacy_language,
-                                    u.privacy_platform, u.privacy_games, u.privacy_socials,
-                                    u.privacy_friends, u.privacy_invite, u.optout, u.newsletter,
+                             RETURN u.theme, u.nsfw, u.privacy_personality, u.privacy_socials,
+                                    u.privacy_sexuality, u.privacy_kinks, u.optout, u.newsletter,
                                     u.email_wave, u.volume'}
 %}
 
@@ -25,10 +21,11 @@
 <span id="edit"></span>
 <div class="box">
     <h1>Edit profile</h1><br />
-    <a href="/onboarding/2" class="btn btn-normal">Basic info</a><br /><br />
+    <a href="/onboarding/1" class="btn btn-normal">Basic info</a><br /><br />
+    <a href="/onboarding/2" class="btn btn-normal">Matchmaking</a><br /><br />
     <a href="/onboarding/3" class="btn btn-normal">Bio and socials</a><br /><br />
-    <a href="/onboarding/4" class="btn btn-normal">Profile picture</a><br /><br />
-    <a href="/onboarding/1" class="btn btn-normal">Personality</a>
+    <a href="/onboarding/4" class="btn btn-normal">Personality</a><br /><br />
+    <a href="/nsfw" class="btn btn-normal">NSFW</a>
 </div>
 
 <span id="preferences"></span>
@@ -50,7 +47,7 @@
     <h1>Notifications</h1>
     <form action="" method="POST" accept-charset="utf-8">
         <input type="checkbox" name="newsletter" id="newsletter" value="true" %(`{if {~ $newsletter true} { echo checked }}%)>
-        <label for="newsletter">Monthly email updates (we won't spam you)</label><br style="margin-bottom: 1em; display: block; content: ''" />
+        <label for="newsletter">Email updates (we won't spam you)</label><br style="margin-bottom: 1em; display: block; content: ''" />
 
         <label>Email notifications for waves</label>
         <select name="email_wave">
@@ -70,97 +67,35 @@
 <div class="box">
     <h1>Privacy</h1>
     <form action="" method="POST" accept-charset="utf-8">
-        <label>Who can see your age?</label>
-        <select name="age">
-            <option value="public" %(`{if {~ $age public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $age vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $age friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $age me} { echo 'selected' }}%)>Just me</option>
+        <label>Who can see your personality traits?</label>
+        <select name="personality">
+            <option value="vrlfp" %(`{if {~ $personality vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
+            <option value="friends" %(`{if {~ $personality friends} { echo 'selected' }}%)>Matches only</option>
+            <option value="me" %(`{if {~ $personality me} { echo 'selected' }}%)>Just me</option>
         </select>
 
-        <label>Who can see your gender?</label>
-        <select name="gender">
-            <option value="public" %(`{if {~ $gender public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $gender vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $gender friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $gender me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your country?</label>
-        <select name="country">
-            <option value="public" %(`{if {~ $country public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $country vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $country friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $country me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see interests they have in common with you?</label>
-        <select name="interests_common">
-            <option value="vrlfp" %(`{if {~ $interests_common vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $interests_common friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $interests_common me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see interests they <strong>don't</strong> have in common with you?</label>
-        <select name="interests_uncommon">
-            <option value="public" %(`{if {~ $interests_uncommon public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $interests_uncommon vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $interests_uncommon friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $interests_uncommon me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your bio?</label>
-        <select name="bio">
-            <option value="public" %(`{if {~ $bio public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $bio vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $bio friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $bio me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your language?</label>
-        <select name="language">
-            <option value="public" %(`{if {~ $language public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $language vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $language friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $language me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your VR platform?</label>
-        <select name="platform">
-            <option value="public" %(`{if {~ $platform public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $platform vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $platform friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $platform me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your favorite apps and games?</label>
-        <select name="games">
-            <option value="public" %(`{if {~ $games public} { echo 'selected' }}%)>Public (anyone on the web)</option>
-            <option value="vrlfp" %(`{if {~ $games vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $games friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="me" %(`{if {~ $games me} { echo 'selected' }}%)>Just me</option>
-        </select>
-
-        <label>Who can see your social links?</label>
+        <label>Who can see your linked accounts? (VRChat, Discord)</label>
         <select name="socials">
-            <option value="public" %(`{if {~ $socials public} { echo 'selected' }}%)>Public (anyone on the web)</option>
             <option value="vrlfp" %(`{if {~ $socials vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $socials friends} { echo 'selected' }}%)>Friends only</option>
+            <option value="friends" %(`{if {~ $socials friends} { echo 'selected' }}%)>Matches only</option>
             <option value="me" %(`{if {~ $socials me} { echo 'selected' }}%)>Just me</option>
         </select>
 
-        <label>Who can see friends they have in common with you?</label>
-        <select name="friends">
-            <option value="vrlfp" %(`{if {~ $friends vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $friends friends} { echo 'selected' }}%)>Friends only</option>
-            <option value="hidden" %(`{if {~ $friends hidden} { echo 'selected' }}%)>Nobody</option>
+        <label>Who can see your sexuality?</label>
+        <select name="sexuality">
+            <option value="vrlfp" %(`{if {~ $sexuality vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
+            <option value="friends" %(`{if {~ $sexuality friends} { echo 'selected' }}%)>Matches only</option>
+            <option value="me" %(`{if {~ $sexuality me} { echo 'selected' }}%)>Just me</option>
         </select>
-        
-        <label>Show your profile link on the profiles of people you invite? (only during beta)</label>
-        <select name="invite">
-            <option value="public" %(`{if {~ $invite public} { echo 'selected' }}%)>Yes</option>
-            <option value="hidden" %(`{if {~ $invite hidden} { echo 'selected' }}%)>No</option>
-        </select>
+
+%       if {~ $nsfw true} {
+            <label>Who can see your NSFW tags?</label>
+            <select name="kinks">
+                <option value="vrlfp" %(`{if {~ $kinks vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
+                <option value="friends" %(`{if {~ $kinks friends} { echo 'selected' }}%)>Matches only</option>
+                <option value="me" %(`{if {~ $kinks me} { echo 'selected' }}%)>Just me</option>
+            </select>
+%       }
 
         <label>Opt-out of anonymous statistics? <small>(<a href="/privacy#stats" target="_blank">Details</a>)</small></label>
         <select name="optout">

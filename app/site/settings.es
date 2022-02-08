@@ -13,33 +13,21 @@ if {~ $p_changetheme true &&
 
 # Privacy settings
 if {~ $p_changeprivacy true &&
-    {~ $p_age public || ~ $p_age vrlfp || ~ $p_age friends || ~ $p_age me} &&
-    {~ $p_gender public || ~ $p_gender vrlfp || ~ $p_gender friends || ~ $p_gender me} &&
-    {~ $p_country public || ~ $p_country vrlfp || ~ $p_country friends || ~ $p_country me} &&
-    {~ $p_interests_common vrlfp || ~ $p_interests_common friends || ~ $p_interests_common me} &&
-    {~ $p_interests_uncommon public || ~ $p_interests_uncommon vrlfp || ~ $p_interests_uncommon friends || ~ $p_interests_uncommon me} &&
-    {~ $p_bio public || ~ $p_bio vrlfp || ~ $p_bio friends || ~ $p_bio me} &&
-    {~ $p_language public || ~ $p_language vrlfp || ~ $p_language friends || ~ $p_language me} &&
-    {~ $p_platform public || ~ $p_platform vrlfp || ~ $p_platform friends || ~ $p_platform me} &&
-    {~ $p_games public || ~ $p_games vrlfp || ~ $p_games friends || ~ $p_games me} &&
-    {~ $p_socials public || ~ $p_socials vrlfp || ~ $p_socials friends || ~ $p_socials me} &&
-    {~ $p_friends vrlfp || ~ $p_friends friends || ~ $p_friends hidden} &&
-    {~ $p_invite public || ~ $p_invite hidden} &&
+    {~ $p_personality vrlfp || ~ $p_personality friends || ~ $p_personality me} &&
+    {~ $p_socials vrlfp || ~ $p_socials friends || ~ $p_socials me} &&
+    {~ $p_sexuality vrlfp || ~ $p_sexuality friends || ~ $p_sexuality me} &&
     {~ $p_optout true || ~ $p_optout false}} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.privacy_age = '''$p_age''',
-                           u.privacy_gender = '''$p_gender''',
-                           u.privacy_country = '''$p_country''',
-                           u.privacy_socials = '''$p_socials''',
-                           u.privacy_games = '''$p_games''',
-                           u.privacy_interests_common = '''$p_interests_common''',
-                           u.privacy_interests_uncommon = '''$p_interests_uncommon''',
-                           u.privacy_bio = '''$p_bio''',
-                           u.privacy_language = '''$p_language''',
-                           u.privacy_platform = '''$p_platform''',
-                           u.privacy_friends = '''$p_friends''',
-                           u.privacy_invite = '''$p_invite''',
+                       SET u.privacy_personality = '''$p_personality''',
+                           u.privacy_socials = '''$p_personality''',
+                           u.privacy_sexuality = '''$p_sexuality''',
                            u.optout = '$p_optout
+
+    # Kinks can be missing if the user has nsfw tags disabled, so set separately
+    if {~ $p_kinks vrlfp || ~ $p_kinks friends || ~ $p_kinks me} {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.privacy_kinks = '''$p_kinks''''
+    }
 
     post_redirect '/settings?update_success=Privacy%20settings'
 }
