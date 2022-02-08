@@ -1,15 +1,18 @@
 %{
-(new vrchat discord steam twitter instagram twitch youtube reddit spotify customurl) = \
+(new vrchat discord privacy) = \
     `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
-                             RETURN u.new, u.vrchat, u.discord, u.steam, u.twitter, u.instagram, \
-                                    u.twitch, u.youtube, u.reddit, u.spotify, u.customurl'}
+                             RETURN u.new, u.vrchat, u.discord, u.privacy_socials'}
 bio = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.bio'}
 
 for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:PLAYS]->(g:game) RETURN g.name'}) {
     games = ($games $g)
 }
 
-for (var = new vrchat discord steam twitter instagram twitch youtube reddit spotify customurl bio games) {
+for (i = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:TAGGED]->(i:interest) RETURN i.name'}) {
+    interests = ($interests $i)
+}
+
+for (var = new vrchat discord bio games interests) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }
@@ -35,61 +38,65 @@ for (var = new vrchat discord steam twitter instagram twitch youtube reddit spot
 %   }
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
-        <label for="bio">Bio (optional)</label>
-        <div id="bio" class="quill"></div><br />
-        <input type="hidden" id="bio_html" name="bio">
+        <label for="pfp">Profile pics</label><br /><br />
+        <input id="pfp"
+               type="hidden"
+               role="uploadcare-uploader"
+               data-public-key="130267e8346d9a7e9bea"
+               data-multiple="true"
+               data-images-only="true"
+               data-tabs="file camera url facebook"
+               data-effects="crop, rotate, mirror, flip, enhance" /><br />
 
-        <label for="games">Fav social VR apps (optional)</label>
+        <div id="pfplist">
+%           avatars = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:AVATAR]->(a:avatar)
+%                                         RETURN a.url ORDER BY a.order'}
+%           if {! isempty $avatars} {
+%               order = 0
+%               for (avatar = $avatars) {
+                    <div id="pfp_%($order%)">
+                        <button type="button" onclick="delete_pfp(%($order%))" class="btn-delete">✖</button>
+                        <img data-blink-ops="scale-crop: 150x150; scale-crop-position: smart_faces_points"
+                             data-blink-uuid="%($avatar%)" />
+                        <input type="hidden" name="pfp_%($order%)" value="%($avatar%)">
+                    </div>
+%                   ++ order
+%               }
+%           }
+        </div><br />
+
+        <label for="bio">Bio</label>
+        <div class="bio_wrapper"><div id="bio" class="quill"></div></div><br />
+        <input type="hidden" id="bio_html" name="bio" required>
+
+        <input id="new" type="checkbox" name="new" value="true" %(`{if {~ $new true} { echo checked }}%)>
+        <label for="new">I'm new to VR</label><br /><br />
+
+        <label for="games">Fav social VR games (optional)</label>
         <input name="games" id="games" value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
 
-        <br />
-        <input id="new" type="checkbox" name="new" value="true" %(`{if {~ $new true} { echo checked }}%)>
-        <label for="new">I'm new to VR</label>
-        <br /><br />
+        <label for="interests">Personal tags (optional)</label>
+        <input name="interests" id="interests" value="%(`{echo $^interests | sed 's/ /,/g; s/_/ /g'}%)">
 
-        <p>Socials (optional):</p>
+        <p style="margin-bottom: 10px">Accounts (optional):</p>
         <table>
             <tr>
                 <td><label for="vrchat">VRChat:</label></td>
-                <td><input type="text" name="vrchat" id="vrchat" placeholder="Username" value="%($vrchat%)"></td>
+                <td><input type="text" name="vrchat" id="vrchat" placeholder="Username" value="%(`{echo $vrchat | sed 's/.*\///'}%)"></td>
             </tr>
             <tr>
                 <td><label for="discord">Discord:</label></td>
                 <td><input type="text" name="discord" id="discord" placeholder="Username#1234" value="%($discord%)"></td>
             </tr>
-            <tr>
-                <td><label for="steam">Steam:</label></td>
-                <td><input type="text" name="steam" id="steam" placeholder="Profile ID" value="%($steam%)"></td>
-            </tr>
-            <tr>
-                <td><label for="twitter">Twitter:</label></td>
-                <td><input type="text" name="twitter" id="twitter" placeholder="Username" value="%($twitter%)"></td>
-            </tr>
-            <tr>
-                <td><label for="instagram">Instagram:</label></td>
-                <td><input type="text" name="instagram" id="instagram" placeholder="Username" value="%($instagram%)"></td>
-            </tr>
-            <tr>
-                <td><label for="twitch">Twitch:</label></td>
-                <td><input type="text" name="twitch" id="twitch" placeholder="Username" value="%($twitch%)"></td>
-            </tr>
-            <tr>
-                <td><label for="youtube">YouTube:</label></td>
-                <td><input type="text" name="youtube" id="youtube" placeholder="URL or Channel ID" value="%($youtube%)"></td>
-            </tr>
-            <tr>
-                <td><label for="reddit">Reddit:</label></td>
-                <td><input type="text" name="reddit" id="reddit" placeholder="Username" value="%($reddit%)"></td>
-            </tr>
-            <tr>
-                <td><label for="spotify">Spotify:</label></td>
-                <td><input type="text" name="spotify" id="spotify" placeholder="Username" value="%($spotify%)"></td>
-            </tr>
-            <tr>
-                <td><label for="customurl">Custom URL:</label></td>
-                <td><input type="text" name="customurl" id="customurl" placeholder="https://example.com" value="%($customurl%)"></td>
-            </tr>
         </table>
+
+        <label>Privacy: Who can see your linked accounts?</label>
+        <select name="privacy">
+            <option value="vrlfp" %(`{if {~ $privacy vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
+            <option value="friends" %(`{if {~ $privacy friends} { echo 'selected' }}%)>Matches only</option>
+            <option value="me" %(`{if {~ $privacy me} { echo 'selected' }}%)>Just me</option>
+        </select>
+
 %       if {! isempty $onboarding} {
             <button type="submit" class="btn btn-gradient">Next page</button>
 %       } {
@@ -105,17 +112,113 @@ for (var = new vrchat discord steam twitter instagram twitch youtube reddit spot
 
 <style>
     td:last-child {
-        width: 65%;
+        width: 100%;
         padding-left: 1em;
     }
 </style>
 
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+<script src="https://ucarecdn.com/libs/widget-tab-effects/1.x/uploadcare.tab-effects.lang.en.min.js"></script>
+<script src="/js/sortable.js"></script>
 <script src="/js/quill.js"></script>
 <script type="text/javascript">
+    Array.from(document.getElementById("pfplist").childNodes).forEach((node) => {
+        if (node.nodeType === 3) {
+            node.remove();
+        }
+    });
+
+    uploadcare.registerTab("preview", uploadcareTabEffects)
+    UPLOADCARE_LOCALE_TRANSLATIONS = {
+        buttons: {
+            choose: {
+                images: {
+                    other: "Choose images"
+                }
+            }
+        }
+    }
+
+    const widget = uploadcare.MultipleWidget("[role=uploadcare-uploader]");
+    widget.onChange(function (group) {
+        group.files().forEach(file => {
+            file.done(fileInfo => {
+                var url = fileInfo.cdnUrl.split("/").slice(3,-1).join("/");
+                var order = document.getElementById("pfplist").children.length;
+
+                var div = document.createElement("div");
+                div.setAttribute("id", "pfp_" + order);
+
+                var button = document.createElement("button");
+                button.setAttribute("type", "button");
+                button.setAttribute("onclick", "delete_pfp(" + order + ")");
+                button.setAttribute("class", "btn-delete");
+                button.innerHTML = "✖";
+
+                var img = document.createElement("img");
+                img.setAttribute("data-blink-ops", "scale-crop: 150x150; scale-crop-position: smart_faces_points");
+                img.setAttribute("data-blink-uuid", url);
+
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "pfp_" + order);
+                input.setAttribute("value", url);
+
+                div.appendChild(button);
+                div.appendChild(img);
+                div.appendChild(input);
+                document.getElementById("pfplist").appendChild(div);
+            });
+        });
+    });
+
+    var sortable = new Sortable(document.getElementById("pfplist"), {
+        draggable: "div",
+        animation: 150,
+        easing: "cubic-bezier(1, 0, 0, 1)",
+        onEnd: function(event) {
+            var first = Math.min(event.oldDraggableIndex, event.newDraggableIndex);
+            var second = Math.max(event.oldDraggableIndex, event.newDraggableIndex);
+            for (var i = first; i <= second; i++) {
+                var order = document.getElementById("pfplist").children[i].children[2];
+                order.name = "pfp_" + i;
+            }
+        }
+    });
+
+    function delete_pfp(order) {
+        document.querySelector("#pfp_" + order).remove();
+    }
+
     var tagify_games = new Tagify(document.querySelector('input[name=games]'), {
         enforceWhitelist: true,
-        whitelist: ['VRChat', %(`{redis graph read 'MATCH (g:game) RETURN g.name ORDER BY g.name' | grep -v VRChat | sed 's/_/ /g; s/^/''/; s/$/'', /'}%)],
-        maxTags: 10,
+        whitelist: [
+%           for (game = `` \n {redis graph read 'MATCH (g:game)
+%                                                RETURN g.name
+%                                                ORDER BY g.order, g.name' | sed 's/_/ /g'}) {
+                "%($game%)",
+%           }
+        ],
+        maxTags: 5,
+        skipInvalid: true,
+        editTags: false,
+        dropdown: {
+            enabled: 0,
+            maxItems: 0
+        },
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+    })
+
+    var tagify_interests = new Tagify(document.querySelector('input[name=interests]'), {
+        enforceWhitelist: false,
+        whitelist: [
+%           for (interest = `` \n {redis graph read 'MATCH (i:interest {type: ''default''})
+%                                                    RETURN i.name
+%                                                    ORDER BY i.name' | sed 's/_/ /g'}) {
+                "%($interest%)",
+%           }
+        ],
+        maxTags: 5,
         skipInvalid: true,
         editTags: false,
         dropdown: {
@@ -131,8 +234,7 @@ for (var = new vrchat discord steam twitter instagram twitch youtube reddit spot
         [{ 'color': [] }, { 'background': [] }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
-        [{ 'align': [] }],
-        ['link']
+        [{ 'align': [] }]
     ]
     var quill = new Quill('#bio', {
         modules: {

@@ -11,8 +11,29 @@ if {~ $p_back true} {
     post_redirect /onboarding/2
 }
 
+# Add profile pics
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:AVATAR]->(a:avatar)
+                   DELETE a'
+for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
+    if {echo $$avatar | grep '^[a-z0-9/\-]*$'} {
+        order = `{echo $avatar | sed 's/^p_pfp_//'}
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           MERGE (u)-[:AVATAR]->(a:avatar {url: '''$$avatar''', order: '$order'})'
+    }
+}
+
+# Validate bio
+if {isempty $p_bio || ~ $p_bio '<p><br></p>'} {
+    throw error 'Missing bio'
+}
+
+# Check newness
+if {!~ $^p_new true} {
+    p_new = false
+}
+
 # Validate and write games
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:PLAYS]->(g:game) DELETE e'
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:PLAYS]->(g:game) DELETE r'
 games = `^{redis graph read 'MATCH (g:game) RETURN g.name'}
 for (game = `{echo $^p_games | sed 's/ /_/g; s/,/ /g'}) {
     if {in $game $games} {
@@ -22,53 +43,34 @@ for (game = `{echo $^p_games | sed 's/ /_/g; s/,/ /g'}) {
     }
 }
 
-# Check newness
-if {!~ $^p_new true} {
-    p_new = false
+# Validate and write tags
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:TAGGED]->(i:interest) DELETE r'
+tags = `^{redis graph read 'MATCH (i:interest) RETURN i.name'}
+for (tag = `{echo $^p_interests | sed 's/ /_/g; s/,/ /g' | escape_redis}) {
+    existingtag = `{redis graph read 'MATCH (i:interest)
+                                      WHERE toLower(i.name) = '''`^{echo $tag | tr 'A-Z' 'a-z'}^'''
+                                      RETURN i.name'}
+    if {isempty $existingtag} {
+        # Create new tag
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           MERGE (i:interest {name: '''$tag''', type: ''custom''})
+                           MERGE (u)-[:TAGGED]->(i)'
+    } {
+        # Existing tag; link to user
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                                 (i:interest {name: '''$existingtag'''})
+                           MERGE (u)-[:TAGGED]->(i)'
+    }
 }
 
 # Fix URLs
 if {! isempty $p_vrchat} {
     p_vrchat = `{echo $p_vrchat | sed 's/\/$//; s/.*\///; s/^/https:\/\/vrchat.com\/home\/search\//' | sanitize_url}
 }
-if {! isempty $p_steam} {
-    p_steam = `{echo $p_steam | sed 's/\/$//; s/.*\///; s/^/https:\/\/steamcommunity.com\/id\//' | sanitize_url}
-}
-if {! isempty $p_twitter} {
-    p_twitter = `{echo $p_twitter | sed 's/^@//; s/\/$//; s/.*\///; s/^/https:\/\/twitter.com\//' | sanitize_url}
-}
-if {! isempty $p_instagram} {
-    p_instagram = `{echo $p_instagram | sed 's/\/$//; s/.*\///; s/^/https:\/\/instagram.com\//' | sanitize_url}
-}
-if {! isempty $p_twitch} {
-    p_twitch = `{echo $p_twitch | sed 's/\/$//; s/.*\///; s/^/https:\/\/twitch.tv\//' | sanitize_url}
-}
-if {! isempty $p_youtube} {
-    if {echo $p_youtube | grep -s '\..*/.'} {
-        if {~ $p_youtube */channel/*} {
-            p_youtube = https://www.youtube.com/channel/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
-        } {~ $p_youtube */c/*} {
-            p_youtube = https://www.youtube.com/c/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
-        } {~ $p_youtube */user/*} {
-            p_youtube = https://www.youtube.com/user/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
-        } {
-            p_youtube = https://www.youtube.com/`{echo $p_youtube | sed 's/\/$//; s/.*\///'}
-        }
-    } {echo $p_youtube | grep -s '^UC......................$'} {
-        p_youtube = https://www.youtube.com/channel/$p_youtube
-    } {
-        p_youtube = https://www.youtube.com/$p_youtube
-    }
-    p_youtube = `{echo $p_youtube | sanitize_url}
-}
-if {! isempty $p_reddit} {
-    p_reddit = `{echo $p_reddit | sed 's/\/$//; s/.*\///; s/^/https:\/\/www.reddit.com\/user\//' | sanitize_url}
-}
-if {! isempty $p_spotify} {
-    p_spotify = `{echo $p_spotify | sed 's/\/$//; s/.*\///; s/^/https:\/\/open.spotify.com\/user\//' | sanitize_url}
-}
-if {! isempty $p_customurl} {
-    p_customurl = `{echo $p_customurl | sanitize_url}
+
+# Validate privacy setting
+if {!~ $p_privacy vrlfp && !~ $p_privacy friends && !~ $p_privacy me} {
+    throw error 'Invalid privacy setting'
 }
 
 # Write
@@ -79,19 +81,12 @@ redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        u.new = '$p_new',
                        u.vrchat = '''`^{echo $^p_vrchat | escape_redis}^''',
                        u.discord = '''`^{echo $^p_discord | escape_redis}^''',
-                       u.steam = '''`^{echo $^p_steam | escape_redis}^''',
-                       u.twitter = '''`^{echo $^p_twitter | escape_redis}^''',
-                       u.instagram = '''`^{echo $^p_instagram | escape_redis}^''',
-                       u.twitch = '''`^{echo $^p_twitch | escape_redis}^''',
-                       u.youtube = '''`^{echo $^p_youtube | escape_redis}^''',
-                       u.reddit = '''`^{echo $^p_reddit | escape_redis}^''',
-                       u.spotify = '''`^{echo $^p_spotify | escape_redis}^''',
-                       u.customurl = '''`^{echo $^p_customurl | escape_redis}^''''
+                       u.privacy_socials = '''$p_privacy''''
 
-# Start computing matches and proceed
+# Proceed
 if {! isempty $onboarding} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.genguestlist = true, u.onboarding = 4'
+                       SET u.onboarding = 4'
     post_redirect /onboarding/4
 } {
     post_redirect '/settings#edit'

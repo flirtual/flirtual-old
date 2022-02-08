@@ -11,89 +11,71 @@ if {~ $p_back true} {
     post_redirect /onboarding/1
 }
 
-# Set display name, or if none is chosen, copy username
-# This makes our life easier later
-if {!isempty $p_displayname} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.displayname = '''$^p_displayname''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$^p_displayname'"}'
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.displayname = '''$logged_user''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$logged_user'"}'
-}
-
-# Validate and set date of birth
-if {! isempty $p_dob} {
-    if {!~ $^p_dob [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ||
-    ~ `{echo $p_dob | sed 's/^.*-(.*)-.*$/\1/' | awk '{ print ($1 >= 1 && $1 <= 12) }'} 0 ||
-    ~ `{echo $p_dob | sed 's/^.*-.*-(.*)$/\1/' | awk '{ print ($1 >= 1 && $1 <= 31) }'} 0} {
-        throw error 'Invalid date of birth'
-    }
-    if {gt `{echo $p_dob | tr -d '-'} `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} 180000}} {
-        throw error 'You must be at least 18 years of age to use this website'
-    }
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.dob = '''$p_dob''''
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.dob = NULL'
-}
-
-# Set gender
-if {!~ $p_gender Man && !~ $p_gender Woman && ! isempty $p_gender_other} {
-    p_gender = $p_gender_other
-}
-if {! isempty $p_gender} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.gender = '''`^{echo $p_gender | escape_redis}^''''
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.gender = NULL'
-}
-
-# Validate and set country
-if {! isempty $p_country} {
-    if {!~ `{redis graph read 'MATCH (c:country {id: '''$p_country'''}) RETURN exists(c)'} true} {
-        throw error 'Invalid country'
-    }
+# Relationship type
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[l:LF]->(r:relationship)
+                   DELETE l'
+relationshipset = false
+if {~ $p_Homies true} {
+    relationshipset = true
     redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                             (c:country {id: '''$p_country'''})
-                       MERGE (u)-[:COUNTRY]->(c)'
+                             (r:relationship {name: ''Homies''})
+                       MERGE (u)-[:LF]->(r)'
+}
+if {~ $p_Casual_dating true} {
+    relationshipset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (r:relationship {name: ''Casual_dating''})
+                       MERGE (u)-[:LF]->(r)'
+}
+if {~ $p_Serious_dating true} {
+    relationshipset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (r:relationship {name: ''Serious_dating''})
+                       MERGE (u)-[:LF]->(r)'
+}
+if {~ $p_Hookups true} {
+    relationshipset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (r:relationship {name: ''Hookups''})
+                       MERGE (u)-[:LF]->(r)'
+}
+if {~ $relationshipset false} {
+    throw error 'Missing relationship type'
+}
+
+# (Non-)Monogamous
+if {~ $p_monopoly Monogamous || ~ $p_monopoly Non-monogamous} {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.monopoly = '''$p_monopoly''''
 } {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country)
-                       DELETE r'
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.monopoly = NULL'
 }
 
-# Validate and write language
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:KNOWS]->(l:language) DELETE e'
-languageset = false
-languages = `^{redis graph read 'MATCH (l:language) RETURN l.id'}
-for (language = `{echo $^p_language | sed 's/ /_/g; s/,/ /g'}) {
-    if {in $language $languages} {
-        languageset = true
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (l:language {id: '''$language'''})
-                           MERGE (u)-[:KNOWS]->(l)'
-    }
+# Gender preference
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[l:LF]->(g:gender)
+                   DELETE l'
+genderset = false
+if {~ $p_Women true} {
+    genderset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (g:gender {name: ''Woman''})
+                       MERGE (u)-[:LF]->(g)'
 }
-if {~ $languageset false} {
-    throw error 'Missing language'
+if {~ $p_Men true} {
+    genderset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (g:gender {name: ''Man''})
+                       MERGE (u)-[:LF]->(g)'
 }
-
-# Validate and write platforms
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[e:USES]->(p:platform) DELETE e'
-platformset = false
-for (platform = `{redis graph read 'MATCH (p:platform) RETURN p.name'}) {
-    if {~ $(p_$platform) true} {
-        platformset = true
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (p:platform {name: '''$platform'''})
-                           MERGE (u)-[:USES]->(p)'
-    }
+if {~ $p_Other true} {
+    genderset = true
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (g:gender {type: ''nonbinary''})
+                       MERGE (u)-[:LF]->(g)'
 }
-if {~ $platformset false} {
-    throw error 'Missing VR platform'
+if {~ $genderset false} {
+    throw error 'Missing gender preference'
 }
 
 # Proceed
