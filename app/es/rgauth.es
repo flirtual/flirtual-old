@@ -71,11 +71,11 @@ fn login_user username password {
         }
 
         # We are logged in! Update inactive expiry and get info we'll need later
-        (logged_user session_length expiryabs onboarding) = \
+        (logged_user session_length expiry expiryabs onboarding) = \
             `` \n {redis graph write 'MATCH (u:user)-[:SESSION]->(s:session {id: '''$sessionid'''})
                                       SET s.expiry = s.expiry + s.length,
                                           u.lastlogin = '$dateun'
-                                      RETURN u.username, s.length, s.expiryabs, u.onboarding'}
+                                      RETURN u.username, s.length, s.expiry, s.expiryabs, u.onboarding'}
     } {
         # The user has not requested to log in
         set_cookie id logout 'Thu, 01 Jan 1970 00:00:00 GMT'
