@@ -214,10 +214,10 @@ fn setup_handlers {
         handler_body = (template $local_file)
     } {~ $req_path /api/*} {
         handler_body = (echo)
-    } {~ $req_path /g/*} {
-        handler_body = (template tpl/group.tpl)
-    } {
+    } {logged_in} {
         handler_body = (template tpl/profile.tpl)
+    } {
+        post_redirect /login
     }
 }
 
