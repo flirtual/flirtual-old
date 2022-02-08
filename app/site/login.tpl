@@ -8,8 +8,8 @@
               <label for="password">Password</label>
               <input type="password" name="password" id="password" required autocomplete="current-password" placeholder="••••••••••••••••">
 
-              <input type="checkbox" name="staylogged" id="staylogged" value="true" %(`{if {~ $p_staylogged true} { echo checked }}%) style="margin-top: 17px; margin-bottom: 29px">
-              <label for="staylogged">Stay logged in</label>
+              <input type="checkbox" name="staylogged" id="staylogged" value="true" %(`{if {~ $p_staylogged true} { echo checked }}%) style="margin-top: 17px; margin-bottom: 42px">
+              <label for="staylogged" style="position: absolute; width: 100%; transform: translate(5px, 15px)">Stay logged in</label>
 
               <button type="submit" class="btn btn-gradient" style="position: absolute; top: calc(100% - 158px); left: calc(100% - 218px)">Login</button>
           </form>
@@ -17,11 +17,11 @@
 
       <div>
           <div class="box-half">
-              <p>Forgot your password?</p>
+              <p style="margin: 37px 0 50px 0">Forgot your password?</p>
               <a href="/forgot" class="btn">Rectify</a>
           </div>
           <div class="box-half">
-              <p>Don't have an account yet?</p>
+              <p style="margin: 37px 0 50px 0">Don't have an account yet?</p>
               <a href="/register" class="btn">Sign up</a>
           </div>
       </div>
