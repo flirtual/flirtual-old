@@ -9,12 +9,8 @@ if {!~ $^debug true ||
 <div class="box">
     <h1>Debug</h1>
     <form method="POST" accept-charset="utf-8" name="prompt">
-        <table>
-            <tr>
-                <td><input type="text" name="command" value="%($^p_command%)" autofocus style="width: calc(100% + 35px); font-family: monospace"></td>
-                <td><button type="submit" class="btn" style="transform: rotate(-12deg) translate(54px, 29px)">Run</button><br /></td>
-            </tr>
-        </table>
+        <input type="text" name="command" value="%($^p_command%)" autofocus style="width: 100%; font-family: monospace">
+        <button type="submit" class="btn">Run</button>
     </form>
     
     <pre style="overflow-x: auto">
