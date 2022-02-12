@@ -1,104 +1,101 @@
-fn compute_match user guest {
-    redis graph write 'MATCH (user:user {username: '''$user'''}),
-                             (guest:user {username: '''$guest'''})
-
-                       WHERE NOT (user)-[:MATCH]-(guest)
-
-                       OPTIONAL MATCH (mutual_inviter:user)
-                       WHERE (user)-[:INVITED_BY]->(mutual_inviter) AND
-                             (guest)-[:INVITED_BY]->(mutual_inviter)
-
-                       OPTIONAL MATCH (second_deg_inviter:user)
-                       WHERE ((user)-[:INVITED_BY]->(second_deg_inviter) AND
-                              (second_deg_inviter)-[:INVITED_BY]->(guest)) OR
-                             ((guest)-[:INVITED_BY]->(second_deg_inviter) AND
-                              (second_deg_inviter)-[:INVITED_BY]->(user))
-
-                       OPTIONAL MATCH (custom_tags:tag {category: ''custom''})
-                       WHERE (user)-[:INTERESTED_IN]->(custom_tags) AND
-                             (guest)-[:INTERESTED_IN]->(custom_tags)
-
-                       OPTIONAL MATCH (default_tags_1:tag)
-                       WHERE default_tags_1.category <> ''custom'' AND
-                             default_tags_1.weight = 1 AND
-                             (user)-[:INTERESTED_IN]->(default_tags_1) AND
-                             (guest)-[:INTERESTED_IN]->(default_tags_1)
-
-                       OPTIONAL MATCH (default_tags_100:tag)
-                       WHERE default_tags_100.category <> ''custom'' AND
-                             default_tags_100.weight = 100 AND
-                             (user)-[:INTERESTED_IN]->(default_tags_100) AND
-                             (guest)-[:INTERESTED_IN]->(default_tags_100)
-
-                       OPTIONAL MATCH (user)-[wave:WAVED]->(guest)
-
-                       OPTIONAL MATCH (friends:user)
-                       WHERE (user)-[:FRIENDS]-(friends) AND
-                             (guest)-[:FRIENDS]-(friends)
-
-                       OPTIONAL MATCH (groups:group)
-                       WHERE (user)-[:MEMBER]->(groups) AND
-                             (guest)-[:MEMBER]->(groups)
-
-                       OPTIONAL MATCH (games:game)
-                       WHERE (user)-[:PLAYS]->(games) AND
-                             (guest)-[:PLAYS]->(games)
-
-                       WITH DISTINCT user, guest,
-                                     (count(DISTINCT mutual_inviter) * 10 +
-                                      count(DISTINCT second_deg_inviter) * 5 +
-                                      count(DISTINCT custom_tags) * 40 +
-                                      count(DISTINCT default_tags_1) * 0.1 +
-                                      count(DISTINCT default_tags_100) * 10 +
-                                      count(DISTINCT wave) * 30 +
-                                      count(DISTINCT friends) * 5 +
-                                      count(DISTINCT groups) * 20 +
-                                      count(DISTINCT games) * 15) AS score
-                       WITH user, guest,
-                            (score + (18 - (abs(user.openness - guest.openness) +
-                                           abs(user.conscientiousness - guest.conscientiousness) +
-                                           abs(user.agreeableness - guest.agreeableness))) * 2.5) AS score
-
-                       CREATE (user)-[match:MATCH {score: score}]->(guest)'
-}
-
-fn compute_user_matches user {
-    for (guest = `{redis graph read 'MATCH (u:user {username: '''$user'''}),
-                                           (g:user)
-                                     WHERE (u) <> (g) AND
-                                           NOT (u)-[:MATCH]-(g) AND
-                                           NOT (u)-[:FRIENDS]-(g) AND
-                                           NOT (u)-[:WAVED]->(g) AND
-                                           NOT (u)-[:PASSED]->(g) AND
-                                           NOT (u)-[:SEEN]->(g) AND
-                                           NOT exists(g.onboarding)
-                                     RETURN g.username'}) {
-        compute_match $user $guest
+fn compute_matches a b {
+    if {!~ $b ()} {
+        b = '{username: '''$b'''}'
     }
 
-    redis graph write 'MATCH (u:user {username: '''$user'''})-[g:GUEST]->(:user) DELETE g'
-    redis graph write 'MATCH (u:user {username: '''$user'''})-[m:MATCH]-(g:user)
-                       WHERE exists(m.score) AND
-                             NOT (u)-[:FRIENDS]-(g) AND
-                             NOT (u)-[:WAVED]->(g) AND
-                             NOT (u)-[:PASSED]->(g)
-                       WITH u, g
-                       ORDER BY m.score DESC
-                       LIMIT 5
-                       CREATE (u)-[:GUEST]->(g)'
+    redis graph write 'MATCH (a:user {username: '''$a'''})-[match:MATCH]-(b:user '$^b') DELETE match'
+
+    redis graph write 'MATCH (a:user {username: '''$a'''}), (b:user '$^b')
+
+                       WHERE (a) <> (b) AND
+                             NOT (a)-[:MATCHED]-(b) AND
+                             NOT exists(a.onboarding) AND
+                             NOT exists(b.onboarding) AND
+                             (a)-[:LF]->(:relationship)<-[:LF]-(b) AND
+                             (a)-[:GENDER]->(:gender)<-[:LF]-(b) AND
+                             (b)-[:GENDER]->(:gender)<-[:LF]-(a) AND
+                             b.age >= a.agemin AND
+                             b.age <= a.agemax AND
+                             a.age >= b.agemin AND
+                             a.age <= b.agemax
+
+                       OPTIONAL MATCH (b)-[aliked:LIKED]->(a)
+                       OPTIONAL MATCH (a)-[bliked:LIKED]->(b)
+                       OPTIONAL MATCH (b)-[apassed:PASSED]->(a)
+                       OPTIONAL MATCH (a)-[bpassed:PASSED]->(b)
+
+                       OPTIONAL MATCH (a)-[:TAGGED]->
+                                      (custom_interests:interest {type: ''custom''})
+                                      <-[:TAGGED]-(b)
+
+                       OPTIONAL MATCH (a)-[:TAGGED]->
+                                      (default_interests:interest {type: ''default''})
+                                      <-[:TAGGED]-(b)
+
+                       OPTIONAL MATCH (a)-[:PLAYS]->
+                                      (games:game)
+                                      <-[:PLAYS]-(b)
+
+                       OPTIONAL MATCH (a)-[:COUNTRY]->
+                                      (country:country)
+                                      <-[:COUNTRY]-(b)
+
+                       WITH a, b,
+                            count(DISTINCT aliked) AS count_aliked,
+                            count(DISTINCT bliked) AS count_bliked,
+                            count(DISTINCT apassed) AS count_apassed,
+                            count(DISTINCT bpassed) AS count_bpassed,
+                            count(DISTINCT custom_interests) AS count_custom_interests,
+                            count(DISTINCT default_interests) AS count_default_interests,
+                            count(DISTINCT games) AS count_games,
+                            count(DISTINCT country) AS count_country,
+                            (18 - (abs(a.openness - b.openness) +
+                                   abs(a.conscientiousness - b.conscientiousness) +
+                                   abs(a.agreeableness - b.agreeableness))) AS personality,
+                            a.weight_custom_interests AS a_weight_custom_interests,
+                            a.weight_default_interests AS a_weight_default_interests,
+                            a.weight_games AS a_weight_games,
+                            a.weight_country AS a_weight_country,
+                            a.weight_personality AS a_weight_personality,
+                            b.weight_custom_interests AS b_weight_custom_interests,
+                            b.weight_default_interests AS b_weight_default_interests,
+                            b.weight_games AS b_weight_games,
+                            b.weight_country AS b_weight_country,
+                            b.weight_personality AS b_weight_personality
+
+                       WITH a, b,
+                            (count_aliked * 30 +
+                             count_apassed * -30 +
+                             count_custom_interests * a_weight_custom_interests +
+                             count_default_interests * a_weight_default_interests +
+                             count_games * a_weight_games +
+                             count_country * a_weight_country +
+                             personality * a_weight_personality) AS ascore,
+                            (count_bliked * 30 +
+                             count_bpassed * -30 +
+                             count_custom_interests * b_weight_custom_interests +
+                             count_default_interests * b_weight_default_interests +
+                             count_games * b_weight_games +
+                             count_country * b_weight_country +
+                             personality * b_weight_personality) AS bscore
+
+                       CREATE (a)-[:MATCH {score: ascore}]->(b)
+                       CREATE (b)-[:MATCH {score: bscore}]->(a)'
 }
 
-
-fn compute_all_matches {
-    redis graph write 'MATCH (:user)-[m:MATCH]->(:user)
+fn daily_matches {
+    redis graph write 'MATCH (a:user)-[m:DAILYMATCH]->(b:user)
+                       WHERE count(b) < 5
                        DELETE m'
-    redis graph write 'MATCH (:user)-[s:SEEN]->(:user)
-                       WHERE s.date < '`{- $dateun 2592000}^'
-                       DELETE s'
-    for (user = `{redis graph read 'MATCH (u:user)
-                                    WHERE NOT exists(u.onboarding) AND
-                                          u.lastlogin > '`{- $dateun 86400}^'
-                                    RETURN u.username'}) {
-        compute_user_matches $user
+
+    for (user = `{redis graph read 'MATCH (a:user)
+                                    OPTIONAL MATCH (a)-[:DAILYMATCH]->(b:user)
+                                    WITH DISTINCT a, b
+                                    WHERE NOT exists(b)
+                                    RETURN a.username'}) {
+        redis graph write 'MATCH (a:user {username: ''test''})-[m:MATCH]->(b:user)
+                           WITH a, b ORDER BY m.score DESC LIMIT 100
+                           WITH a, b ORDER BY rand() LIMIT 20
+                           CREATE (a)-[:DAILYMATCH]->(b)'
     }
 }
