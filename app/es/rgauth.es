@@ -112,9 +112,11 @@ fn login_user username password {
 fn logout_user {
     # Delete all sessions, expire cookie, and redirect to /login
     user = `{redis graph read 'MATCH (u:user)-[:SESSION]->(s:session {id: '''`^{get_cookie id | sed 's/[^a-zA-Z0-9_\-]//g'}^'''}) RETURN u.username'}
-    redis graph write 'MATCH (u:user {username: '''$user'''})-[:SESSION]->(s:session) DELETE s'
-    xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
-    post_redirect /login
+    if {! isempty $user} {
+        redis graph write 'MATCH (u:user {username: '''$user'''})-[:SESSION]->(s:session) DELETE s'
+        xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
+        post_redirect /login
+    }
 }
 
 fn logged_in { ! isempty $logged_user }
