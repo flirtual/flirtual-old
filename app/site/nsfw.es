@@ -32,7 +32,7 @@ for (kink = `{echo $^p_kinks | sed 's/ /_/g; s/,/ /g'}) {
 }
 
 # Validate and set privacy setting
-if {!~ $p_privacy vrlfp && !~ $p_privacy friends && !~ $p_privacy me} {
+if {!~ $p_privacy everyone && !~ $p_privacy matches && !~ $p_privacy me} {
     throw error 'Invalid privacy setting'
 } {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
