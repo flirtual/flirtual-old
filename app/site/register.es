@@ -7,7 +7,7 @@ if {!~ $REQUEST_METHOD POST ||
                                                       WHERE toLower(uu.username) = '''`^{echo $p_username | tr 'A-Z' 'a-z'}^'''
                                                       OPTIONAL MATCH (ue:user {email: '''$p_email'''})
                                                       OPTIONAL MATCH (ur:reserved {username: '''`^{echo $p_username | tr 'A-Z' 'a-z'}^'''})
-                                                      RETURN r.id, exists(uu), exists(ue), exists(ur)'}
+                                                      RETURN exists(uu), exists(ue), exists(ur)'}
 
 # Validate username, availability
 if {isempty $p_username || ! echo $p_username | grep -s '^'$allowed_user_chars'+$'} {
@@ -33,12 +33,10 @@ if {isempty $p_password ||
 
 # Check ToS/PP, newsletter, theme
 if {!~ $p_tos true} {
-    throw error 'You must agree to the Terms of Service and the Privacy Policy to use VRLFP'
+    throw error 'You must agree to the Terms of Service and the Privacy Policy to use Flirtual'
 }
 
 if {!~ $p_newsletter true} { p_newsletter = false }
-
-if {!~ $p_theme dark} { p_theme = light }
 
 # Validate hCaptcha
 if {! hcaptcha $p_hcaptcharesponse} {
@@ -47,17 +45,21 @@ if {! hcaptcha $p_hcaptcharesponse} {
 
 # Create user and confirmation
 confirm = `{kryptgo genid}
+
 redis graph write 'MERGE (u:user {username: '''$p_username''',
+                                  displayname:  '''$p_username''',
                                   email: '''$p_email''',
                                   password: '''`{kryptgo genhash -p $p_password}^''',
                                   newsletter: '$p_newsletter',
-                                  email_wave: ''each'',
                                   onboarding: 1,
-                                  privacy_personality: ''vrlfp'', privacy_socials: ''friends'',
-                                  privacy_sexuality: ''vrlfp'', privacy_kinks: ''vrlfp'',
+                                  privacy_personality: ''everyone'', privacy_socials: ''matches'',
+                                  privacy_sexuality: ''everyone'', privacy_country: ''everyone'',
+                                  privacy_kinks: ''everyone'',
+                                  weight_custom_interests: 1, weight_default_interests: 1,
+                                  weight_games: 1, weight_country: 1, weight_monopoly: 1,
+                                  weight_domsub: 1, weight_kinks: 1, weight_personality: 1,
                                   optout: false,
                                   nsfw: false,
-                                  theme: '''$p_theme''',
 				  volume: 0.5,
                                   registered: '''`{date -ui}^'''})
                    MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
