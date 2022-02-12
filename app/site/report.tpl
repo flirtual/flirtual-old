@@ -13,7 +13,7 @@ if {! isempty $q_user && echo $q_user | grep -s '^'$allowed_user_chars'+$'} {
       </div>
 % } {! isempty $displayname} {
       <div class="box">
-          <h1>Submit a report</h1>
+          <h1>Report</h1>
           <form action="" method="POST" accept-charset="utf-8">
               <input type="hidden" name="id" value="%($id%)">
 
