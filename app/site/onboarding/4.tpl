@@ -17,7 +17,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
 
 <div class="box">
     <h1>Personality</h1>
-    <p>Totally optional! These help VRLFP show you people with similar vibes and values. Other users won't see your answers.</p>
+    <p>This helps us match you with compatible people, based on the Big 5 Personality Test. Your answers are hidden from other users. You can skip this and come back later.</p>
 
     <form action="" method="POST" accept-charset="utf-8">
         <table id="survey">
@@ -124,8 +124,8 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
 
         <label>Privacy: Who can see your personality traits?</label>
         <select name="privacy">
-            <option value="vrlfp" %(`{if {~ $privacy vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $privacy friends} { echo 'selected' }}%)>Matches only</option>
+            <option value="everyone" %(`{if {~ $privacy everyone} { echo 'selected' }}%)>Anyone on Flirtual</option>
+            <option value="matches" %(`{if {~ $privacy matches} { echo 'selected' }}%)>Matches only</option>
             <option value="me" %(`{if {~ $privacy me} { echo 'selected' }}%)>Just me</option>
         </select>
 
@@ -154,6 +154,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
         transition: background-color .3s, color .3s, box-shadow .3s !important;
     }
     input[type="radio"]:not(:checked) + label {
+        position: relative;
         box-shadow: var(--shadow-2);
     }
     input[type="radio"]:not(:checked) + label + input[type="radio"]:not(:checked) + label::after {
@@ -162,7 +163,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
         width: 17px;
         height: 2.5em;
         background-color: var(--grey);
-        transform: translate(-43px, -5px);
+        transform: translate(-59px, -5px);
     }
 </style>
 

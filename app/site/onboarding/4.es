@@ -12,7 +12,7 @@ if {~ $p_back true} {
 }
 
 # Validate privacy setting
-if {!~ $p_privacy vrlfp && !~ $p_privacy friends && !~ $p_privacy me} {
+if {!~ $p_privacy everyone && !~ $p_privacy matches && !~ $p_privacy me} {
     throw error 'Invalid privacy setting'
 }
 
@@ -97,10 +97,12 @@ redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        u.agreeableness = '$agreeableness',
                        u.privacy_personality = '''$p_privacy''''
 
-# Start computing matches and proceed
+# Compute matches and proceed
 if {! isempty $onboarding} {
+    compute_matches $logged_user
+    daily_matches $logged_user
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.genguestlist = true, u.onboarding = 5'
+                       SET u.onboarding = 5'
     post_redirect /onboarding/5
 } {
     post_redirect '/settings#edit'

@@ -1,18 +1,10 @@
 %{
-(new vrchat discord privacy) = \
+(displayname vrchat discord privacy) = \
     `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
-                             RETURN u.new, u.vrchat, u.discord, u.privacy_socials'}
+                             RETURN u.displayname, u.vrchat, u.discord, u.privacy_socials'}
 bio = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.bio'}
 
-for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:PLAYS]->(g:game) RETURN g.name'}) {
-    games = ($games $g)
-}
-
-for (i = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:TAGGED]->(i:interest) RETURN i.name'}) {
-    interests = ($interests $i)
-}
-
-for (var = new vrchat discord bio games interests) {
+for (var = displayname vrchat discord bio games interests) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }
@@ -30,14 +22,13 @@ for (var = new vrchat discord bio games interests) {
 <link rel="stylesheet" href="/css/quill.css">
 
 <div class="box" style="margin-top: 0">
-%   if {! isempty $onboarding} {
-        <h1>Almost done</h1>
-        <p>You can edit everything here in your profile settings later!</p>
-%   } {
-        <h1>Social info</h1>
-%   }
+    <h1>Profile</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
+        <label for="displayname">Display name</label>
+        <input type="text" name="displayname" id="displayname" value="%($displayname%)">
+        <p class="help_text">This is how you'll appear around Flirtual. Unlike your username (%($logged_user%)), your display name can contain special characters and doesn't need to be unique. Your profile link (%($domain/$logged_user%)) will still use your username.</p>
+
         <label for="pfp">Profile pics</label><br /><br />
         <input id="pfp"
                type="hidden"
@@ -65,35 +56,31 @@ for (var = new vrchat discord bio games interests) {
 %           }
         </div><br />
 
-        <label for="bio">Bio</label>
-        <div class="bio_wrapper"><div id="bio" class="quill"></div></div><br />
+        <label for="bio">Bio</label><br />
+        <span>Need some inspiration?</span>
+        <a onclick="bioPrompt()" class="btn btn-gradient btn-small" style="padding: 6px 12px 7px 39px; transform: translateY(9px) scale(0.85)">
+            <img style="position: absolute; width: 23px; height: 23px; margin: -1px 0 0 -30px; background: var(--white); mask-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQ0MC44OCwxMjkuMzcsMjg4LjE2LDQwLjYyYTY0LjE0LDY0LjE0LDAsMCwwLTY0LjMzLDBMNzEuMTIsMTI5LjM3YTQsNCwwLDAsMCwwLDYuOUwyNTQsMjQzLjg1YTQsNCwwLDAsMCw0LjA2LDBMNDQwLjksMTM2LjI3QTQsNCwwLDAsMCw0NDAuODgsMTI5LjM3Wk0yNTYsMTUyYy0xMy4yNSwwLTI0LTcuMTYtMjQtMTZzMTAuNzUtMTYsMjQtMTYsMjQsNy4xNiwyNCwxNlMyNjkuMjUsMTUyLDI1NiwxNTJaIi8+PHBhdGggZD0iTTIzOCwyNzAuODEsNTQsMTYzLjQ4YTQsNCwwLDAsMC02LDMuNDZWMzQwLjg2YTQ4LDQ4LDAsMCwwLDIzLjg0LDQxLjM5TDIzNCw0NzkuNDhhNCw0LDAsMCwwLDYtMy40NlYyNzQuMjdBNCw0LDAsMCwwLDIzOCwyNzAuODFaTTk2LDM2OGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMTA0Ljg0LDM2OCw5NiwzNjhabTk2LTMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMyMDAuODQsMzM2LDE5MiwzMzZaIi8+PHBhdGggZD0iTTQ1OCwxNjMuNTEsMjc0LDI3MS41NmE0LDQsMCwwLDAtMiwzLjQ1VjQ3NmE0LDQsMCwwLDAsNiwzLjQ2bDE2Mi4xNS05Ny4yM0E0OCw0OCwwLDAsMCw0NjQsMzQwLjg2VjE2N0E0LDQsMCwwLDAsNDU4LDE2My41MVpNMzIwLDQyNGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMzI4Ljg0LDQyNCwzMjAsNDI0Wm0wLTg4Yy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMzMjguODQsMzM2LDMyMCwzMzZabTk2LDMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFM0MjQuODQsMzY4LDQxNiwzNjhabTAtODhjLTguODQsMC0xNi0xMC43NS0xNi0yNHM3LjE2LTI0LDE2LTI0LDE2LDEwLjc1LDE2LDI0UzQyNC44NCwyODAsNDE2LDI4MFoiLz48L3N2Zz4=')">
+            Try a prompt
+        </a>
+        <div class="bio_wrapper"><div id="bio" class="quill"></div></div>
         <input type="hidden" id="bio_html" name="bio" required>
 
-        <input id="new" type="checkbox" name="new" value="true" %(`{if {~ $new true} { echo checked }}%)>
-        <label for="new">I'm new to VR</label><br /><br />
-
-        <label for="games">Fav social VR games (optional)</label>
-        <input name="games" id="games" value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
-
-        <label for="interests">Personal tags (optional)</label>
-        <input name="interests" id="interests" value="%(`{echo $^interests | sed 's/ /,/g; s/_/ /g'}%)">
-
-        <p style="margin-bottom: 10px">Accounts (optional):</p>
+        <p style="margin: 40px 0 10px 0">Accounts (optional):</p>
         <table>
             <tr>
-                <td><label for="vrchat">VRChat:</label></td>
+                <td><label for="vrchat" style="font-size: 115%">VRChat:</label></td>
                 <td><input type="text" name="vrchat" id="vrchat" placeholder="Username" value="%(`{echo $vrchat | sed 's/.*\///'}%)"></td>
             </tr>
             <tr>
-                <td><label for="discord">Discord:</label></td>
+                <td><label for="discord" style="font-size: 115%">Discord:</label></td>
                 <td><input type="text" name="discord" id="discord" placeholder="Username#1234" value="%($discord%)"></td>
             </tr>
         </table>
 
         <label>Privacy: Who can see your linked accounts?</label>
         <select name="privacy">
-            <option value="vrlfp" %(`{if {~ $privacy vrlfp} { echo 'selected' }}%)>Anyone on VRLFP</option>
-            <option value="friends" %(`{if {~ $privacy friends} { echo 'selected' }}%)>Matches only</option>
+            <option value="everyone" %(`{if {~ $privacy everyone} { echo 'selected' }}%)>Anyone on Flirtual</option>
+            <option value="matches" %(`{if {~ $privacy matches} { echo 'selected' }}%)>Matches only</option>
             <option value="me" %(`{if {~ $privacy me} { echo 'selected' }}%)>Just me</option>
         </select>
 
@@ -190,44 +177,6 @@ for (var = new vrchat discord bio games interests) {
         document.querySelector("#pfp_" + order).remove();
     }
 
-    var tagify_games = new Tagify(document.querySelector('input[name=games]'), {
-        enforceWhitelist: true,
-        whitelist: [
-%           for (game = `` \n {redis graph read 'MATCH (g:game)
-%                                                RETURN g.name
-%                                                ORDER BY g.order, g.name' | sed 's/_/ /g'}) {
-                "%($game%)",
-%           }
-        ],
-        maxTags: 5,
-        skipInvalid: true,
-        editTags: false,
-        dropdown: {
-            enabled: 0,
-            maxItems: 0
-        },
-        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
-    })
-
-    var tagify_interests = new Tagify(document.querySelector('input[name=interests]'), {
-        enforceWhitelist: false,
-        whitelist: [
-%           for (interest = `` \n {redis graph read 'MATCH (i:interest {type: ''default''})
-%                                                    RETURN i.name
-%                                                    ORDER BY i.name' | sed 's/_/ /g'}) {
-                "%($interest%)",
-%           }
-        ],
-        maxTags: 5,
-        skipInvalid: true,
-        editTags: false,
-        dropdown: {
-            enabled: 0,
-            maxItems: 0
-        },
-        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
-    })
-
     var quillToolbar = [
         [{ 'header': [3, false] }],
         ['bold', 'italic', 'underline', 'strike'],
@@ -253,4 +202,24 @@ for (var = new vrchat discord bio games interests) {
         document.getElementById('bio_html').value = quill.container.firstChild.innerHTML;
         document.getElementById('form').submit();
     });
+
+    function bioPrompt() {
+        const prompts = [
+            "What I'm up to these days",
+            "I nerd out on",
+            "Never have I ever",
+            "If I had to eat one food for the rest of my life, it would be",
+            "I think a lot about",
+            "Three things I can't live without",
+            "Unpopular opinion, but",
+            "The secret to getting to know me is",
+            "My favorite game ever is",
+            "Me as a haiku",
+            "My favorite VRChat world"
+        ];
+        var prompt = prompts[Math.floor(Math.random() * prompts.length)];
+
+        quill.insertText(quill.getLength() - 1, "\n\n");
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength() - 1, "<h3>" + prompt + ":</h3>");
+    }
 </script>

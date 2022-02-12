@@ -15,7 +15,7 @@
     <h1>No email?</h1>
 %   if {~ $update_success true} {
         <p>Success! Your email has been updated and we've sent you a new confirmation link.</p>
-        <p>Please <a href="https://vrlfp.atlassian.net/servicedesk/customer/portal/3/group/4/create/46" target="_blank">contact us</a> if you're still having trouble.</p>
+        <p>Please <a href="https://rovr.atlassian.net/servicedesk/customer/portal/3/group/4/create/46" target="_blank">contact us</a> if you're still having trouble.</p>
 %   } {
         <p>Your email is <strong>%(`{redis_html `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.email'}}%)</strong>. If that's wrong, or if you'd like to try a different email, you can enter a new address below:</p>
 
