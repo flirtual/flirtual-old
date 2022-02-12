@@ -217,7 +217,7 @@ fn setup_handlers {
     } {logged_in} {
         handler_body = (template tpl/profile.tpl)
     } {
-        post_redirect /login
+        post_redirect '/login?redirect='$req_path
     }
 }
 
