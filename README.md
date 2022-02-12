@@ -1,5 +1,5 @@
-VRLFP
-=====
+Flirtual
+========
 
 The VR dating app.
 
@@ -31,16 +31,16 @@ $ make
 To run the full application, you will also need a Redis server with the
 RedisGraph module, an ejabberd server with
 [some configuration](https://github.com/rovrlabs/rovr-ejabberd),
-[vrlfp-cron](https://github.com/rovrlabs/vrlfp-cron), and
-[vrlfp-static](https://github.com/rovrlabs/vrlfp-static) (which we host in
-object storage but can also just be thrown into app/sites/).
+[flirtual-cron](https://github.com/rovrlabs/flirtual-cron), and
+[flirtual-static](https://github.com/rovrlabs/flirtual-static) (which we
+host in object storage but can also just be thrown into app/sites/).
 
 Usage
 -----
 
 `./bin/cgd -c app/es/kwerc.es`
 
-VRLFP should now be reachable at http://127.0.0.1:42069.
+Flirtual should now be reachable at http://127.0.0.1:42069.
 
 Contributing
 ------------
@@ -48,18 +48,18 @@ Contributing
 Contributions are more than welcome. Feel free to take an issue or open
 a new one.
 
-Development discussion happens on [Discord](https://vrlfp.com/discord)
-(VRLFP -> #developers channel).
+Development discussion happens on [Discord](https://flirtu.al/discord)
+(Flirtual -> #developers channel).
 
 Contact
 -------
 
-hello@vrlfp.com
+hello@flirtu.al
 
 License
 -------
 
-VRLFP is copyright (c) 2018-2022 ROVR LABS INC. and is distributed under
+Flirtual is copyright (c) 2018-2022 ROVR LABS INC. and is distributed under
 the AGPLv3 license. See LICENSE for details.
 
 Dependencies under vendor/ have their own licenses. Read them.
@@ -67,6 +67,5 @@ Dependencies under vendor/ have their own licenses. Read them.
 See also
 --------
 
-VRLFP is built with the [kwerc](https://kwerc.org) web framework. Its
-documentation might be helpful.  And contributions are welcome there
-too!
+Flirtual is built with the [kwerc](https://kwerc.org) web framework. Its
+documentation might be helpful. And contributions are welcome there too!
