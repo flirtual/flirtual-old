@@ -2,29 +2,22 @@ require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
-# Theme
-if {~ $p_changetheme true &&
-    {~ $p_theme light || ~ $p_theme dark}} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.theme = '''$p_theme''''
-
-    post_redirect '/settings?update_success=Theme'
-}
-
 # Privacy settings
 if {~ $p_changeprivacy true &&
-    {~ $p_personality vrlfp || ~ $p_personality friends || ~ $p_personality me} &&
-    {~ $p_socials vrlfp || ~ $p_socials friends || ~ $p_socials me} &&
-    {~ $p_sexuality vrlfp || ~ $p_sexuality friends || ~ $p_sexuality me} &&
+    {~ $p_personality everyone || ~ $p_personality matches || ~ $p_personality me} &&
+    {~ $p_socials everyone || ~ $p_socials matches || ~ $p_socials me} &&
+    {~ $p_sexuality everyone || ~ $p_sexuality matches || ~ $p_sexuality me} &&
+    {~ $p_country everyone || ~ $p_country matches || ~ $p_country me} &&
     {~ $p_optout true || ~ $p_optout false}} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.privacy_personality = '''$p_personality''',
                            u.privacy_socials = '''$p_personality''',
                            u.privacy_sexuality = '''$p_sexuality''',
+                           u.privacy_country= '''$p_gender''',
                            u.optout = '$p_optout
 
     # Kinks can be missing if the user has nsfw tags disabled, so set separately
-    if {~ $p_kinks vrlfp || ~ $p_kinks friends || ~ $p_kinks me} {
+    if {~ $p_kinks everyone || ~ $p_kinks matches || ~ $p_kinks me} {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                            SET u.privacy_kinks = '''$p_kinks''''
     }
@@ -40,17 +33,6 @@ if {~ $p_changenotifications true} {
     } {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                            SET u.newsletter = false'
-    }
-
-    if {~ $p_email_wave each} {
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                           SET u.email_wave = ''each'''
-    } {~ $p_email_wave digest} {
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                           SET u.email_wave = ''digest'''
-    } {~ $p_email_wave disabled} {
-        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                           SET u.email_wave = ''disabled'''
     }
 
     if {echo $p_volume | grep -s -e '^0\.[0-9][0-9]?$' -e '^[0-1]$'} {

@@ -3,10 +3,10 @@
           <h1>Login</h1>
           <form action="" method="POST" accept-charset="utf-8">
               <label for="username">Username<small>(or email... you do you)</small></label>
-              <input type="text" name="username" id="username" required autocomplete="username" placeholder="vrlfpfan42" value="%(`{echo $^p_username | escape_html}%)">
+              <input type="text" name="username" id="username" required autocomplete="username" value="%(`{echo $^p_username | escape_html}%)">
 
               <label for="password">Password</label>
-              <input type="password" name="password" id="password" required autocomplete="current-password" placeholder="••••••••••••••••">
+              <input type="password" name="password" id="password" required autocomplete="current-password">
 
               <input type="checkbox" name="staylogged" id="staylogged" value="true" %(`{if {~ $p_staylogged true} { echo checked }}%) style="margin-top: 17px; margin-bottom: 42px">
               <label for="staylogged" style="position: absolute; width: 100%; transform: translate(5px, 15px)">Stay logged in</label>
