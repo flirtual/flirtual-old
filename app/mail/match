@@ -1,6 +1,6 @@
-<p>$user waved back&mdash;they want to meet you too!</p>
+<p>$user liked you back&mdash;they want to meet you too!</p>
 
-<p><a href="https://vrlfp.com/$user" class="btn">Send them a message</a></p>
+<p><a href="https://flirtu.al/$user" class="btn">Send them a message</a></p>
 
 <script type="application/ld+json">
 {
@@ -9,13 +9,13 @@
   "description": "Send them a message",
   "potentialAction": {
     "@type": "ViewAction",
-    "url": "https://vrlfp.com/$user",
+    "url": "https://flirtu.al/$user",
     "name": "Message"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "VRLFP",
-    "url": "https://vrlfp.com/"
+    "name": "Flirtual",
+    "url": "https://flirtu.al/"
   }
 }
 </script>
