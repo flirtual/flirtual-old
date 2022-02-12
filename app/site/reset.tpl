@@ -7,7 +7,7 @@
 %   } {~ `^{redis graph read 'MATCH (u:user)-[:RESET]->(r:reset {id: '''`^{echo $q_id | escape_redis}^'''}) RETURN exists(r)'} true} {
         <form action="" method="POST" accept-charset="utf-8">
             <label for="username">Username<small>(or email)</small></label>
-            <input type="text" name="username" id="username" required placeholder="vrlfpfan42" value="%(`{echo $^p_username | escape_html}%)">
+            <input type="text" name="username" id="username" required placeholder="flirtualfan42" value="%(`{echo $^p_username | escape_html}%)">
 
             <label for="password">New password</label>
             <input type="password" name="password" id="password" required placeholder="••••••••••••••••">

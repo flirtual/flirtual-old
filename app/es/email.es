@@ -12,10 +12,10 @@ fn email user subject {
         link = 'https://'$domain'/notifications'
     }
 
-    sed 's/\\n /\n\n/g; s/\\n$//' << --EOF-- | /usr/sbin/sendmail -tif $mailfrom
-From: $app <$mailfrom>
+    sed 's/\\n /\n\n/g; s/\\n$//' << --EOF-- | /usr/sbin/sendmail -tif $email
+From: $app <$email>
 To: $to
-Subject: [VRLFP] $subject
+Subject: [Flirtual] $subject
 MIME-Version: 1.0
 Content-Type: multipart/alternative; boundary="BOUNDARY"
 
@@ -26,7 +26,7 @@ $plaintext
 
 Happy matching!
 
-Twitter: https://twitter.com/vrlfp
+Twitter: https://twitter.com/flirtualapp
 Discord: https://$domain/discord
 Unsubscribe: https://$domain/settings#notifications
 
@@ -43,7 +43,7 @@ Content-Type: text/html; charset=utf-8
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow">
-        <title>[VRLFP] $subject^</title>
+        <title>[Flirtual] $subject^</title>
         <style>
             .btn {
                 color: #fff;
@@ -268,7 +268,7 @@ $html
                                     </tr>
                                     <tr>
                                         <td style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;color: #212121;text-transform: uppercase;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" data-slot-container="1" class="ui-sortable" align="center">
-                                            <div data-slot="text"><a href="https://twitter.com/vrlfp" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
+                                            <div data-slot="text"><a href="https://twitter.com/flirtualapp" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>
 <a href="https://$domain/discord" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Discord</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>
