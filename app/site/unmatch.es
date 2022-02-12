@@ -14,11 +14,13 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
     }
 }
 
-# Remove user from friends list
-redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[f:FRIENDS]-(b:user {username: '''$p_user'''})
-                   DELETE f'
+# Delete match
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[m:MATCHED]-(b:user {username: '''$p_user'''})
+                   DELETE m'
 xmpp delete_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'"}'
 xmpp delete_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'"}'
+
+compute_matches $logged_user $p_user
 
 if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
     # Follow redirect
