@@ -83,19 +83,27 @@ fn compute_matches a b {
                        CREATE (b)-[:MATCH {score: bscore}]->(a)'
 }
 
-fn daily_matches {
-    redis graph write 'MATCH (a:user)-[m:DAILYMATCH]->(b:user)
-                       WHERE count(b) < 5
-                       DELETE m'
+fn daily_user_matches user {
+    redis graph write 'MATCH (a:user {username: '''$user'''})-[m:MATCH]->(b:user)
+                       WITH a, b ORDER BY m.score DESC LIMIT 100
+                       WITH a, b ORDER BY rand() LIMIT 20
+                       CREATE (a)-[:DAILYMATCH]->(b)'
+}
 
-    for (user = `{redis graph read 'MATCH (a:user)
-                                    OPTIONAL MATCH (a)-[:DAILYMATCH]->(b:user)
-                                    WITH DISTINCT a, b
-                                    WHERE NOT exists(b)
-                                    RETURN a.username'}) {
-        redis graph write 'MATCH (a:user {username: ''test''})-[m:MATCH]->(b:user)
-                           WITH a, b ORDER BY m.score DESC LIMIT 100
-                           WITH a, b ORDER BY rand() LIMIT 20
-                           CREATE (a)-[:DAILYMATCH]->(b)'
+fn daily_matches user {
+    if {! isempty $user} {
+        daily_user_matches $user
+    } {
+        redis graph write 'MATCH (a:user)-[m:DAILYMATCH]->(b:user)
+                           WHERE count(b) < 5
+                           DELETE m'
+
+        for (user = `{redis graph read 'MATCH (a:user)
+                                        OPTIONAL MATCH (a)-[:DAILYMATCH]->(b:user)
+                                        WITH DISTINCT a, b
+                                        WHERE NOT exists(b)
+                                        RETURN a.username'}) {
+            daily_user_matches $user
+        }
     }
 }
