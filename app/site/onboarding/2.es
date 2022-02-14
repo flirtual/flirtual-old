@@ -21,11 +21,12 @@ if {isempty $p_dob} {
         lt `{echo $p_dob | tr -d '-'} 19000101} {
         throw error 'Invalid date of birth'
     }
-    if {gt `{echo $p_dob | tr -d '-'} `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} 180000}} {
+    age = `{int `{/ `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} `{echo $p_dob | sed 's/-//g'}} 10000}}
+    if {lt $age 18} {
         throw error 'You must be at least 18 years of age to use this website'
     }
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.dob = '''$p_dob''''
+                       SET u.dob = '''$p_dob''', u.age = '$age
 }
 
 # Set gender
@@ -116,6 +117,7 @@ if {~ $languageset false} {
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:USES]->(p:platform) DELETE r'
 platformset = false
 platforms = `^{redis graph read 'MATCH (p:platform) RETURN p.name'}
+dprint platforms $^p_platform
 for (platform = `{echo $^p_platform | sed 's/,/ /g'}) {
     if {in $platform $platforms} {
         platformset = true
@@ -170,5 +172,7 @@ if {! isempty $onboarding} {
                        SET u.onboarding = 3'
     post_redirect /onboarding/3
 } {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.recompute_matches = true'
     post_redirect '/settings#edit'
 }

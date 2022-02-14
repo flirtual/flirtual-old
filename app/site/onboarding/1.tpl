@@ -14,7 +14,7 @@ for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:LF]
     $g = checked
 }
 
-for (var = monopoly) {
+for (var = women men other monopoly agemin agemax) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }

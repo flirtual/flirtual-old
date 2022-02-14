@@ -134,19 +134,17 @@ fn isvisible field {
                 <div class="swiper-wrapper">
 %                   avatars = `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:AVATAR]->(a:avatar)
 %                                                 RETURN a.url ORDER BY a.order'}
-%                   if {! isempty $avatars} {
-%                       for (avatar = $avatars) {
-                            <div class="swiper-slide">
-                                <div class="desktop">
-                                    <img data-blink-ops="scale-crop: 1920x1080; scale-crop-position: smart_faces_points"
-                                         data-blink-uuid="%($avatar%)" />
-                                </div>
-                                <div class="mobile">
-                                    <img data-blink-ops="scale-crop: 1920x1920; scale-crop-position: smart_faces_points"
-                                         data-blink-uuid="%($avatar%)" />
-                                </div>
+%                   for (avatar = $avatars) {
+                        <div class="swiper-slide">
+                            <div class="desktop">
+                                <img data-blink-ops="scale-crop: 1920x1080; scale-crop-position: smart_faces_points"
+                                     data-blink-uuid="%($avatar%)" />
                             </div>
-%                       }
+                            <div class="mobile">
+                                <img data-blink-ops="scale-crop: 1920x1920; scale-crop-position: smart_faces_points"
+                                     data-blink-uuid="%($avatar%)" />
+                            </div>
+                        </div>
 %                   }
                 </div>
                 <div class="swiper-prev"></div>

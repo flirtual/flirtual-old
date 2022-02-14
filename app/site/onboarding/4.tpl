@@ -5,7 +5,7 @@
                                u.survey_6, u.survey_7, u.survey_8, u.survey_9,
                                u.privacy_personality'}
 
-for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9) {
+for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey_8 survey_9 privacy) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }

@@ -39,5 +39,6 @@ if {!~ $p_privacy everyone && !~ $p_privacy matches && !~ $p_privacy me} {
                        SET u.privacy_kinks = '''$p_privacy''''
 }
 
-# Proceed
+# Update matches and proceed
+compute_matches $logged_user
 post_redirect '/settings#edit'

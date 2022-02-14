@@ -98,11 +98,11 @@ redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        u.privacy_personality = '''$p_privacy''''
 
 # Compute matches and proceed
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.recompute_matches = true'
 if {! isempty $onboarding} {
-    compute_matches $logged_user
-    daily_matches $logged_user
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.onboarding = 5'
+                       SET u.onboarding = 5, u.initial_matches = true'
     post_redirect /onboarding/5
 } {
     post_redirect '/settings#edit'

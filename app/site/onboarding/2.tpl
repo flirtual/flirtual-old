@@ -16,9 +16,8 @@ sexualities = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-
 languages = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:KNOWS]->(l:language)
                                 RETURN l.id'}
 
-for (p = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:USES]->(p:platform) RETURN p.name'}) {
-    $p = checked
-}
+platforms = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:USES]->(p:platform)
+                                RETURN p.name'}
 
 for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:PLAYS]->(g:game) RETURN g.name'}) {
     games = ($games $g)
@@ -28,7 +27,8 @@ for (i = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:TAG
     interests = ($interests $i)
 }
 
-for (var = dob gender_woman gender_man genders_other sexualities country new languages) {
+for (var = dob gender_woman gender_man privacy_sexuality country privacy_country new genders_other \
+           sexualities languages) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }
@@ -262,7 +262,7 @@ for (var = dob gender_woman gender_man genders_other sexualities country new lan
                     return `<tag title='${tagData.value}' contenteditable='false' spellcheck="false" class='tagify__tag ${tagData.class ? tagData.class : ""}' ${this.getAttributes(tagData)}>
                                 <x title='remove tag' class='tagify__tag__removeBtn'></x>
                                 <div>
-                                    <span class='tagify__tag-text'>${tagData.value}</span>
+                                    <span class='tagify__tag-text'>${tagData.value.replace(/_/g, ' ')}</span>
                                 </div>
                             </tag>`
                 } catch(err) {}
@@ -277,19 +277,18 @@ for (var = dob gender_woman gender_man genders_other sexualities country new lan
         },
         enforceWhitelist: true,
         whitelist: [
-            { value:'Meta Quest', display: 'Meta Quest'},
-            { value:'Oculus Link', display: 'Meta Quest with Link'},
-            { value:'Oculus Rift', display: 'Oculus Rift (S)'},
-            { value:'SteamVR', display: 'SteamVR (Index, Vive, Pimax, etc.)'},
-            { value:'Windows Mixed Reality', display: 'Windows Mixed Reality (Reverb, Odyssey,etc.)'},
-            { value:'PlayStation VR', display: 'PlayStation VR'},
-            { value:'Mobile VR', display: 'Mobile VR (Go, Gear VR, Cardboard, Daydream, etc.)'},
-            { value:'Desktop', display: 'I don\'t have a headset yet (desktop user)'}
+            { value:'Meta_Quest', display: 'Meta Quest' },
+            { value:'Oculus_Link', display: 'Meta Quest with Link' },
+            { value:'Oculus_Rift', display: 'Oculus Rift (S)' },
+            { value:'SteamVR', display: 'SteamVR (Index, Vive, Pimax, etc.)' },
+            { value:'Windows_Mixed_Reality', display: 'Windows Mixed Reality (Reverb, Odyssey,etc.)' },
+            { value:'PlayStation_VR', display: 'PlayStation VR' },
+            { value:'Mobile_VR', display: 'Mobile VR (Go, Gear VR, Cardboard, Daydream, etc.)' },
+            { value:'Desktop', display: 'I don\'t have a headset yet (desktop user)' }
         ],
         maxTags: 5,
         skipInvalid: true,
         editTags: false,
-	transformTag: transformLanguage,
         dropdown: {
             enabled: 0,
             maxItems: 0
@@ -297,18 +296,11 @@ for (var = dob gender_woman gender_man genders_other sexualities country new lan
         originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
     })
 
-    function haveVR(checkbox) {
-        if (checkbox.checked) {
-            document.getElementById('desktop').checked = false;
-        }
-    }
-    function noVR(checkbox) {
-        if (checkbox.checked) {
-            [].forEach.call(document.getElementsByClassName('vrcheckbox'), function(el) {
-                el.checked = false;
-            })
-        }
-    }
+%   if {! isempty $platforms} {
+%       for (platform = $platforms) {
+            tagify_platform.addTags("%($platform%)");
+%       }
+%   }
 
     var tagify_games = new Tagify(document.querySelector('input[name=games]'), {
         enforceWhitelist: true,

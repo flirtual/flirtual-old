@@ -80,13 +80,13 @@ if {~ $genderset false} {
 
 # Age range preference
 if {! isempty $p_agemin && ge $p_agemin 18 && le $p_agemin 125} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.agemin = '$p_agemin
 } {
     throw error 'Missing/invalid age range.'
 }
 if {! isempty $p_agemax && ge $p_agemax 18 && le $p_agemax 125} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.agemax = '$p_agemax
 } {
     throw error 'Missing/invalid age range.'
@@ -98,5 +98,7 @@ if {! isempty $onboarding} {
                        SET u.onboarding = 2'
     post_redirect /onboarding/2
 } {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.recompute_matches = true'
     post_redirect '/settings#edit'
 }
