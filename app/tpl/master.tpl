@@ -18,7 +18,6 @@ if {logged_in} {
         <link rel="stylesheet" href="/css/style.css?v=%($dateun%)">
 %       if {logged_in} {
             <link rel="stylesheet" href="/dist/converse.min.css" media="screen">
-            <!--<script type="text/javascript" src="/js/libsignal-protocol.js" charset="utf-8"></script> omemo, not working reliably -->
             <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8"></script>
 %       }
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,7 +118,7 @@ if {logged_in} {
 
             <div>
                 <div class="desktop">
-                    Made with ❤️+🥽
+                    Made with 🤍 in VR
                     <span class="right">© 2022 ROVR Labs</span>
                 </div>
                 <div class="mobile center">
@@ -183,12 +182,12 @@ if {logged_in} {
                     use_system_emojis: true,
                     emoji_categories:
                         {
-                            "smileys": ":smiley:",
+                            "smileys": ":heart_eyes:",
                             "people": ":thumbsup:",
-                            "activity": ":soccer:",
-                            "travel": ":red_car:",
+                            "activity": ":saxophone:",
+                            "travel": ":helicopter:",
                             "objects": ":bulb:",
-                            "nature": ":maple_leaf:",
+                            "nature": ":cat:",
                             "food": ":pizza:",
                             "symbols": ":yellow_heart:",
                             "flags": ":rainbow_flag:"
