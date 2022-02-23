@@ -19,7 +19,10 @@ redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                          (b:user {username: '''$p_user'''})
                    CREATE (a)-[p:PASSED {date: '$dateun'}]->(b)'
 
-compute_matches $logged_user $p_user
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                         -[m:DAILYMATCH]->
+                         (b:user {username: '''$p_user'''})
+                   DELETE m'
 
 if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
     # Follow redirect

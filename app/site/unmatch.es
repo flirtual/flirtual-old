@@ -4,7 +4,11 @@ if {!~ $REQUEST_METHOD POST} { return 0 }
 
 # Validate user, existence
 if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
-    !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true} {
+    !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true ||
+    !~ `{redis graph read 'MATCH (a:user {username: '''$logged_user'''})
+                                -[m:MATCHED]-
+                                (b:user {username: '''$p_user'''})
+                           RETURN exists(m)'} true} {
     if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
         # Follow redirect
         post_redirect $p_return
@@ -15,8 +19,15 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
 }
 
 # Delete match
-redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[m:MATCHED]-(b:user {username: '''$p_user'''})
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                         -[m:MATCHED]-
+                         (b:user {username: '''$p_user'''})
                    DELETE m'
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                         -[l:LIKED]-
+                         (b:user {username: '''$p_user'''})
+                   DELETE l'
+
 xmpp delete_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'"}'
 xmpp delete_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'"}'
 
