@@ -37,6 +37,10 @@ for (var = dob gender_woman gender_man privacy_sexuality country privacy_country
         $var = ()
     }
 }
+
+if {!~ $dob *-*} {
+    dob = `{echo $dob | sed 's/(....)(..)(..)/\1-\2-\3/'}
+}
 %}
 
 <script src="/js/intlpolyfill.js"></script>
@@ -97,7 +101,7 @@ for (var = dob gender_woman gender_man privacy_sexuality country privacy_country
         <label for="games">Fav social VR games</label>
         <input name="games" id="games" required value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
 
-        <label for="interests">Personal interest tags</label>
+        <label for="interests">Personal interest tags (you can add custom interests too!)</label>
         <input name="interests" id="interests" required value="%(`{if {! isempty $interests} { echo $interests | sed 's/ /,/g; s/_/ /g'}}%)">
 
 %       if {! isempty $onboarding} {
@@ -325,7 +329,9 @@ for (var = dob gender_woman gender_man privacy_sexuality country privacy_country
     var tagify_interests = new Tagify(document.querySelector('input[name=interests]'), {
         enforceWhitelist: false,
         whitelist: [
-%           for (interest = `` \n {redis graph read 'MATCH (i:interest {type: ''default''})
+%           for (interest = `` \n {redis graph read 'MATCH (i:interest)
+%                                                    WHERE i.type = ''default'' OR
+%                                                          i.type = ''strong''
 %                                                    RETURN i.name
 %                                                    ORDER BY i.name' | sed 's/_/ /g'}) {
                 "%($interest%)",
