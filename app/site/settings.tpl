@@ -20,11 +20,12 @@
 <span id="edit"></span>
 <div class="box">
     <h1>Edit profile</h1><br />
-    <a href="/onboarding/1" class="btn btn-normal">Matchmaking</a><br /><br />
-    <a href="/onboarding/2" class="btn btn-normal">Basic info</a><br /><br />
-    <a href="/onboarding/3" class="btn btn-normal">Profile</a><br /><br />
-    <a href="/onboarding/4" class="btn btn-normal">Personality</a><br /><br />
+    <a href="/onboarding/1" class="btn btn-normal">Matchmaking</a>
+    <a href="/onboarding/2" class="btn btn-normal">Basic info</a>
+    <a href="/onboarding/3" class="btn btn-normal">Profile</a>
+    <a href="/onboarding/4" class="btn btn-normal">Personality</a>
     <a href="/nsfw" class="btn btn-normal">NSFW</a>
+    <a href="/%($logged_user%)" class="btn btn-gradient">View profile</a>
 </div>
 
 <span id="notifications"></span>
@@ -82,7 +83,7 @@
             </select>
 %       }
 
-        <label>Opt-out of anonymous statistics? <small>(<a href="/privacy#stats" target="_blank">Details</a>)</small></label>
+        <label>Opt-out of anonymous statistics? <small>(<a href="/privacy" target="_blank">Details</a>)</small></label>
         <select name="optout">
             <option value="false" %(`{if {~ $optout false} { echo 'selected' }}%)>Include me in statistics</option>
             <option value="true" %(`{if {~ $optout true} { echo 'selected' }}%)>Do not include me in statistics</option>
