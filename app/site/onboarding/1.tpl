@@ -1,20 +1,16 @@
 %{
-(women men other monopoly agemin agemax) = \
+(women men other serious monopoly agemin agemax) = \
     `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
                         OPTIONAL MATCH (u)-[:LF]->(w:gender {name: ''Woman''})
                         OPTIONAL MATCH (u)-[:LF]->(m:gender {name: ''Man''})
                         OPTIONAL MATCH (u)-[:LF]->(o:gender {name: ''Other''})
-                        RETURN exists(w), exists(m), exists(o), u.monopoly, u.agemin, u.agemax'}
-
-for (r = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:LF]->(r:relationship) RETURN r.name'}) {
-    $r = checked
-}
+                        RETURN exists(w), exists(m), exists(o), u.serious, u.monopoly, u.agemin, u.agemax'}
 
 for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:LF]->(g:gender) RETURN g.name'}) {
     $g = checked
 }
 
-for (var = women men other monopoly agemin agemax) {
+for (var = women men other serious monopoly agemin agemax) {
     if {! isempty $(p_$var)} {
         $var = $(p_$var)
     }
@@ -31,26 +27,6 @@ for (var = women men other monopoly agemin agemax) {
     <h1>Matchmaking</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
-        <label>What kind of relationship are you looking for?</label><br />
-        <input id="homies" type="checkbox" name="Homies" value="true" %($Homies%)>
-        <label for="homies">Homies</label><br />
-        <input id="casual" type="checkbox" name="Casual_dating" value="true" %($Casual_dating%)>
-        <label for="casual">Casual dating</label><br />
-        <input id="serious" type="checkbox" name="Serious_dating" value="true" %($Serious_dating%)>
-        <label for="serious">Serious dating</label><br />
-        <input id="hookups" type="checkbox" name="Hookups" value="true" %($Hookups%)>
-        <label for="hookups">Hookups</label><br />
-
-        <a id="morebtn" class="btn" onclick="toggleMore()" style="font-size: 24px; margin: 24px 0 0 4px">More &#x25BC;</a>
-        <div id="more" style="display: none; margin: -8px 0 -23px 0">
-            <input id="monogamous" type="radio" name="monopoly" value="Monogamous" %(`{if {~ $monopoly Monogamous} { echo checked }}%)>
-            <label for="monogamous">Monogamous</label><br />
-            <input id="nonmonogamous" type="radio" name="monopoly" value="Non-monogamous" %(`{if {~ $monopoly Non-monogamous} { echo checked }}%)>
-            <label for="nonmonogamous">Non-monogamous</label><br />
-            <input id="both" type="radio" name="monopoly" value="Both">
-            <label for="both">Open to both</label>
-        </div><br /><br />
-
         <label>Who are you looking for?</label><br />
         <input id="women" type="checkbox" name="Women" value="true" %(`{if {~ $women true} { echo checked }}%)>
         <label for="women">Women</label><br />
@@ -59,9 +35,10 @@ for (var = women men other monopoly agemin agemax) {
         <input id="other" type="checkbox" name="Other" value="true" %(`{if {~ $other true} { echo checked }}%)>
         <label for="other">Others</label><br />
 
-        <label for="agemin">Age</label>
+        <label for="agemin">Age range</label>
         <select name="agemin" style="width: auto; margin-top: 12px">
-            <option value="18" %(`{if {~ $agemin 18 || isempty $agemin} { echo 'selected' }}%)>18</option>
+            <option hidden disabled selected value></option>
+            <option value="18" %(`{if {~ $agemin 18} { echo 'selected' }}%)>18</option>
             <option value="19" %(`{if {~ $agemin 19} { echo 'selected' }}%)>19</option>
             <option value="20" %(`{if {~ $agemin 20} { echo 'selected' }}%)>20</option>
             <option value="21" %(`{if {~ $agemin 21} { echo 'selected' }}%)>21</option>
@@ -172,6 +149,7 @@ for (var = women men other monopoly agemin agemax) {
         </select>
         -
         <select name="agemax" style="width: auto">
+            <option hidden disabled selected value></option>
             <option value="18" %(`{if {~ $agemax 18} { echo 'selected' }}%)>18</option>
             <option value="19" %(`{if {~ $agemax 19} { echo 'selected' }}%)>19</option>
             <option value="20" %(`{if {~ $agemax 20} { echo 'selected' }}%)>20</option>
@@ -279,8 +257,30 @@ for (var = women men other monopoly agemin agemax) {
             <option value="122" %(`{if {~ $agemax 122} { echo 'selected' }}%)>122</option>
             <option value="123" %(`{if {~ $agemax 123} { echo 'selected' }}%)>123</option>
             <option value="124" %(`{if {~ $agemax 124} { echo 'selected' }}%)>124</option>
-            <option value="125" %(`{if {~ $agemax 125 || isempty $agemax} { echo 'selected' }}%)>125</option>
-        </select>
+            <option value="125" %(`{if {~ $agemax 125} { echo 'selected' }}%)>125</option>
+        </select><br /><br />
+
+        <label>Are you open to serious dating?<small> (i.e.&nbsp;meeting&nbsp;in&nbsp;real&nbsp;life)</small></label><br />
+        <div class="tags" style="margin: 8px 0 0 -7px">
+            <input id="serious_yes" type="radio" name="serious" value="true" required %(`{if {~ $serious true} { echo checked }}%)>
+            <label for="serious_yes">Yes</label>
+            <input id="serious_no" type="radio" name="serious" value="false" %(`{if {~ $serious false} { echo checked }}%)>
+            <label for="serious_no">No</label>
+        </div>
+
+        <a id="morebtn" class="btn" onclick="toggleMore()" style="font-size: 24px; margin: 65px 0 0 4px">More &#x25BC;</a>
+        <div id="more" style="display: none; margin: -8px 0 -23px 0">
+            <input id="monogamous" type="radio" name="monopoly" value="Monogamous" %(`{if {~ $monopoly Monogamous} { echo checked }}%)>
+            <label for="monogamous">Monogamous</label><br />
+            <input id="nonmonogamous" type="radio" name="monopoly" value="Non-monogamous" %(`{if {~ $monopoly Non-monogamous} { echo checked }}%)>
+            <label for="nonmonogamous">Non-monogamous</label><br />
+            <input id="both" type="radio" name="monopoly" value="Both">
+            <label for="both">Open to both</label>
+        </div>
+
+%       if {isempty $onboarding} {
+            <p>Changes you make to your matchmaking preferences will be applied tomorrow.</p>
+%       }
 
 %       if {! isempty $onboarding} {
             <button type="submit" class="btn btn-gradient">Next page</button>
@@ -289,6 +289,32 @@ for (var = women men other monopoly agemin agemax) {
 %       }
     </form>
 </div>
+
+<style>
+    .tags input[type="radio"]:first-child + label {
+        border-radius: 15px 0 0 15px;
+        transform: translateX(11px);
+    }
+    .tags input[type="radio"]:nth-child(3) + label {
+        border-radius: 0 15px 15px 0;
+    }
+    .tags input[type="radio"] + label {
+        transition: background-color .3s, color .3s, box-shadow .3s !important;
+        user-select: none;
+    }
+    .tags input[type="radio"]:not(:checked) + label {
+        position: relative;
+        box-shadow: var(--shadow-2);
+    }
+    .tags input[type="radio"]:not(:checked) + label + input[type="radio"]:not(:checked) + label::after {
+        content: "";
+        position: absolute;
+        width: 17px;
+        height: 2.5em;
+        background-color: var(--grey);
+        transform: translate(-59px, -5px);
+    }
+</style>
 
 <script type="text/javascript">
     function toggleMore() {
