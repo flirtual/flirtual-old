@@ -12,10 +12,6 @@ func main() {
 
     p.AllowElements("p", "h3", "strong", "em", "u", "s", "span", "ol", "ul", "li", "blockquote", "pre", "br")
 
-    p.AllowStandardURLs()
-    p.AddTargetBlankToFullyQualifiedLinks(true)
-    p.AllowAttrs("href").OnElements("a")
-
     p.AllowAttrs("class").Matching(regexp.MustCompile("^ql-align-(center|right|justify)$")).Globally()
     p.AllowAttrs("spellcheck").Matching(regexp.MustCompile("^false$")).OnElements("pre")
     p.AllowStyles("color", "background-color").Matching(regexp.MustCompile(`^rgb\([0-9]{1,3}, [0-9]{1,3}, [0-9]{1,3}\)$`)).Globally()
