@@ -55,12 +55,12 @@ redis graph write 'MERGE (u:user {username: '''$p_username''',
                                   privacy_personality: ''everyone'', privacy_socials: ''matches'',
                                   privacy_sexuality: ''everyone'', privacy_country: ''everyone'',
                                   privacy_kinks: ''everyone'',
-                                  weight_custom_interests: 1, weight_default_interests: 1,
-                                  weight_games: 1, weight_country: 1, weight_monopoly: 1,
-                                  weight_domsub: 1, weight_kinks: 1, weight_personality: 1,
+                                  weight_custom_interests: 5, weight_default_interests: 3,
+                                  weight_games: 3, weight_country: 3, weight_monopoly: 5,
+                                  weight_personality: 0.5, weight_domsub: 5, weight_kinks: 3,
                                   optout: false,
                                   nsfw: false,
-				  volume: 0.5,
+                                  volume: 0.5,
                                   registered: '''`{date -ui}^'''})
                    MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
                    MERGE (u)-[:CONFIRM]->(c)'
