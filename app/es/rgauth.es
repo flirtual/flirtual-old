@@ -13,16 +13,20 @@ fn login_user username password {
 
         # Normalize case-insensitive username/email -> case-sensitive username
         username = `{echo $username | tr 'A-Z' 'a-z' | escape_redis}
-        (username rpassword) = `` \n {redis graph read 'MATCH (u:user)
-                                                   WHERE toLower(u.username) = '''$username''' OR
-                                                         toLower(u.email) = '''$username'''
-                                                   RETURN u.username, u.password'}
+        (username rpassword banned) = \
+            `` \n {redis graph read 'MATCH (u:user)
+                                     WHERE toLower(u.username) = '''$username''' OR
+                                         toLower(u.email) = '''$username'''
+                                     RETURN u.username, u.password, u.banned'}
 
         # Goodbye
         if {isempty $username ||
             ! kryptgo checkhash -b $rpassword -p $password} {
             dprint Failed login to $username from $HTTP_USER_AGENT on $REMOTE_ADDR
             throw error 'Wrong username/email or password'
+        }
+        if {~ $^banned true} {
+            throw error 'Your account has been banned; please check your email for details'
         }
 
         # Generate new session ID
