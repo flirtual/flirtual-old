@@ -33,7 +33,7 @@
                   <tr><td></td></tr>
                   <tr>
                       <td><input type="checkbox" name="newsletter" id="newsletter" value="true" %(`{if {~ $p_newsletter true} { echo checked }}%)></td>
-                      <td><label for="newsletter" style="display: inline-block; width: 100%; transform: translateY(4px)">Bless my inbox with Flirtual updates (we won't spam you)</label></td>
+                      <td><label for="newsletter" style="display: inline-block; width: 100%; transform: translateY(4px)">Get Flirtual updates (we won't spam you)</label></td>
                   </tr>
               </table>
 
