@@ -120,7 +120,7 @@ fn isvisible field {
             <div class="swiper">
                 <div class="swiper-wrapper">
 %                   avatars = `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:AVATAR]->(a:avatar)
-%                                                 RETURN a.url ORDER BY a.order'}
+%                                                 RETURN a.url ORDER BY a.order LIMIT 15'}
 %                   for (avatar = $avatars) {
                         <div class="swiper-slide">
                             <div class="desktop">
