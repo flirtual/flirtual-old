@@ -119,8 +119,8 @@ fn logout_user {
     if {! isempty $user} {
         redis graph write 'MATCH (u:user {username: '''$user'''})-[:SESSION]->(s:session) DELETE s'
         xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
-        post_redirect /login
     }
+    post_redirect /login
 }
 
 fn logged_in { ! isempty $logged_user }
