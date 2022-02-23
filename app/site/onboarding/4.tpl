@@ -152,6 +152,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
     }
     input[type="radio"] + label {
         transition: background-color .3s, color .3s, box-shadow .3s !important;
+        user-select: none;
     }
     input[type="radio"]:not(:checked) + label {
         position: relative;
