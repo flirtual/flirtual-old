@@ -1,17 +1,34 @@
 fn redis cmd {
+    # redis replica ... -> use the replica host
+    if {~ $cmd(1) replica} {
+        cmd = $cmd(2 ...)
+        rhost = $REDISCLI_REPLICA_HOST
+        rport = $REDISCLI_REPLICA_PORT
+    } {
+        rtimeout = 'timeout 1000'
+        rhost = $REDISCLI_HOST
+        rport = $REDISCLI_PORT
+    }
+
     # redis graph read/write -> redis GRAPH.[RO_]QUERY $REDISCLI_DB
     if {~ $cmd(1) graph} {
-        if {~ $cmd(2) write} {
+        cmd = $cmd(2 ...)
+        if {~ $cmd(1) write} {
             rgmode = QUERY
         } {
             rgmode = RO_QUERY
         }
-        cmd = GRAPH.$rgmode $REDISCLI_DB "$cmd(3 ...)^"
+        cmd = $cmd(2 ...)
+        cmd = GRAPH.$rgmode $REDISCLI_DB "$cmd^" $^timeout
     }
+
     # Allow linebreaks in redis input, send to redis, and format output
-    echo $cmd | tr '
-' ' ' | redis-cli -h $REDISCLI_HOST -p $REDISCLI_PORT --no-raw | \
-         sed -n '/^2\)/,/^3\)/p' | sed '$d' | sed 's/[0-9]+\) //g; s/^ *//; s/^"//; s/"$//; s/\(integer\) //; s/^$/\(nil\)/'
+    echo $cmd |
+         tr $NEWLINE ' ' |
+         redis-cli -h $rhost -p $rport --no-raw |
+         sed -n '/^2\)/,/^3\)/p' |
+         sed '$d' |
+         sed 's/[0-9]+\) //g; s/^ *//; s/^"//; s/"$//; s/\(integer\) //; s/^$/\(nil\)/'
 }
 
 # Escape quotes for writing to redis
