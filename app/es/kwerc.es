@@ -15,7 +15,7 @@ cd ..
 
 kwerc_root = `{pwd}
 
-http_content_type = 'text/html;charset=UTF-8'
+http_content_type = 'text/html; charset=UTF-8'
 
 if {test -f config} {
     . config
