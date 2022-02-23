@@ -34,6 +34,7 @@ for (var = displayname vrchat discord privacy bio) {
                type="hidden"
                role="uploadcare-uploader"
                data-public-key="130267e8346d9a7e9bea"
+               data-cdn-base="https://media.flirtu.al"
                data-multiple="true"
                data-images-only="true"
                data-tabs="file camera url facebook"
@@ -48,7 +49,8 @@ for (var = displayname vrchat discord privacy bio) {
 %               for (avatar = $avatars) {
                     <div id="pfp_%($order%)">
                         <button type="button" onclick="delete_pfp(%($order%))" class="btn-delete">✖</button>
-                        <img data-blink-ops="scale-crop: 150x150; scale-crop-position: smart_faces_points"
+                        <img width="150" height="150"
+                             data-blink-ops="scale-crop: 150x150; scale-crop-position: smart_faces_points"
                              data-blink-uuid="%($avatar%)" />
                         <input type="hidden" name="pfp_%($order%)" value="%($avatar%)">
                     </div>
@@ -116,46 +118,49 @@ for (var = displayname vrchat discord privacy bio) {
         }
     });
 
-    uploadcare.registerTab("preview", uploadcareTabEffects)
-    UPLOADCARE_LOCALE_TRANSLATIONS = {
-        buttons: {
-            choose: {
-                images: {
-                    other: "Choose images"
-                }
-            }
-        }
-    }
+    uploadcare.registerTab("preview", uploadcareTabEffects);
 
     const widget = uploadcare.MultipleWidget("[role=uploadcare-uploader]");
-    widget.onChange(function (group) {
+
+    widget.validators.push(function(fileInfo) {
+        if (fileInfo.size !== null && fileInfo.size > 10 * 1024 * 1024) {
+            throw new Error("fileMaximumSize");
+        }
+    });
+
+    widget.onChange(function(group) {
         group.files().forEach(file => {
             file.done(fileInfo => {
-                var url = fileInfo.cdnUrl.split("/").slice(3,-1).join("/");
-                var order = document.getElementById("pfplist").children.length;
+                var uuid = fileInfo.cdnUrl.split("/")[3];
+                if (!document.querySelector('[src*="' + uuid + '"]')) {
+                    var url = fileInfo.cdnUrl.split("/").slice(3,-1).join("/");
+                    var order = document.getElementById("pfplist").children.length;
 
-                var div = document.createElement("div");
-                div.setAttribute("id", "pfp_" + order);
+                    var div = document.createElement("div");
+                    div.setAttribute("id", "pfp_" + order);
 
-                var button = document.createElement("button");
-                button.setAttribute("type", "button");
-                button.setAttribute("onclick", "delete_pfp(" + order + ")");
-                button.setAttribute("class", "btn-delete");
-                button.innerHTML = "✖";
+                    var button = document.createElement("button");
+                    button.setAttribute("type", "button");
+                    button.setAttribute("onclick", "delete_pfp(" + order + ")");
+                    button.setAttribute("class", "btn-delete");
+                    button.innerHTML = "✖";
 
-                var img = document.createElement("img");
-                img.setAttribute("data-blink-ops", "scale-crop: 150x150; scale-crop-position: smart_faces_points");
-                img.setAttribute("data-blink-uuid", url);
+                    var img = document.createElement("img");
+                    img.setAttribute("width", 150);
+                    img.setAttribute("height", 150);
+                    img.setAttribute("data-blink-ops", "scale-crop: 150x150; scale-crop-position: smart_faces_points");
+                    img.setAttribute("data-blink-uuid", url);
 
-                var input = document.createElement("input");
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", "pfp_" + order);
-                input.setAttribute("value", url);
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "hidden");
+                    input.setAttribute("name", "pfp_" + order);
+                    input.setAttribute("value", url);
 
-                div.appendChild(button);
-                div.appendChild(img);
-                div.appendChild(input);
-                document.getElementById("pfplist").appendChild(div);
+                    div.appendChild(button);
+                    div.appendChild(img);
+                    div.appendChild(input);
+                    document.getElementById("pfplist").appendChild(div);
+                }
             });
         });
     });

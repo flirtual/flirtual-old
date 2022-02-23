@@ -37,12 +37,6 @@ for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
 if {~ $pfpset false} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        MERGE (u)-[:AVATAR]->(a:avatar {url: ''e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'', order: 0})'
-    throw error 'Missing profile pics'
-}
-
-# Validate bio
-if {isempty $p_bio || ~ $p_bio '<p><br></p>'} {
-    throw error 'Missing bio'
 }
 
 # Fix URLs
@@ -56,7 +50,6 @@ if {!~ $p_privacy everyone && !~ $p_privacy matches && !~ $p_privacy me} {
 }
 
 # Write
-dprint $p_bio
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                    SET u.bio = '''`^{echo $^p_bio | sed 's/\\//g' | bluemonday | 
                                      sed 's/<a /<a onclick="external_link(event, this)" /g' |
