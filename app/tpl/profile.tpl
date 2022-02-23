@@ -134,8 +134,8 @@ fn isvisible field {
                         </div>
 %                   }
                 </div>
-                <div class="swiper-prev"></div>
-                <div class="swiper-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
 
             <div class="name">
