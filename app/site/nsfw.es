@@ -40,5 +40,6 @@ if {!~ $p_privacy everyone && !~ $p_privacy matches && !~ $p_privacy me} {
 }
 
 # Update matches and proceed
-compute_matches $logged_user
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.recompute_matches = true'
 post_redirect '/settings#edit'
