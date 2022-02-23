@@ -1,7 +1,7 @@
 Flirtual
 ========
 
-The VR dating app.
+The VR dating app (formerly VRLFP).
 
 Dependencies
 ------------
