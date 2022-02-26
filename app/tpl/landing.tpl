@@ -148,13 +148,16 @@
                 transform: translateY(-50%);
             }
             #slide-1 img {
-                margin: 0 0 10vh 50%;
+                margin: 0 0 0 50%;
                 width: auto;
                 height: 10vw;
                 transform: translateX(-50%);
             }
+            #slide-1 small {
+                font-size: 1.5vw;
+            }
             #slide-1 h2 {
-                margin: 0;
+                margin: 3vw 0 0 0;
                 font-size: 5vw;
             }
             #slide-1 p {
@@ -433,6 +436,7 @@
                 <div class="swiper-slide" id="slide-1">
                     <div>
                         <img src="/img/logo.svg?v=4" alt="Flirtual" />
+                        <small>(previously VRLFP)</small>
                         <h2>Go on dates...</h2>
                     </div>
                     <p>⮟</p>
