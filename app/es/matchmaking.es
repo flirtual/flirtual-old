@@ -132,9 +132,14 @@ fn compute_matches a b {
 fn daily_matches users {
     if {isempty $users} {
         # Every user that doesn't already have daily matches waiting for them
-        redis graph write 'MATCH (a:user)-[m:DAILYMATCH]->(b:user)
-                           WHERE count(b) < 5
-                           DELETE m'
+        delete = `{redis graph read 'MATCH (a:user)-[m:DAILYMATCH]->(b:user)
+                                     WITH DISTINCT a, count(m) AS c
+                                     WHERE c < 20
+                                     RETURN a.username'}
+        for (user = $delete) {
+            redis graph write 'MATCH (a:user {username: '''$user'''})-[m:DAILYMATCH]->(b:user)
+                               DELETE m'
+        }
 
         users = `{redis graph read 'MATCH (a:user)
                                     OPTIONAL MATCH (a)-[:DAILYMATCH]->(b:user)
