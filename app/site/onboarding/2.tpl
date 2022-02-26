@@ -50,7 +50,7 @@ if {!~ $dob *-*} {
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label for="dob">Date of birth (only your age will be visible)</label>
-        <input type="date" name="dob" id="dob" min="1900-01-01" autocomplete="bday" placeholder="YYYY-MM-DD" value="%($dob%)">
+        <input type="date" name="dob" id="dob" min="1900-01-01" autocomplete="bday" placeholder="YYYY-MM-DD" value="%($dob%)"><br />
 
         <label>Gender</label><br />
         <input type="checkbox" name="gender_man" id="gender_man" value="true" %(`{if {~ $gender_man true} { echo checked }}%)>

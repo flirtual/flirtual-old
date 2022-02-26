@@ -1,5 +1,5 @@
 <div class="box">
-    <h1>Email confirmation</h1>
+    <h1>Confirm email</h1>
     <p>Please check your email for a confirmation link to activate your account. If you don't see it in your inbox, please check your spam folder!</p>
 
 %   if {~ $p_resend yes} {

@@ -27,13 +27,13 @@ for (var = women men other serious monopoly agemin agemax) {
     <h1>Matchmaking</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
-        <label>Who are you looking for?</label><br />
+        <label>I want to meet...</label><br />
         <input id="women" type="checkbox" name="Women" value="true" %(`{if {~ $women true} { echo checked }}%)>
         <label for="women">Women</label><br />
         <input id="men" type="checkbox" name="Men" value="true" %(`{if {~ $men true} { echo checked }}%)>
         <label for="men">Men</label><br />
         <input id="other" type="checkbox" name="Other" value="true" %(`{if {~ $other true} { echo checked }}%)>
-        <label for="other">Others</label><br />
+        <label for="other">Other genders</label><br />
 
         <label for="agemin">Age range</label>
         <select name="agemin" style="width: auto; margin-top: 12px">
@@ -262,7 +262,7 @@ for (var = women men other serious monopoly agemin agemax) {
 
         <label>Are you open to serious dating?<small> (i.e.&nbsp;meeting&nbsp;in&nbsp;real&nbsp;life)</small></label><br />
         <div class="tags" style="margin: 8px 0 0 -7px">
-            <input id="serious_yes" type="radio" name="serious" value="true" required %(`{if {~ $serious true} { echo checked }}%)>
+            <input id="serious_yes" type="radio" name="serious" value="true" %(`{if {~ $serious true} { echo checked }}%)>
             <label for="serious_yes">Yes</label>
             <input id="serious_no" type="radio" name="serious" value="false" %(`{if {~ $serious false} { echo checked }}%)>
             <label for="serious_no">No</label>

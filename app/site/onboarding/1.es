@@ -52,11 +52,12 @@ if {! isempty $p_agemax && ge $p_agemax 18 && le $p_agemax 125} {
 }
 
 # Open to serious dating?
-if {~ $p_serious true || ~ $p_serious false} {
+if {~ $p_serious true} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.serious = '''$p_serious''''
+                       SET u.serious = true'
 } {
-    throw error 'Missing casual/serious dating'
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.serious = false'
 }
 
 # (Non-)Monogamous

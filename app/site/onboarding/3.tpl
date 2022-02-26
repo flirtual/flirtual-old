@@ -27,7 +27,7 @@ for (var = displayname vrchat discord privacy bio) {
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label for="displayname">Display name</label>
         <input type="text" name="displayname" id="displayname" value="%($displayname%)">
-        <p class="help_text">This is how you'll appear around Flirtual. Unlike your username (%($logged_user%)), your display name can contain special characters and doesn't need to be unique. Your profile link (%($domain/$logged_user%)) will still use your username.</p>
+        <p class="help_text">This is how you'll appear around Flirtual. Your display name can contain special characters and doesn't need to be unique. Your profile link (%($domain/$logged_user%)) will still use your username.</p>
 
         <label for="pfp">Profile pics</label><br /><br />
         <input id="pfp"
@@ -37,7 +37,7 @@ for (var = displayname vrchat discord privacy bio) {
                data-cdn-base="https://media.flirtu.al"
                data-multiple="true"
                data-images-only="true"
-               data-tabs="file camera url facebook"
+               data-tabs="file url facebook"
                data-effects="crop, rotate, mirror, flip, enhance" /><br />
 
         <div id="pfplist">
