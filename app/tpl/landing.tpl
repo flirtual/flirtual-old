@@ -520,46 +520,46 @@
                     <div class="swiper people">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <img data-blink-uuid="a68e9441-8430-4a33-a067-04313d4d260c" />
+                                <img src="https://media.flirtu.al/a68e9441-8430-4a33-a067-04313d4d260c/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="5e0d4116-2e60-4ae9-b865-3ce7d17c68ec" />
+                                <img src="https://media.flirtu.al/5e0d4116-2e60-4ae9-b865-3ce7d17c68ec/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="01db5707-2aac-45cd-a80c-223c6e1b93f2" />
+                                <img src="https://media.flirtu.al/01db5707-2aac-45cd-a80c-223c6e1b93f2/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="b8ea7c5b-5110-46b7-8635-38728e8a77aa" />
+                                <img src="https://media.flirtu.al/b8ea7c5b-5110-46b7-8635-38728e8a77aa/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="eea60bde-de1a-4f43-9f02-a218fddf2a73" />
+                                <img src="https://media.flirtu.al/eea60bde-de1a-4f43-9f02-a218fddf2a73/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="ad5cba2d-03ff-43eb-9cf3-e6986bb0be54" />
+                                <img src="https://media.flirtu.al/ad5cba2d-03ff-43eb-9cf3-e6986bb0be54/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="40122187-d831-4131-ab8e-ee0f5544ce73" />
+                                <img src="https://media.flirtu.al/40122187-d831-4131-ab8e-ee0f5544ce73/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="17b87f45-0ef8-4dfa-80c4-c23450f09b30" />
+                                <img src="https://media.flirtu.al/17b87f45-0ef8-4dfa-80c4-c23450f09b30/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="28eaf327-e2bd-4fd2-a7f9-4dd6be153bfc" />
+                                <img src="https://media.flirtu.al/28eaf327-e2bd-4fd2-a7f9-4dd6be153bfc/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="5bbf00fc-2c97-49b2-9f16-9d3c1a180ae8" />
+                                <img src="https://media.flirtu.al/5bbf00fc-2c97-49b2-9f16-9d3c1a180ae8/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="f3b27da8-4f36-4c7f-bd65-094421d28f22" />
+                                <img src="https://media.flirtu.al/f3b27da8-4f36-4c7f-bd65-094421d28f22/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="c0d8ad7f-a6df-4de8-a429-a8fa729bf447" />
+                                <img src="https://media.flirtu.al/c0d8ad7f-a6df-4de8-a429-a8fa729bf447/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="9f2de017-6b5a-4ca9-b858-95057889fd64" />
+                                <img src="https://media.flirtu.al/9f2de017-6b5a-4ca9-b858-95057889fd64/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                             <div class="swiper-slide">
-                                <img data-blink-uuid="b8b087b9-3ab3-4a05-b01a-166b502789f5" />
+                                <img src="https://media.flirtu.al/b8b087b9-3ab3-4a05-b01a-166b502789f5/-/format/auto/-/quality/smart/-/resize/x661/" />
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
@@ -656,10 +656,24 @@
                 centeredSlides: true,
                 speed: 4000,
                 loop: true,
+                loopedSlides: 1,
                 autoplay: {
                     delay: 1,
                     disableOnInteraction: false,
                 },
+                on: {
+                    slideChange: function() {
+                        let lastVisibleItem = this.realIndex + this.params.slidesPerView
+                        let slidesLength = this.slides.length - 2
+                        let lastVisibleIndex = this.realIndex + this.params.slidesPerView
+                        if (lastVisibleItem > slidesLength) {
+                           this.slideTo(1)
+                        }
+                        if (lastVisibleIndex >= this.slides.length) {
+                           this.slideTo((slidesLength - this.params.slidesPerView) + 1)
+                        }
+                    }
+                }
             });
 
             window.Blinkloader.optimize({
