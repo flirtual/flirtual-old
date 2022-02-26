@@ -37,8 +37,7 @@ for (var = women men other serious monopoly agemin agemax) {
 
         <label for="agemin">Age range</label>
         <select name="agemin" style="width: auto; margin-top: 12px">
-            <option hidden disabled selected value></option>
-            <option value="18" %(`{if {~ $agemin 18} { echo 'selected' }}%)>18</option>
+            <option value="18" %(`{if {~ $agemin 18 || isempty $agemin} { echo 'selected' }}%)>18</option>
             <option value="19" %(`{if {~ $agemin 19} { echo 'selected' }}%)>19</option>
             <option value="20" %(`{if {~ $agemin 20} { echo 'selected' }}%)>20</option>
             <option value="21" %(`{if {~ $agemin 21} { echo 'selected' }}%)>21</option>
@@ -257,10 +256,10 @@ for (var = women men other serious monopoly agemin agemax) {
             <option value="122" %(`{if {~ $agemax 122} { echo 'selected' }}%)>122</option>
             <option value="123" %(`{if {~ $agemax 123} { echo 'selected' }}%)>123</option>
             <option value="124" %(`{if {~ $agemax 124} { echo 'selected' }}%)>124</option>
-            <option value="125" %(`{if {~ $agemax 125} { echo 'selected' }}%)>125</option>
+            <option value="125" %(`{if {~ $agemax 125 || isempty $agemax} { echo 'selected' }}%)>125</option>
         </select><br /><br />
 
-        <label>Are you open to serious dating?<small> (i.e.&nbsp;meeting&nbsp;in&nbsp;real&nbsp;life)</small></label><br />
+        <label>Are you open to serious dating? (optional)</label><br />
         <div class="tags" style="margin: 8px 0 0 -7px">
             <input id="serious_yes" type="radio" name="serious" value="true" %(`{if {~ $serious true} { echo checked }}%)>
             <label for="serious_yes">Yes</label>
