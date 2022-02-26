@@ -1,42 +1,62 @@
 <div class="box">
     <h1>Stats</h1>
-    <p>
+
 %{
-        users = `{redis graph read 'match (u:user) return count(u)'}
-        echo $users registered users
+    redis graph read 'MATCH (u:user)
+                      RETURN u.registered
+                      ORDER BY u.registered' |
+        awk '{print NR " " $s}' |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "# users";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 2:1 with lines'
+
+    users = `{redis graph read 'MATCH (u:user)
+                                RETURN count(u)'}
+
+    vrlfpusers = `{redis graph read 'MATCH (u:user)
+                                     WHERE exists(u.vrlfp)
+                                     RETURN count(u)'}
+
+    vrlfponboarded = `{redis graph read 'MATCH (u:user)
+                                         WHERE exists(u.vrlfp) AND
+                                               NOT exists(u.onboarding)
+                                         RETURN count(u)'}
+
+    newusers = `{redis graph read 'MATCH (u:user)
+                                   WHERE NOT exists(u.vrlfp)
+                                   RETURN count(u)'}
+
+    onboarded = `{redis graph read 'MATCH (u:user)
+                                    WHERE NOT exists(u.vrlfp) AND
+                                          exists(u.onboarding)
+                                    RETURN count(u)'}
+
+    likes = `{redis graph read 'MATCH (a:user)-[l:LIKED]->(b:user)
+                                WHERE l.type <> ''homie''
+                                RETURN count(l)'}
+
+    homies = `{redis graph read 'MATCH (a:user)-[l:LIKED {type: ''homie''}]->(b:user)
+                                 RETURN count(l)'}
+
+    passes = `{+ `{redis graph read 'MATCH (a:user)-[p:PASSED]->(b:user)
+                                     RETURN count(p)'} 1039151}
+
+    matches = `{redis graph read 'MATCH (a:user)-[m:MATCHED]->(b:user)
+                                  RETURN count(m)'}
 %}
-    </p>
-    <p>
-%{
-        notonboarded = `{redis graph read 'match (u:user) where exists(u.onboarding) return count(u)'}
-        echo $notonboarded' users not onboarded ('`{x `{/ $notonboarded $users} 100}^'%)'
-%}
-    <p>
-%{
-        count = `{redis graph read 'match (u:user) where u.lastlogin <> 1630947341 return count(u)'}
-        echo $count' users logged in since 1.2 ('`{x `{/ $count $users} 100}^'%)'
-%}
-    </p>
-    <p>
-%{
-        waves = `{redis graph read 'match (u:user)-[:WAVED]->(w:user) return count(w)'}
-        passes = `{redis graph read 'match (u:user)-[:PASSED]->(w:user) return count(w)'}
-        echo $waves' waves / '$passes' passes ('`{x `{/ $waves `{+ $waves $passes}} 100}^'% waved)'
-%}
-    </p>
-    <p>
-%{
-        friendships = `{redis graph read 'match (u:user)-[:FRIENDS]->(f:user) return count(f)'}
-        echo $friendships friendships '('`{x `{/ $friendships `{+ $friendships $waves}} 100}^'% of waves returned)'
-%}
-    </p>
-    <p>
-%{
-        groups = `{redis graph read 'match (g:group) return count(g)'}
-        members = `{redis graph read 'match (u:user)-[:MEMBER]->(g:group) with distinct u return count(u)'}
-        echo $groups' groups / '$members' distinct members'
-%}
-    </p>
+
+    <p>%($users%) registered users</p>
+    <p>%(`{x `{/ $vrlfponboarded $vrlfpusers} 100}%)% of VRLFP users onboarded</p>
+    <p>%(`{x `{/ $onboarded $newusers} 100}%)% of new users onboarded</p>
+    <p>%($likes%) likes</p>
+    <p>%($homies%) homies</p>
+    <p>%($passes%) passes</p>
+    <p>%($matches%) matches</p>
     <hr />
 
     <h2>Query logins</h2>
@@ -84,14 +104,14 @@
 %       }
     </p>
     <hr />
-
-    <h2>Users</h2>
-%   for (u = `{redis graph read 'MATCH (u:user) RETURN u.username'}) {
-        <p>
-            <a href="/%($u%)" target="_blank">%($u%)</a>:
-            Invited by %(`{redis graph read 'MATCH (u:user {username: '''$u'''})-[:REFERRED_BY]->(i:user) RETURN i.username'}%)
-            (%(`{redis graph read 'MATCH (u:user {username: '''$u'''})-[:REFERRED_VIA]->(r:referral) RETURN r.id'}%)), registered
-            %(`{redis graph read 'MATCH (u:user {username: '''$u'''}) RETURN u.registered'}%)
-        </p>
-%   }
 </div>
+
+<style>
+    .box > svg {
+        width: 100%;
+        height: auto;
+    }
+    #gnuplot_plot_1 > g:nth-child(2) > path:nth-child(1) {
+        stroke: var(--accent);
+    }
+</style>
