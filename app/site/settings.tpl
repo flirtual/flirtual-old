@@ -11,7 +11,7 @@
 % }
 
 <div style="margin-top: -100px">
-    <a onclick="document.getElementById('edit').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Edit profile</a>
+    <a onclick="document.getElementById('edit').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Profile</a>
     <a onclick="document.getElementById('notifications').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Notifications</a>
     <a onclick="document.getElementById('privacy').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Privacy</a>
     <a onclick="document.getElementById('account').scrollIntoView()" class="btn" style="margin: 0 1em 1em 0">Account</a>
