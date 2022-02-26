@@ -3,9 +3,11 @@ if {!~ $onboarding 5} {
     post_redirect /
 }
 
-# Email confirmed? Proceed
+# Email confirmed? Start matchmaking and proceed
 if {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.confirmed'} true} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''}) SET u.onboarding = NULL'
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.recompute_matches = true, u.initial_matches = true,
+                           u.onboarding = NULL'
     post_redirect /
 }
 
