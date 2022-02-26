@@ -1,1 +1,1 @@
-post_redirect https://discord.gg/PXsjCx6
+post_redirect https://discord.gg/homiezone
