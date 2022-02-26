@@ -195,6 +195,9 @@ fn setup_handlers {
         try . $local_path.es
     }
 
+    if {~ $req_path / && ! logged_in} {
+        master_template = tpl/landing.tpl
+    }
     if {~ $req_path /api/*} {
         master_template = tpl/plain.tpl
     }
