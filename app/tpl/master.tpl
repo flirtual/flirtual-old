@@ -10,6 +10,7 @@ if {logged_in} {
 <html lang="en">
     <head>
         <title>Flirtual</title>
+        <meta name="description" content="Flirtual is the first VR dating site. Join thousands of users for VR dates. Most date in VRChat, but we support every VR app. Formerly VRLFP.">
 
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
             <link rel="stylesheet" href="/css/tagify.css" media="print" onload="this.media='all'; this.onload=null;">
@@ -21,15 +22,17 @@ if {logged_in} {
             <link rel="stylesheet" href="/dist/converse.min.css" media="screen" onload="this.media='all'; this.onload=null;">
 %       }
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#25c9d0">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=0">
+        <link rel="manifest" href="/site.webmanifest?v=0">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=0" color="#e9658b">
+        <link rel="shortcut icon" href="/favicon.ico?v=0">
+
         <meta name="apple-mobile-web-app-title" content="Flirtual">
         <meta name="application-name" content="Flirtual">
-        <meta name="msapplication-TileColor" content="#25c9d0">
-        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#e9658b">
+        <meta name="theme-color" content="#e9658b">
 
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -38,7 +41,7 @@ if {logged_in} {
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
             <script type="text/javascript" src="/js/tagify.js"></script>
 %       }
-        <script type="text/javascript" src="/js/swiper.js" defer></script>
+        <script type="text/javascript" src="/js/swiper.js"></script>
         <script>
             (function(src, cb) {
                 var s = document.createElement('script');
