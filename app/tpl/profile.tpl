@@ -152,7 +152,7 @@ fn isvisible field {
 %               # Gender
 %               genders = `` \n {redis graph read 'MATCH (u:user {username: '''$profile'''})-[:GENDER]->(g:gender)
 %                                                 RETURN g.name
-%                                                 ORDER BY g.order' | sed 's/_/ /g'}
+%                                                 ORDER BY g.order LIMIT 5' | sed 's/_/ /g'}
 %               if {! isempty $genders} {
 %                   for (gender = $genders) {
                         <span class="tag">%($gender%)</span>
@@ -232,7 +232,7 @@ fn isvisible field {
         # Sexuality
         sexualities = `` \n {redis graph read 'MATCH (u:user {username: '''$profile'''})-[:SEXUALITY]->(s:sexuality)
                                                RETURN s.name
-                                               ORDER BY s.order' | sed 's/_/ /g'}
+                                               ORDER BY s.order LIMIT 3' | sed 's/_/ /g'}
         if {isvisible sexuality && ! isempty $sexualities} {
             echo '<div class="tags">'
             for (sexuality = $sexualities) {
