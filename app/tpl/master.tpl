@@ -159,6 +159,7 @@ if {logged_in} {
                     allow_contact_removal: false,
                     allow_contact_requests: false,
                     allow_logout: false,
+                    allow_non_roster_messaging: true,
                     allow_registration: false,
                     allow_user_trust_override: false,
                     autocomplete_add_contact: false,
