@@ -74,13 +74,13 @@ fn isvisible field {
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
                     <input type="hidden" name="type" value="like">
-                    <button type="submit" class="btn btn-gradient btn-normal">❤️ Like</button>
+                    <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
                 </form>
                 <form action="/like" method="POST" accept-charset="utf-8">
                     <input type="hidden" name="return" value="%($req_path%)">
                     <input type="hidden" name="user" value="%($profile%)">
                     <input type="hidden" name="type" value="homie">
-                    <button type="submit" class="btn btn-gradient btn-normal">✌&#xFE0F; Homie</button>
+                    <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
                 </form>
                 <form action="/pass" method="POST" accept-charset="utf-8">
                     <input type="hidden" name="return" value="%($req_path%)">
@@ -101,14 +101,14 @@ fn isvisible field {
 %   if {isvisible socials && {! isempty $vrchat || ! isempty $discord}} {
         <div class="box contact">
 %           if {isvisible socials && ! isempty $vrchat} {
-                <img style="transform: translateY(4px) scale(1.3)" src="/img/vrchat.svg" />
+                <img style="transform: translateY(4px) scale(1.3)" src="/img/vrchat.svg" width="30" height="24" />
                 <strong>VRChat:</strong>
                 <a href="%($^vrchat%)" target="_blank" rel="nofollow noopener">
 %                   echo $^vrchat | sed 's/\/$//; s/.*\///; s/%20/ /g'
                 </a><br />
 %           }
 %           if {isvisible socials && ! isempty $discord} {
-                <img src="/img/discord.svg" />
+                <img src="/img/discord.svg" width="30" height="24" />
                 <strong>Discord:</strong>
                 %($^discord%)<br />
 %           }
@@ -163,8 +163,10 @@ fn isvisible field {
 %               if {! isempty $country} {
                     <span class="tag">
                         <span class="country_name" style="margin-right: 41px">%($country%)</span>
-                        <span style="position: absolute; transform: translate(-31px, -3px)"><img class="country" onerror="this.style.visibility='hidden'"
-                                   src='/img/flags/%($country%).svg' /></span>
+                        <span style="position: absolute; transform: translate(-31px, -3px)">
+                            <img class="country" onerror="this.style.visibility='hidden'"
+                                 src='/img/flags/%($country%).svg' width="33" height="25" />
+                        </span>
                     </span>
 %               }
 
