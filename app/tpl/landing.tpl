@@ -480,7 +480,7 @@
                 </div>
 
                 <div class="swiper-slide" id="slide-4">
-                    <h2>Safe, magical dates in any VR app.<br />Easily meet up with people all over the world!</h2>
+                    <h2>Safe, magical dates in any VR app.<br />Easily meet people all over the world!</h2>
                     <div class="swiper dates">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
