@@ -3,5 +3,5 @@ fn xmpp cmd args {
          -d $args \
          -H 'Content-Type: application/json' \
          -X POST \
-         'https://'$XMPP_HOST:$XMPP_PORT'/api/'$^cmd
+         'https://'$XMPP_HOST:$XMPP_PORT'/api/'$^cmd >/dev/null >[2=1]
 }
