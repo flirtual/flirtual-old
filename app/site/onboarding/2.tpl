@@ -90,7 +90,7 @@ if {!~ $dob *-*} {
         </select>
 
         <label for="language">Language</label>
-        <input name="language" id="language" required>
+        <input name="language" id="language">
 
         <label for="platform">VR setup</label>
         <input name="platform" id="platform" required>

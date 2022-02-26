@@ -111,7 +111,9 @@ for (language = `{echo $^p_language | sed 's/,/ /g'}) {
     }
 }
 if {~ $languageset false} {
-    throw error 'Missing language'
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
+                             (l:language {id: ''en''})
+                       MERGE (u)-[:KNOWS]->(l)'
 }
 
 # Validate and write platform
