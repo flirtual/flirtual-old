@@ -41,7 +41,7 @@ if {~ $pfpset false} {
 
 # Fix URLs
 if {! isempty $p_vrchat} {
-    p_vrchat = `{echo $p_vrchat | sed 's/\/$//; s/.*\///; s/^/https:\/\/vrchat.com\/home\/search\//' | sanitize_url}
+    p_vrchat = `{echo $p_vrchat | urlencode | sed 's/\/$//; s/.*\///; s/^/https:\/\/vrchat.com\/home\/search\//' | sanitize_url}
 }
 
 # Validate privacy setting

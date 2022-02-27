@@ -104,7 +104,7 @@ fn isvisible field {
                 <img style="transform: translateY(4px) scale(1.3)" src="/img/vrchat.svg" width="30" height="24" />
                 <strong>VRChat:</strong>
                 <a href="%($^vrchat%)" target="_blank" rel="nofollow noopener">
-%                   echo $^vrchat | sed 's/\/$//; s/.*\///; s/%20/ /g'
+%                   echo $^vrchat | sed 's/\/$//; s/.*\///; s/%20/ /g' | urldecode
                 </a><br />
 %           }
 %           if {isvisible socials && ! isempty $discord} {

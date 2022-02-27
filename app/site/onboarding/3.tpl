@@ -72,7 +72,7 @@ for (var = displayname vrchat discord privacy bio) {
         <table>
             <tr>
                 <td><label for="vrchat" style="font-size: 115%">VRChat:</label></td>
-                <td><input type="text" name="vrchat" id="vrchat" placeholder="Username" value="%(`{echo $vrchat | sed 's/.*\///'}%)"></td>
+                <td><input type="text" name="vrchat" id="vrchat" placeholder="Username" value="%(`{echo $vrchat | sed 's/.*\///' | urldecode}%)"></td>
             </tr>
             <tr>
                 <td><label for="discord" style="font-size: 115%">Discord:</label></td>
