@@ -101,7 +101,7 @@ fn compute_matches a b {
         }
 
         ascore = `{awk 'BEGIN { printf "%f", '$count_aliked' * 10 + \
-                                             '$count_bpassed' * -30 + \
+                                             '$count_bpassed' * -100 + \
                                              '$count_custom_interests' * '$a_weight_custom_interests' + \
                                              '$count_strong_interests' * '$a_weight_default_interests' * 1.7 + \
                                              '$count_default_interests' * '$a_weight_default_interests' + \
@@ -112,7 +112,7 @@ fn compute_matches a b {
                                              '$personality' * '$a_weight_personality' }' | sed 's/\.?0*$//'}
 
         bscore = `{awk 'BEGIN { printf "%f", '$count_bliked' * 10 + \
-                                             '$count_apassed' * -30 + \
+                                             '$count_apassed' * -100 + \
                                              '$count_custom_interests' * '$b_weight_custom_interests' + \
                                              '$count_strong_interests' * '$b_weight_default_interests' * 1.7 + \
                                              '$count_default_interests' * '$b_weight_default_interests' + \
