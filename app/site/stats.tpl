@@ -33,7 +33,7 @@
 
     onboarded = `{redis graph read 'MATCH (u:user)
                                     WHERE NOT exists(u.vrlfp) AND
-                                          exists(u.onboarding)
+                                          NOT exists(u.onboarding)
                                     RETURN count(u)'}
 
     likes = `{redis graph read 'MATCH (a:user)-[l:LIKED]->(b:user)
