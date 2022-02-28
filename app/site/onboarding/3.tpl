@@ -66,7 +66,7 @@ for (var = displayname vrchat discord privacy bio) {
             Try a prompt
         </a>
         <div class="bio_wrapper"><div id="bio" class="quill"></div></div>
-        <input type="hidden" id="bio_html" name="bio" required>
+        <input type="hidden" id="bio_html" name="bio">
 
         <p style="margin: 40px 0 10px 0">Accounts (optional):</p>
         <table>

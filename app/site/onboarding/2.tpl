@@ -93,16 +93,16 @@ if {!~ $dob *-*} {
         <input name="language" id="language">
 
         <label for="platform">VR setup</label>
-        <input name="platform" id="platform" required>
+        <input name="platform" id="platform">
 
         <input id="new" type="checkbox" name="new" value="true" %(`{if {~ $new true} { echo checked }}%) style="margin: 15px 75px 30px 4px">
         <label for="new" style="display: inline-block; width: auto; transform: translateY(8px)">I'm new to VR</label><br /><br />
 
         <label for="games">Fav social VR games</label>
-        <input name="games" id="games" required value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
+        <input name="games" id="games" value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
 
         <label for="interests">Personal interest tags (you can add custom interests too!)</label>
-        <input name="interests" id="interests" required value="%(`{if {! isempty $interests} { echo $interests | sed 's/ /,/g; s/_/ /g'}}%)">
+        <input name="interests" id="interests" value="%(`{if {! isempty $interests} { echo $interests | sed 's/ /,/g; s/_/ /g'}}%)">
 
 %       if {! isempty $onboarding} {
             <button type="submit" class="btn btn-gradient">Next page</button>
