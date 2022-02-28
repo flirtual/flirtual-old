@@ -14,13 +14,17 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
     }
 }
 
-# Pass on user (remove from future matchmaking)
+# Pass on user (remove from future matchmaking until matches recomputed)
 redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                          (b:user {username: '''$p_user'''})
                    CREATE (a)-[p:PASSED {date: '$dateun'}]->(b)'
 
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                          -[m:DAILYMATCH]->
+                         (b:user {username: '''$p_user'''})
+                   DELETE m'
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                         -[m:MATCH]->
                          (b:user {username: '''$p_user'''})
                    DELETE m'
 

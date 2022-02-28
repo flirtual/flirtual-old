@@ -24,6 +24,10 @@ redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                          -[m:DAILYMATCH]-
                          (b:user {username: '''$p_user'''})
                    DELETE m'
+redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                         -[m:MATCH]->
+                         (b:user {username: '''$p_user'''})
+                   DELETE m'
 
 # If user already liked logged_user, create match
 if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
