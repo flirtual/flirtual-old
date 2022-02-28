@@ -34,7 +34,7 @@
                 <img data-blink-ops="scale-crop: 80x80; scale-crop-position: smart_faces_points"
                      data-blink-uuid="%($avatar%)" width="80" height="80" />
                 <span>
-                    %($displayname%)
+                    %(`{redis_html $displayname}%)
                 </span>
                 <span class="right" aria-label="%($tooltip%)" role="tooltip" data-microtip-position="top">
                     %($icon%)
