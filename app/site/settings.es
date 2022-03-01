@@ -67,7 +67,7 @@ if {~ $p_changeemail true &&
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.email = '''$p_newemail''',
                            u.confirmed = false,
-                           u.onboarding = 7
+                           u.onboarding = 5
                        MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
                        MERGE (u)-[:CONFIRM]->(c)'
 
