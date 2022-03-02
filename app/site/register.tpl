@@ -1,5 +1,6 @@
 % if {!logged_in} {
-      <div class="box">
+      <a href="/" class="btn btn-gradient" style="transform: translateY(-3.5em)">Home</a>
+      <div class="box" style="margin-top: 2em">
           <h1>Register</h1>
 
           <form action="" method="POST" accept-charset="utf-8">
