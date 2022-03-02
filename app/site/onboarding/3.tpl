@@ -29,7 +29,7 @@ for (var = displayname vrchat discord privacy bio) {
         <input type="text" name="displayname" id="displayname" value="%($displayname%)">
         <p class="help_text">This is how you'll appear around Flirtual. Your display name can contain special characters and doesn't need to be unique. Your profile link (%($domain/$logged_user%)) will still use your username.</p>
 
-        <label for="pfp">Profile pics</label><br /><br />
+        <label for="pfp">Profile pics<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br /><br />
         <input id="pfp"
                type="hidden"
                role="uploadcare-uploader"
@@ -59,7 +59,7 @@ for (var = displayname vrchat discord privacy bio) {
 %           }
         </div><br />
 
-        <label for="bio">Bio</label><br />
+        <label for="bio">Bio<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br />
         <span>Need some inspiration?</span>
         <a onclick="bioPrompt()" class="btn btn-gradient btn-small" style="padding: 6px 12px 7px 39px; transform: translateY(9px) scale(0.85)">
             <img style="position: absolute; width: 23px; height: 23px; margin: -1px 0 0 -30px; background: var(--white); mask-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQ0MC44OCwxMjkuMzcsMjg4LjE2LDQwLjYyYTY0LjE0LDY0LjE0LDAsMCwwLTY0LjMzLDBMNzEuMTIsMTI5LjM3YTQsNCwwLDAsMCwwLDYuOUwyNTQsMjQzLjg1YTQsNCwwLDAsMCw0LjA2LDBMNDQwLjksMTM2LjI3QTQsNCwwLDAsMCw0NDAuODgsMTI5LjM3Wk0yNTYsMTUyYy0xMy4yNSwwLTI0LTcuMTYtMjQtMTZzMTAuNzUtMTYsMjQtMTYsMjQsNy4xNiwyNCwxNlMyNjkuMjUsMTUyLDI1NiwxNTJaIi8+PHBhdGggZD0iTTIzOCwyNzAuODEsNTQsMTYzLjQ4YTQsNCwwLDAsMC02LDMuNDZWMzQwLjg2YTQ4LDQ4LDAsMCwwLDIzLjg0LDQxLjM5TDIzNCw0NzkuNDhhNCw0LDAsMCwwLDYtMy40NlYyNzQuMjdBNCw0LDAsMCwwLDIzOCwyNzAuODFaTTk2LDM2OGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMTA0Ljg0LDM2OCw5NiwzNjhabTk2LTMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMyMDAuODQsMzM2LDE5MiwzMzZaIi8+PHBhdGggZD0iTTQ1OCwxNjMuNTEsMjc0LDI3MS41NmE0LDQsMCwwLDAtMiwzLjQ1VjQ3NmE0LDQsMCwwLDAsNiwzLjQ2bDE2Mi4xNS05Ny4yM0E0OCw0OCwwLDAsMCw0NjQsMzQwLjg2VjE2N0E0LDQsMCwwLDAsNDU4LDE2My41MVpNMzIwLDQyNGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMzI4Ljg0LDQyNCwzMjAsNDI0Wm0wLTg4Yy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMzMjguODQsMzM2LDMyMCwzMzZabTk2LDMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFM0MjQuODQsMzY4LDQxNiwzNjhabTAtODhjLTguODQsMC0xNi0xMC43NS0xNi0yNHM3LjE2LTI0LDE2LTI0LDE2LDEwLjc1LDE2LDI0UzQyNC44NCwyODAsNDE2LDI4MFoiLz48L3N2Zz4='); -webkit-mask-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQ0MC44OCwxMjkuMzcsMjg4LjE2LDQwLjYyYTY0LjE0LDY0LjE0LDAsMCwwLTY0LjMzLDBMNzEuMTIsMTI5LjM3YTQsNCwwLDAsMCwwLDYuOUwyNTQsMjQzLjg1YTQsNCwwLDAsMCw0LjA2LDBMNDQwLjksMTM2LjI3QTQsNCwwLDAsMCw0NDAuODgsMTI5LjM3Wk0yNTYsMTUyYy0xMy4yNSwwLTI0LTcuMTYtMjQtMTZzMTAuNzUtMTYsMjQtMTYsMjQsNy4xNiwyNCwxNlMyNjkuMjUsMTUyLDI1NiwxNTJaIi8+PHBhdGggZD0iTTIzOCwyNzAuODEsNTQsMTYzLjQ4YTQsNCwwLDAsMC02LDMuNDZWMzQwLjg2YTQ4LDQ4LDAsMCwwLDIzLjg0LDQxLjM5TDIzNCw0NzkuNDhhNCw0LDAsMCwwLDYtMy40NlYyNzQuMjdBNCw0LDAsMCwwLDIzOCwyNzAuODFaTTk2LDM2OGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMTA0Ljg0LDM2OCw5NiwzNjhabTk2LTMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMyMDAuODQsMzM2LDE5MiwzMzZaIi8+PHBhdGggZD0iTTQ1OCwxNjMuNTEsMjc0LDI3MS41NmE0LDQsMCwwLDAtMiwzLjQ1VjQ3NmE0LDQsMCwwLDAsNiwzLjQ2bDE2Mi4xNS05Ny4yM0E0OCw0OCwwLDAsMCw0NjQsMzQwLjg2VjE2N0E0LDQsMCwwLDAsNDU4LDE2My41MVpNMzIwLDQyNGMtOC44NCwwLTE2LTEwLjc1LTE2LTI0czcuMTYtMjQsMTYtMjQsMTYsMTAuNzUsMTYsMjRTMzI4Ljg0LDQyNCwzMjAsNDI0Wm0wLTg4Yy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFMzMjguODQsMzM2LDMyMCwzMzZabTk2LDMyYy04Ljg0LDAtMTYtMTAuNzUtMTYtMjRzNy4xNi0yNCwxNi0yNCwxNiwxMC43NSwxNiwyNFM0MjQuODQsMzY4LDQxNiwzNjhabTAtODhjLTguODQsMC0xNi0xMC43NS0xNi0yNHM3LjE2LTI0LDE2LTI0LDE2LDEwLjc1LDE2LDI0UzQyNC44NCwyODAsNDE2LDI4MFoiLz48L3N2Zz4=')">
@@ -68,7 +68,7 @@ for (var = displayname vrchat discord privacy bio) {
         <div class="bio_wrapper"><div id="bio" class="quill"></div></div>
         <input type="hidden" id="bio_html" name="bio">
 
-        <p style="margin: 40px 0 10px 0">Accounts (optional):</p>
+        <p style="margin: 40px 0 10px 0">Accounts:</p>
         <table>
             <tr>
                 <td><label for="vrchat" style="font-size: 115%">VRChat:</label></td>

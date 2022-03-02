@@ -27,7 +27,7 @@ for (var = women men other serious monopoly agemin agemax) {
     <h1>Matchmaking</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
-        <label>I want to meet...</label><br />
+        <label>I want to meet...<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br />
         <input id="women" type="checkbox" name="Women" value="true" %(`{if {~ $women true} { echo checked }}%)>
         <label for="women">Women</label><br />
         <input id="men" type="checkbox" name="Men" value="true" %(`{if {~ $men true} { echo checked }}%)>
@@ -35,7 +35,7 @@ for (var = women men other serious monopoly agemin agemax) {
         <input id="other" type="checkbox" name="Other" value="true" %(`{if {~ $other true} { echo checked }}%)>
         <label for="other">Other genders</label><br />
 
-        <label for="agemin">Age range</label>
+        <label for="agemin">Age range<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <select name="agemin" style="width: auto; margin-top: 12px">
             <option value="18" %(`{if {~ $agemin 18 || isempty $agemin} { echo 'selected' }}%)>18</option>
             <option value="19" %(`{if {~ $agemin 19} { echo 'selected' }}%)>19</option>
@@ -259,7 +259,7 @@ for (var = women men other serious monopoly agemin agemax) {
             <option value="125" %(`{if {~ $agemax 125 || isempty $agemax} { echo 'selected' }}%)>125</option>
         </select><br /><br />
 
-        <label>Are you open to serious dating? (optional)</label><br />
+        <label>Are you open to serious dating?</label><br />
         <div class="tags" style="margin: 8px 0 0 -7px">
             <input id="serious_yes" type="radio" name="serious" value="true" %(`{if {~ $serious true} { echo checked }}%)>
             <label for="serious_yes">Yes</label>
@@ -280,6 +280,7 @@ for (var = women men other serious monopoly agemin agemax) {
 %       if {isempty $onboarding} {
             <p>Changes you make to your matchmaking preferences will be applied tomorrow.</p>
 %       }
+        <p><span class="required">*</span> = required</p>
 
 %       if {! isempty $onboarding} {
             <button type="submit" class="btn btn-gradient">Next page</button>

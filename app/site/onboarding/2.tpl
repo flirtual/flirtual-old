@@ -49,10 +49,10 @@ if {!~ $dob *-*} {
     <h1>Basic info</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
-        <label for="dob">Date of birth (only your age will be visible)</label>
+        <label for="dob">Date of birth (only your age will be visible)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input type="date" name="dob" id="dob" min="1900-01-01" autocomplete="bday" placeholder="YYYY-MM-DD" value="%($dob%)"><br />
 
-        <label>Gender</label><br />
+        <label>Gender<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br />
         <input type="checkbox" name="gender_man" id="gender_man" value="true" %(`{if {~ $gender_man true} { echo checked }}%)>
         <label for="gender_man">Man</label><br />
         <input type="checkbox" name="gender_woman" id="gender_woman" value="true" style="margin-top: 12px" %(`{if {~ $gender_woman true} { echo checked }}%)>
@@ -69,7 +69,7 @@ if {!~ $dob *-*} {
             </tr>
         </table>
 
-        <label for="sexuality">Sexuality (optional)</label>
+        <label for="sexuality">Sexuality</label>
         <input name="sexuality" id="sexuality" value="%(`{echo $^sexualities | sed 's/ /,/g; s/_/ /g'}%)">
 
         <label>Privacy: Who can see your sexuality?</label>
@@ -79,7 +79,7 @@ if {!~ $dob *-*} {
             <option value="me" %(`{if {~ $privacy_sexuality me} { echo 'selected' }}%)>Just me</option>
         </select>
 
-        <label for="country">Location (optional)</label>
+        <label for="country">Location</label>
         <input name="country" id="country" class="countries" value="%($country%)">
 
         <label>Privacy: Who can see your country?</label>
@@ -89,19 +89,19 @@ if {!~ $dob *-*} {
             <option value="me" %(`{if {~ $privacy_country me} { echo 'selected' }}%)>Just me</option>
         </select>
 
-        <label for="language">Language</label>
+        <label for="language">Language<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="language" id="language">
 
-        <label for="platform">VR setup</label>
+        <label for="platform">VR setup<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="platform" id="platform">
 
         <input id="new" type="checkbox" name="new" value="true" %(`{if {~ $new true} { echo checked }}%) style="margin: 15px 75px 30px 4px">
         <label for="new" style="display: inline-block; width: auto; transform: translateY(8px)">I'm new to VR</label><br /><br />
 
-        <label for="games">Fav social VR games</label>
+        <label for="games">Fav social VR games (up to 5)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="games" id="games" value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
 
-        <label for="interests">Personal interest tags (you can add custom interests too!)</label>
+        <label for="interests">Personal interest tags (up to 5)<br />(you can add custom interests too!)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="interests" id="interests" value="%(`{if {! isempty $interests} { echo $interests | sed 's/ /,/g; s/_/ /g'}}%)">
 
 %       if {! isempty $onboarding} {
