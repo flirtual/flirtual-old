@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
         <title>Flirtual</title>
-        <meta name="description" content="Flirtual is the first VR dating site. Join thousands of users for VR dates. Most date in VRChat, but we support every VR app. Formerly VRLFP.">
+        <meta name="description" content="Flirtual is the First VR Dating App. Join thousands for dates in Virtual Reality. We support VR dates in VR apps like VRChat. Formerly VRLFP.">
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">

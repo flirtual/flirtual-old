@@ -10,7 +10,7 @@ if {logged_in} {
 <html lang="en">
     <head>
         <title>Flirtual</title>
-        <meta name="description" content="Flirtual is the first VR dating site. Join thousands of users for VR dates. Most date in VRChat, but we support every VR app. Formerly VRLFP.">
+        <meta name="description" content="Flirtual is the First VR Dating App. Join thousands for dates in Virtual Reality. We support VR dates in VR apps like VRChat. Formerly VRLFP.">
 
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
             <link rel="stylesheet" href="/css/tagify.css" media="print" onload="this.media='all'; this.onload=null;">
