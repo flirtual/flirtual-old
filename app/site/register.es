@@ -46,22 +46,25 @@ if {! hcaptcha $p_hcaptcharesponse} {
 # Create user and confirmation
 confirm = `{kryptgo genid}
 
-redis graph write 'MERGE (u:user {username: '''$p_username''',
-                                  displayname:  '''$p_username''',
-                                  email: '''$p_email''',
-                                  password: '''`{kryptgo genhash -p $p_password}^''',
-                                  newsletter: '$p_newsletter',
-                                  onboarding: 1,
-                                  privacy_personality: ''everyone'', privacy_socials: ''matches'',
-                                  privacy_sexuality: ''everyone'', privacy_country: ''everyone'',
-                                  privacy_kinks: ''everyone'',
-                                  weight_custom_interests: 5, weight_default_interests: 3,
-                                  weight_games: 3, weight_country: 3, weight_monopoly: 5,
-                                  weight_personality: 0.5, weight_domsub: 5, weight_kinks: 3,
-                                  optout: false,
-                                  nsfw: false,
-                                  volume: 0.5,
-                                  registered: '''`{date -ui}^'''})
+redis graph write 'MERGE (u:user {username: '''$p_username'''})
+                   ON CREATE SET u.displayname = '''$p_username''',
+                                 u.email = '''$p_email''',
+                                 u.password = '''`{kryptgo genhash -p $p_password}^''',
+                                 u.newsletter = '$p_newsletter',
+                                 u.onboarding = 1,
+                                 u.privacy_personality = ''everyone'',
+                                 u.privacy_socials = ''matches'',
+                                 u.privacy_sexuality = ''everyone'',
+                                 u.privacy_country = ''everyone'',
+                                 u.privacy_kinks = ''everyone'',
+                                 u.weight_custom_interests = 5, u.weight_default_interests = 3,
+                                 u.weight_games = 3, u.weight_country = 3, u.weight_monopoly = 5,
+                                 u.weight_personality = 0.5, u.weight_domsub = 5,
+                                 u.weight_kinks = 3,
+                                 u.optout = false,
+                                 u.nsfw = false,
+                                 u.volume = 0.5,
+                                 u.registered = '''`{date -ui}^'''
                    MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
                    MERGE (u)-[:CONFIRM]->(c)'
 
