@@ -152,6 +152,8 @@ fn daily_matches users {
     }
     for (user = $users) {
         redis graph write 'MATCH (a:user {username: '''$user'''})-[m:MATCH]->(b:user)
+                           WHERE NOT (a)-[:LIKED]->(b) AND
+                                 NOT (a)-[:PASSED]->(b)
                            WITH a, b ORDER BY m.score DESC LIMIT 20
                            CREATE (a)-[:DAILYMATCH]->(b)'
     }
