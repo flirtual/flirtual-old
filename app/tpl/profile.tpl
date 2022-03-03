@@ -70,23 +70,37 @@ fn isvisible field {
 %           } {~ $passed true && !~ $req_path /} {
                 <div class="notice">You passed on %($displayname%).</div>
 %           } {
-                <form action="/like" method="POST" accept-charset="utf-8">
-                    <input type="hidden" name="return" value="%($req_path%)">
-                    <input type="hidden" name="user" value="%($profile%)">
-                    <input type="hidden" name="type" value="like">
-                    <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
-                </form>
-                <form action="/like" method="POST" accept-charset="utf-8">
-                    <input type="hidden" name="return" value="%($req_path%)">
-                    <input type="hidden" name="user" value="%($profile%)">
-                    <input type="hidden" name="type" value="homie">
-                    <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
-                </form>
-                <form action="/pass" method="POST" accept-charset="utf-8">
-                    <input type="hidden" name="return" value="%($req_path%)">
-                    <input type="hidden" name="user" value="%($profile%)">
-                    <button type="submit" class="btn btn-normal">Pass</button>
-                </form>
+%               if {!~ $req_path /homies} {
+                    <form action="/like" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="type" value="like">
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
+                    </form>
+                    <form action="/like" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="type" value="homie">
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
+                    </form>
+                    <form action="/pass" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Pass</button>
+                    </form>
+%               } {
+                    <form action="/like" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="type" value="homie">
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
+                    </form>
+                    <form action="/hpass" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Pass</button>
+                    </form>
+%               }
 %           }
 %       } {~ $profile $logged_user} {
             <a href="/settings#edit" class="btn">Edit profile</a>
@@ -144,10 +158,12 @@ fn isvisible field {
 
             <div class="asl">
 %               # Age
-                <span class="tag">
-                    %(`{int `{/ `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} `{echo $dob | sed 's/-//g'}} 10000}}%)
-                </span>
-
+%               age = `{int `{/ `{- `{yyyymmdd `{date -u | sed 's/  / 0/'}} `{echo $dob | sed 's/-//g'}} 10000}}
+%               if {le $age 125} {
+                    <span class="tag">
+                        %($age%)
+                    </span>
+%               }
 
 %               # Gender
 %               genders = `` \n {redis graph read 'MATCH (u:user {username: '''$profile'''})-[:GENDER]->(g:gender)
