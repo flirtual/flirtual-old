@@ -18,8 +18,7 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
 # Create new like
 redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                          (b:user {username: '''$p_user'''})
-                   MERGE (a)-[l:LIKED]->(b)
-                   ON CREATE SET l.type = '''$p_type''', date: '$dateun
+                   MERGE (a)-[:LIKED {type: '''$p_type''', date: '$dateun'}]->(b)'
 
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                          -[m:DAILYMATCH]-
@@ -37,8 +36,7 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
                           RETURN exists(l)'} true} {
     redis graph write 'MATCH (a:user {username: '''$p_user'''}),
                              (b:user {username: '''$logged_user'''})
-                       MERGE (a)-[m:MATCHED]->(b)
-                       ON CREATE SET m.date = '$dateun
+                       MERGE (a)-[:MATCHED {date: '$dateun'}]->(b)'
 
     # Messaging contact
     xmpp add_rosteritem '{"localuser": "'$logged_user'", "localhost": "'$XMPP_HOST'", "user": "'$p_user'", "host": "'$XMPP_HOST'", "nick": "'$p_user'", "group": "Friends", "subs": "both"}'

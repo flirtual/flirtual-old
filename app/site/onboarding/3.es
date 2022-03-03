@@ -31,8 +31,7 @@ for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
         pfpset = true
         order = `{echo $avatar | sed 's/^p_pfp_//'}
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                           MERGE (u)-[:AVATAR]->(a:avatar {url: '''$$avatar'''})
-                           ON CREATE SET a.order = '$order
+                           MERGE (u)-[:AVATAR]->(a:avatar {url: '''$$avatar''', order: '$order'})'
     }
 }
 if {~ $pfpset false} {
