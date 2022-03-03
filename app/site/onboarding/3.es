@@ -27,7 +27,7 @@ redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:AVATAR]->(a:a
                    DELETE a'
 pfpset = false
 for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
-    if {echo $$avatar | grep '^[a-z0-9/\-]*$'} {
+    if {echo $$avatar | grep '^[a-z0-9/\-,]*$'} {
         pfpset = true
         order = `{echo $avatar | sed 's/^p_pfp_//'}
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
