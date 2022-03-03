@@ -24,7 +24,7 @@ $plaintext
 
 Happy matching!
 
-Twitter: https://twitter.com/flirtualapp
+Twitter: https://twitter.com/getflirtual
 Discord: https://$domain/discord
 Unsubscribe: https://$domain/settings#notifications
 
@@ -216,7 +216,7 @@ $html
                                     </tr>
                                     <tr>
                                         <td style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;color: #212121;text-transform: uppercase;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" data-slot-container="1" class="ui-sortable" align="center">
-                                            <div data-slot="text"><a href="https://twitter.com/flirtualapp" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
+                                            <div data-slot="text"><a href="https://twitter.com/getflirtual" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Twitter</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>
 <a href="https://$domain/discord" rel="noopener noreferrer" style="font-family: brandon-grotesque, Roboto, Verdana, Arial, sans-serif;font-size: 10px;line-height: 20px;color: #212121;text-transform: uppercase;text-decoration: underline;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;" target="_blank">Discord</a>
 <span style="font-family:arial, sans-serif; font-size:10px; line-height:20px; color:#dddddd;">&nbsp;|&nbsp;</span>
