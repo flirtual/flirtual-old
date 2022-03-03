@@ -15,6 +15,20 @@
                        set timefmt ''%Y-%m-%d'';
                        plot "/dev/stdin" using 2:1 with lines'
 
+    redis graph read 'MATCH (u:user)
+                      RETURN u.registered
+                      ORDER BY u.registered' |
+        tail -n 1000 |
+        awk '{print NR " " $s}' |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "# users";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 2:1 with lines'
+
     users = `{redis graph read 'MATCH (u:user)
                                 RETURN count(u)'}
 
