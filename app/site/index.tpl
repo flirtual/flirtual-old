@@ -18,12 +18,15 @@
           <h1>That's all</h1>
           <h2>You are out of matches for today.</h2>
           <p>Come back tomorrow for more!</p>
+          <p>Or continue browsing in Homie Mode, where you can see unlimited homies (without our matchmaking magic). You'll leave Homie Mode automatically tomorrow once we have more matches for you.</p>
+          <a href="/homies" class="btn btn-gradient">Homie Mode</a>
       </div>
 % } {
       <div class="box">
           <h1>That's all</h1>
           <h2>You have run out of matches :(</h2>
-          <p>To see more people, try changing your matchmaking filters, or invite more friends to Flirtual.</p>
-          <a href="/onboarding/1" class="btn btn-gradient">Matchmaking</a>
+          <p>To see more people, try changing your <a href="/onboarding/1">matchmaking filters</a>, or invite more friends to Flirtual.</p>
+          <p>Or continue browsing in Homie Mode, where you can see unlimited homies (without our matchmaking magic). You'll leave Homie Mode automatically tomorrow once we have more matches for you.</p>
+          <a href="/homies" class="btn btn-gradient">Homie Mode</a>
       </div>
 % }
