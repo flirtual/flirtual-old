@@ -29,7 +29,7 @@ for (var = displayname vrchat discord privacy bio) {
         <input type="text" name="displayname" id="displayname" value="%($displayname%)">
         <p class="help_text">This is how you'll appear around Flirtual. Your display name can contain special characters and doesn't need to be unique. Your profile link (%($domain/$logged_user%)) will still use your username.</p>
 
-        <label for="pfp">Profile pics<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br /><br />
+        <label for="pfp">Profile pics (up to 15)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br /><br />
         <input id="pfp"
                type="hidden"
                role="uploadcare-uploader"
