@@ -101,7 +101,7 @@ if {!~ $dob *-*} {
         <label for="games">Fav social VR games (up to 5)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="games" id="games" value="%(`{echo $^games | sed 's/ /,/g; s/_/ /g'}%)">
 
-        <label for="interests">Personal interest tags (up to 5)<br />(you can add custom interests too!)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
+        <label for="interests">Personal interest tags (up to 7)<br />(you can add custom interests too!)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>
         <input name="interests" id="interests" value="%(`{if {! isempty $interests} { echo $interests | sed 's/ /,/g; s/_/ /g'}}%)">
 
 %       if {! isempty $onboarding} {
@@ -337,7 +337,7 @@ if {!~ $dob *-*} {
                 "%($interest%)",
 %           }
         ],
-        maxTags: 5,
+        maxTags: 7,
         skipInvalid: true,
         editTags: false,
         dropdown: {

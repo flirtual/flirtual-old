@@ -148,7 +148,7 @@ for (game = `{echo $^p_games | sed 's/ /_/g; s/,/ /g'}) {
     }
 }
 
-# Validate and write tags
+# Validate and write interests
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:TAGGED]->(i:interest) DELETE r'
 tags = `^{redis graph read 'MATCH (i:interest) RETURN i.name'}
 for (tag = `{echo $^p_interests | sed 's/ /_/g; s/,/ /g' | escape_redis}) {
