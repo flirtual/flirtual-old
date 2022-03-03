@@ -4,7 +4,7 @@
 %                                       -[m:MATCHED]-
 %                                       (p:user)
 %                                 RETURN p.username
-%                                 ORDER BY m.date DESC, p.displayname'}
+%                                 ORDER BY m.date DESC, p.displayname' | uniq}
 %   if {! isempty $matches} {
 %       for (profile = $matches) {
 %           (displayname avatar utype ptype) = \
