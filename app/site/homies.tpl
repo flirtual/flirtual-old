@@ -1,9 +1,3 @@
-% if {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[m:DAILYMATCH]->(p:user)
-%                           RETURN DISTINCT exists(p)'} true} {
-%     # Disable Homie Mode if we have daily matches
-%     post_redirect /
-% }
-
 % profile = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}), (p:user)
 %                               WHERE u <> p AND
 %                                     NOT (u)-[:LIKED]->(p) AND
