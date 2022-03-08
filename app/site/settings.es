@@ -27,6 +27,20 @@ if {~ $p_changeprivacy true &&
 
 # Notifications
 if {~ $p_changenotifications true} {
+    if {~ $p_match_emails true} {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.match_emails = true'
+    } {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.match_emails= false'
+    }
+    if {~ $p_like_emails true} {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.like_emails = true'
+    } {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.like_emails = false'
+    }
     if {~ $p_newsletter true} {
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                            SET u.newsletter = true'

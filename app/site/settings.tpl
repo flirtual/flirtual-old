@@ -1,9 +1,11 @@
 %{
-(theme nsfw personality socials sexuality country kinks optout newsletter volume) = \
+(theme nsfw personality socials sexuality country kinks optout match_emails like_emails newsletter \
+ volume) = \
     `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
                              RETURN u.theme, u.nsfw, u.privacy_personality, u.privacy_socials,
                                     u.privacy_sexuality, u.privacy_country, u.privacy_kinks,
-                                    u.optout, u.newsletter, u.volume'}
+                                    u.optout, u.match_emails, u.like_emails, u.newsletter,
+                                    u.volume'}
 %}
 
 % if {! isempty $q_update_success} {
@@ -32,8 +34,12 @@
 <div class="box">
     <h1>Notifications</h1>
     <form action="" method="POST" accept-charset="utf-8">
+        <input type="checkbox" name="match_emails" id="match_emails" value="true" %(`{if {~ $match_emails true} { echo checked }}%)>
+        <label for="match_emails">Match notifications</label><br />
+        <input type="checkbox" name="like_emails" id="like_emails" value="true" %(`{if {~ $like_emails true} { echo checked }}%)>
+        <label for="like_emails">Weekly profile like reminders</label><br />
         <input type="checkbox" name="newsletter" id="newsletter" value="true" %(`{if {~ $newsletter true} { echo checked }}%)>
-        <label for="newsletter">Email updates (we won't spam you)</label><br style="margin-bottom: 1em; display: block; content: ''" />
+        <label for="newsletter">Product updates (we won't spam you)</label><br style="margin-bottom: 1em; display: block; content: ''" />
 
         <label for="volume">Message notification volume</label><a onclick="document.getElementById('message_audio').currentTime = 0; document.getElementById('message_audio').play()" class="btn btn-small" style="transform: translate(-12px, 12px)">Test</a><br />
         <input type="range" min="0" max="1" step="0.01" id="volume" name="volume" value="%($volume%)" onchange="document.getElementById('message_audio').volume = this.value" style="width: 100%"><br /><br />
