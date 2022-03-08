@@ -1,5 +1,13 @@
 <div class="box">
     <h1>Matches</h1>
+    <!--
+%   if {~ $premium true} {
+        <a href="/likes" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
+%   } {
+        <a href="/premium" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
+%   }
+    -->
+
 %   matches = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 %                                       -[m:MATCHED]-
 %                                       (p:user)
@@ -22,8 +30,8 @@
 %                                        WITH DISTINCT utype, ptype, p.displayname AS displayname,
 %                                                      a.url AS avatar ORDER BY a.order LIMIT 1
 %                                        RETURN displayname, avatar, utype, ptype'}
-%           if {{~ $utype date || ~ $utype hookup} &&
-%               {~ $ptype date || ~ $ptype hookup}} {
+%           if {{~ $utype like || ~ $utype date || ~ $utype hookup} &&
+%               {~ $ptype like || ~ $ptype date || ~ $ptype hookup}} {
 %               tooltip = 'You both liked each other!'
 %               icon = '❤️'
 %           } {

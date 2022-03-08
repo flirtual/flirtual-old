@@ -45,8 +45,12 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
     # Match notification
     sed 's/\$user/'$logged_user'/' < mail/match | email $p_user 'It''s a match!'
 
-    # Back to the profile
-    post_redirect /$p_user
+    # Back to the profile, or matches if coming from likes
+    if {~ $p_return /matches } {
+        post_redirect /matches
+    } {
+        post_redirect /$p_user
+    }
 }
 
 if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {

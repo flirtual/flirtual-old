@@ -71,24 +71,52 @@ fn isvisible field {
                 <div class="notice">You passed on %($displayname%).</div>
 %           } {
 %               if {!~ $req_path /homies} {
+%                   if {~ $req_path / && ~ $premium true} {
+                        <form action="/undo" method="POST" accept-charset="utf-8">
+                            <button type="submit" class="btn btn-normal">Undo</button>
+                        </form>
+%                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="return" value="%($req_path%)">
+%                       if {~ $q_return /likes} {
+                            <input type="hidden" name="return" value="/matches">
+%                       } {~ $req_path /undo} {
+                            <input type="hidden" name="return" value="/">
+%                       } {
+                            <input type="hidden" name="return" value="%($req_path%)">
+%                       }
                         <input type="hidden" name="user" value="%($profile%)">
                         <input type="hidden" name="type" value="like">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
                     </form>
                     <form action="/like" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="return" value="%($req_path%)">
+%                       if {~ $q_return /likes} {
+                            <input type="hidden" name="return" value="/matches">
+%                       } {~ $req_path /undo} {
+                            <input type="hidden" name="return" value="/">
+%                       } {
+                            <input type="hidden" name="return" value="%($req_path%)">
+%                       }
                         <input type="hidden" name="user" value="%($profile%)">
                         <input type="hidden" name="type" value="homie">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
                     </form>
                     <form action="/pass" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="return" value="%($req_path%)">
+%                       if {~ $q_return /likes} {
+                            <input type="hidden" name="return" value="/likes">
+%                       } {~ $req_path /undo} {
+                            <input type="hidden" name="return" value="/">
+%                       } {
+                            <input type="hidden" name="return" value="%($req_path%)">
+%                       }
                         <input type="hidden" name="user" value="%($profile%)">
                         <button type="submit" class="btn btn-normal">Pass</button>
                     </form>
 %               } {
+%                   if {~ $premium true} {
+                        <form action="/undo" method="POST" accept-charset="utf-8">
+                            <button type="submit" class="btn btn-normal">Undo</button>
+                        </form>
+%                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
                         <input type="hidden" name="user" value="%($profile%)">

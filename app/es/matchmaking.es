@@ -151,14 +151,24 @@ fn daily_matches users {
                            DELETE m'
     }
     for (user = $users) {
-        limit = `{max 20 `{min 50 `{int `{x 0.25 `{redis graph read 'MATCH (a:user {username: '''$user'''})
-                                                                           <-[:LIKED]-(b:user)
-                                                                     RETURN count(b)'}}}}}
+        premium = `{redis graph read 'MATCH (u:user {username: '''$user'''})
+                                      RETURN exists(u.premium)'}
+        liked = `{redis graph read 'MATCH (a:user {username: '''$user'''})
+                                          <-[:LIKED]-(b:user)
+                                    RETURN count(b)'}
+
+        if {~ $premium true} {
+            limit = 1000000000000000000
+        } {isempty $liked} {
+            limit = 20
+        } {
+            limit = `{max 20 `{min 50 `{int `{x 0.25 $liked}}}}
+        }
 
         redis graph write 'MATCH (a:user {username: '''$user'''})-[m:MATCH]->(b:user)
                            WHERE NOT (a)-[:LIKED]->(b) AND
                                  NOT (a)-[:PASSED]->(b)
-                           WITH a, b ORDER BY m.score DESC LIMIT '$limit'
-                           CREATE (a)-[:DAILYMATCH]->(b)'
+                           WITH m, a, b ORDER BY m.score DESC LIMIT '$limit'
+                           CREATE (a)-[:DAILYMATCH {score: m.score}]->(b)'
     }
 }

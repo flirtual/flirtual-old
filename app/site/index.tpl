@@ -1,6 +1,6 @@
 % profile = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[m:DAILYMATCH]->(p:user)
 %                               RETURN p.username
-%                               ORDER BY rand()
+%                               ORDER BY m.score DESC
 %                               LIMIT 1'}
 % if {! isempty $profile} {
 %     template tpl/profile.tpl $profile
