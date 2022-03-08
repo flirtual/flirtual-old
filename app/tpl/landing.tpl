@@ -633,6 +633,10 @@
             var swiper2 = new Swiper(".cards", {
                 effect: "cards",
                 grabCursor: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: true,
+                },
                 keyboard: true,
             });
             var swiper3 = new Swiper(".cards-text", {
