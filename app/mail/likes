@@ -1,0 +1,21 @@
+<p>This week $numlikes liked your profile on Flirtual!</p>
+
+<p><a href="https://flirtu.al/">Browse profiles</a> to like or homie them back.</p>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "description": "Browse profiles",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "url": "https://flirtu.al/",
+    "name": "Browse"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Flirtual",
+    "url": "https://flirtu.al/"
+  }
+}
+</script>

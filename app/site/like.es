@@ -18,7 +18,7 @@ if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
 # Create new like
 redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                          (b:user {username: '''$p_user'''})
-                   MERGE (a)-[:LIKED {type: '''$p_type''', date: '$dateun'}]->(b)'
+                   MERGE (a)-[:LIKED {type: '''$p_type''', date: '$dateun', email: true}]->(b)'
 
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                          -[m:DAILYMATCH]-
@@ -43,7 +43,10 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
     xmpp add_rosteritem '{"localuser": "'$p_user'", "localhost": "'$XMPP_HOST'", "user": "'$logged_user'", "host": "'$XMPP_HOST'", "nick": "'$logged_user'", "group": "Friends", "subs": "both"}'
 
     # Match notification
-    sed 's/\$user/'$logged_user'/' < mail/match | email $p_user 'It''s a match!'
+    if {~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
+                              RETURN u.match_emails'} true} {
+        sed 's/\$user/'$logged_user'/' < mail/match | email $p_user 'It''s a match!'
+    }
 
     # Back to the profile, or matches if coming from likes
     if {~ $p_return /matches } {
