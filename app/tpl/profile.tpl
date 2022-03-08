@@ -67,8 +67,20 @@ fn isvisible field {
 %       if {!~ $profile $logged_user && !~ $ismatch true} {
 %           if {~ $luliked true && !~ $req_path /} {
                 <div class="notice">You liked %($displayname%).</div>
+%               if {~ $premium true} {
+                    <form action="/undo" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Undo</button>
+                    </form>
+%               }
 %           } {~ $passed true && !~ $req_path /} {
                 <div class="notice">You passed on %($displayname%).</div>
+%               if {~ $premium true} {
+                    <form action="/undo" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Undo</button>
+                    </form>
+%               }
 %           } {
 %               if {!~ $req_path /homies} {
 %                   if {~ $req_path / && ~ $premium true} {

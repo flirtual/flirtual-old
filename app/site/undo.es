@@ -7,6 +7,26 @@ if {!~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
+# Direct profile (not browsing)
+if {! isempty $p_user} {
+    # Validate user
+    if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
+        !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true} {
+        post_redirect /
+    } {
+        # Unlike/unpass
+        redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                                 -[l:LIKED]->
+                                 (b:user {username: '''$p_user'''})
+                           DELETE l'
+        redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                                 -[p:PASSED]->
+                                 (b:user {username: '''$p_user'''})
+                           DELETE p'
+        post_redirect /$p_user
+    }
+}
+
 # Clean up old undone profiles
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[u:UNDO]->(b:user)
                    DELETE u'
