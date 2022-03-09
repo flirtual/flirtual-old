@@ -58,6 +58,7 @@ for (var = nsfw domsub kinks) {
     }
 
     var tagify_kinks = new Tagify(document.querySelector('input[name=kinks]'), {
+        enforceWhitelist: true,
         whitelist: [
 %           for (kink = `` \n {redis graph read 'MATCH (k:kink)
 %                                                RETURN k.name
