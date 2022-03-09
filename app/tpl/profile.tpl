@@ -5,10 +5,11 @@ if {! isempty $targ} {
     profile = `{echo $req_path | sed 's/\/$//; s/.*\///'}
 }
 
-(profile serious luserious monopoly lumonopoly displayname dob country ismatch passed uliked \
- luliked lastlogin new lunew open luopen conscientious luconscientious agreeable luagreeable bio \
- vrchat discord domsub ludomsub onboarding vrlfp privacy_personality privacy_socials \
- privacy_sexuality privacy_kinks nsfw luadmin admin mod verified earlysupporter banned email) = \
+(profile serious luserious monopoly lumonopoly displayname dob country country_id ismatch passed \
+ uliked luliked lastlogin new lunew open luopen conscientious luconscientious agreeable \
+ luagreeable bio vrchat discord domsub ludomsub onboarding vrlfp privacy_personality \
+ privacy_socials privacy_sexuality privacy_kinks nsfw luadmin admin mod verified earlysupporter \
+ banned email) = \
     `` \n {redis graph read 'MATCH (u:user)
                              WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^'''
                              OPTIONAL MATCH (lu:user {username: '''$^logged_user'''})
@@ -18,7 +19,7 @@ if {! isempty $targ} {
                              OPTIONAL MATCH (lu)-[passed:PASSED]->(u)
                              OPTIONAL MATCH (u)-[:COUNTRY]->(c:country)
                              RETURN u.username, u.serious, lu.serious, u.monopoly, lu.monopoly,
-                                    u.displayname, u.dob, toLower(c.id), exists(matched),
+                                    u.displayname, u.dob, c.name, toLower(c.id), exists(matched),
                                     exists(passed), exists(uliked), exists(luliked), u.lastlogin,
                                     u.new, u.lunew, sign(u.openness), sign(lu.openness),
                                     sign(u.conscientiousness), sign(lu.conscientiousness),
@@ -221,7 +222,7 @@ fn isvisible field {
                         <span class="country_name" style="margin-right: 41px">%($country%)</span>
                         <span style="position: absolute; transform: translate(-31px, -3px)">
                             <img class="country" onerror="this.style.visibility='hidden'"
-                                 src='/img/flags/%($country%).svg' width="33" height="25" />
+                                 src="/img/flags/%($country_id%).svg" width="33" height="25" />
                         </span>
                     </span>
 %               }
@@ -380,7 +381,9 @@ fn isvisible field {
         # Dom/sub/switch
         if {~ $nsfw true && isvisible kinks && {! isempty $domsub}} {
             echo '<div class="tags">'
-            if {~ $domsub $ludomsub} {
+            if {{~ $domsub Dominant && ~ $ludomsub Submissive} ||
+                {~ $domsub Submissive && ~ $ludomsub Dominant} ||
+                {~ $domsub Switch && ~ $ludomsub Switch}} {
                 echo '<span class="tag common">'$domsub'</span>'
             } {
                 echo '<span class="tag">'$domsub'</span>'
@@ -389,27 +392,13 @@ fn isvisible field {
         }
 
         # Kinks
-        common_kinks = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})
-                                                              -[:KINK]->
-                                                              (k:kink)
-                                                              <-[:KINK]-
-                                                              (lu:user {username: '''$logged_user'''})
-                                                        RETURN k.name ORDER BY k.order'}}
         kinks = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:KINK]->(k:kink),
                                                        (lu:user {username: '''$logged_user'''})
-                                                 WHERE NOT (lu)-[:KINK]->(k)
                                                  RETURN k.name ORDER BY k.order'}}
-        if {~ $nsfw true && isvisible kinks && {! isempty $kinks || ! isempty $common_kinks}} {
+        if {~ $nsfw true && isvisible kinks && ! isempty $kinks} {
             echo '<div class="tags">'
-            if {! isempty $common_kinks} {
-                for (kink = $common_kinks) {
-                    echo '<span class="tag common">'^`^{echo $kink | sed 's/_/ /g'}^'</span>'
-                }
-            }
-            if {! isempty $kinks} {
-                for (kink = $kinks) {
-                    echo '<span class="tag">'^`^{echo $kink | sed 's/_/ /g'}^'</span>'
-                }
+            for (kink = $kinks) {
+                echo '<span class="tag">'^`^{echo $kink | sed 's/_/ /g'}^'</span>'
             }
             echo '</div>'
         }
@@ -431,6 +420,11 @@ fn isvisible field {
 %           if {!~ $profile $logged_user} {
 %               if {~ $luadmin true} {
                     <form action="/mod" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="action" value="verify">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Verify user</button>
+                    </form>
+                    <form action="/mod" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="action" value="ban">
                         <input type="hidden" name="user" value="%($profile%)">
                         <button type="submit" class="btn btn-normal">Ban user</button>
@@ -445,11 +439,6 @@ fn isvisible field {
 
 <script type="text/javascript">
     window.addEventListener("load", function(event) {
-        if (document.querySelector(".country_name")) {
-            var country = document.querySelector(".country_name");
-            country.innerHTML = new Intl.DisplayNames([], {type: 'region'}).of(country.innerHTML.toUpperCase());
-        }
-
         if (document.querySelector(".bio") && document.querySelector(".bio").clientHeight >= 480) {
             var shadow = document.createElement("div");
             shadow.classList.add("bio_shadow");
