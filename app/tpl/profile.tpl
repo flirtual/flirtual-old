@@ -219,7 +219,7 @@ fn isvisible field {
 %               # Location
 %               if {! isempty $country} {
                     <span class="tag">
-                        <span class="country_name" style="margin-right: 41px">%($country%)</span>
+                        <span class="country_name" style="margin-right: 41px">%(`{echo $country | sed 's/_/ /g'}%)</span>
                         <span style="position: absolute; transform: translate(-31px, -3px)">
                             <img class="country" onerror="this.style.visibility='hidden'"
                                  src="/img/flags/%($country_id%).svg" width="33" height="25" />
@@ -279,6 +279,8 @@ fn isvisible field {
 %       }
 
 %{
+        echo '<div>'
+
         # Open to serious dating
         if {~ $^serious true} {
             echo '<div class="tags">'
@@ -295,13 +297,6 @@ fn isvisible field {
             for (sexuality = $sexualities) {
                 echo '<span class="tag '`^{if {~ $profile $logged_user} { echo common }}^'">'$sexuality'</span>'
             }
-            echo '</div>'
-        }
-
-        # (Non-)monogamous
-        if {! isempty $monopoly} {
-            echo '<div class="tags">'
-            echo '<span class="tag '`^{if {~ $monopoly $lumonopoly} { echo common }}^'">'$monopoly'</span>'
             echo '</div>'
         }
 
@@ -391,6 +386,17 @@ fn isvisible field {
             echo '</div>'
         }
 
+        echo '</div>'
+        echo '<a id="morebtn" class="btn" onclick="toggleMore()" style="font-size: 24px; margin: 28px 0 -2px 0">More info &#x25BC;</a>'
+        echo '<div id="more" style="display: none; margin: -8px 0 -23px 0">'
+
+        # (Non-)monogamous
+        if {! isempty $monopoly} {
+            echo '<div class="tags">'
+            echo '<span class="tag '`^{if {~ $monopoly $lumonopoly} { echo common }}^'">'$monopoly'</span>'
+            echo '</div>'
+        }
+
         # Kinks
         kinks = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})-[:KINK]->(k:kink),
                                                        (lu:user {username: '''$logged_user'''})
@@ -402,6 +408,58 @@ fn isvisible field {
             }
             echo '</div>'
         }
+
+        # Language
+        common_languages = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})
+                                                                  -[:KNOWS]->(l:language)<-[:KNOWS]-
+                                                                  (lu:user {username: '''$logged_user'''})
+                                                            RETURN l.name ORDER BY l.name'}}
+        languages = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})
+                                                           -[:KNOWS]->(l:language),
+                                                           (lu:user {username: '''$logged_user'''})
+                                                     WHERE NOT (lu)-[:KNOWS]->(l)
+                                                     RETURN l.name ORDER BY l.name'}}
+        if {! isempty $languages || ! isempty $common_languages} {
+            echo '<div class="tags">'
+            if {! isempty $common_languages} {
+                for (language = $common_languages) {
+                    echo '<span class="tag common">'^`^{echo $language | sed 's/_/ /g'}^'</span>'
+                }
+            }
+            if {! isempty $languages} {
+                for (language = $languages) {
+                    echo '<span class="tag">'^`^{echo $language | sed 's/_/ /g'}^'</span>'
+                }
+            }
+            echo '</div>'
+        }
+
+        # VR setup
+        common_platforms = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})
+                                                                  -[:USES]->(p:platform)<-[:USES]-
+                                                                  (lu:user {username: '''$logged_user'''})
+                                                            RETURN p.name ORDER BY p.order'}}
+        platforms = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$profile'''})
+                                                           -[:USES]->(p:platform),
+                                                           (lu:user {username: '''$logged_user'''})
+                                                     WHERE NOT (lu)-[:USES]->(p)
+                                                     RETURN p.name ORDER BY p.order'}}
+        if {! isempty $platforms || ! isempty $common_platforms} {
+            echo '<div class="tags">'
+            if {! isempty $common_platforms} {
+                for (platform = $common_platforms) {
+                    echo '<span class="tag common">'^`^{echo $platform | sed 's/_/ /g'}^'</span>'
+                }
+            }
+            if {! isempty $platforms} {
+                for (platform = $platforms) {
+                    echo '<span class="tag">'^`^{echo $platform | sed 's/_/ /g'}^'</span>'
+                }
+            }
+            echo '</div>'
+        }
+
+        echo '</div>'
 %}
     </div>
 
@@ -462,6 +520,17 @@ fn isvisible field {
         } else {
             bio.classList.add("expand");
             bio.nextSibling.nextSibling.innerHTML = "⯅";
+        }
+    }
+
+    function toggleMore() {
+        var more = document.getElementById("more");
+        if (more.style.display === "none") {
+            more.style.display = "block";
+            morebtn.innerHTML = "Less info &#x25B2;";
+        } else {
+            more.style.display = "none";
+            morebtn.innerHTML = "More info &#x25BC;";
         }
     }
 </script>

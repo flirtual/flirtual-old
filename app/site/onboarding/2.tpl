@@ -288,9 +288,13 @@ if {!~ $dob *-*} {
             { value:'Windows_Mixed_Reality', display: 'Windows Mixed Reality (Reverb, Odyssey,etc.)' },
             { value:'PlayStation_VR', display: 'PlayStation VR' },
             { value:'Mobile_VR', display: 'Mobile VR (Go, Gear VR, Cardboard, Daydream, etc.)' },
-            { value:'Desktop', display: 'I don\'t have a headset yet (desktop user)' }
+            { value:'Desktop', display: 'I don\'t have a headset yet (desktop user)' },
+            { value:'Full-body_tracking', display: 'Full-body tracking (Vive Trackers, Tundra, Kinect, etc.)' },
+            { value:'Eye/facial_tracking', display: 'Eye/facial tracking (Vive Pro Eye, Pimax, Varjo, etc.)' },
+            { value:'Haptic_suit', display: 'Haptic suit (bHaptics, Teslasuit, etc.)' },
+            { value:'Locomotion_treadmill', display: 'Locomotion treadmill (KAT Walk, Omni, etc.)' }
         ],
-        maxTags: 5,
+        maxTags: 8,
         skipInvalid: true,
         editTags: false,
         dropdown: {
