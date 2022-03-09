@@ -5,10 +5,9 @@ if {!~ $REQUEST_METHOD POST ||
     return 0
 }
 
-# Validate users, action
+# Validate users
 if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
-    !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true ||
-    {!~ $p_action ban && !~ $p_action unban}} {
+    !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true} {
     post_redirect /
 }
 
@@ -20,6 +19,15 @@ if {~ $p_action ban} {
 } {~ $p_action unban} {
     redis graph write 'MATCH (u:user {username: '''$p_user'''})
                        SET u.banned = NULL'
+} {~ $p_action verify} {
+    if {~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
+                              RETURN exists(u.verified)'} false} {
+        redis graph write 'MATCH (u:user {username: '''$p_user'''})
+                           SET u.verified = true'
+    } {
+        redis graph write 'MATCH (u:user {username: '''$p_user'''})
+                           SET u.verified = NULL'
+    }
 }
 
 post_redirect /$p_user
