@@ -86,27 +86,26 @@ if {!~ $p_privacy_country everyone && !~ $p_privacy_country matches && !~ $p_pri
 }
 
 # Validate and set country
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country) DELETE r'
 if {! isempty $p_country} {
-    if {!~ `{redis graph read 'MATCH (c:country {id: '''$p_country'''}) RETURN exists(c)'} true} {
+    if {!~ `{redis graph read 'MATCH (c:country {name: '''`{echo $p_country | escape_redis}^'''})
+                               RETURN exists(c)'} true} {
         throw error 'Invalid country'
     }
     redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                             (c:country {id: '''$p_country'''})
+                             (c:country {name: '''`{echo $p_country | escape_redis}^'''})
                        MERGE (u)-[:COUNTRY]->(c)'
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:COUNTRY]->(c:country)
-                       DELETE r'
 }
 
 # Validate and write language
 redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[r:KNOWS]->(l:language) DELETE r'
 languageset = false
-languages = `^{redis graph read 'MATCH (l:language) RETURN l.id'}
+languages = `^{redis graph read 'MATCH (l:language) RETURN l.name'}
 for (language = `{echo $^p_language | sed 's/,/ /g'}) {
     if {in $language $languages} {
         languageset = true
         redis graph write 'MATCH (u:user {username: '''$logged_user'''}),
-                                 (l:language {id: '''$language'''})
+                                 (l:language {name: '''$language'''})
                            MERGE (u)-[:KNOWS]->(l)'
     }
 }

@@ -5,7 +5,7 @@
                              OPTIONAL MATCH (u)-[:GENDER]->(w:gender {name: ''Woman''})
                              OPTIONAL MATCH (u)-[:GENDER]->(m:gender {name: ''Man''})
                              RETURN u.dob, exists(w), exists(m), u.privacy_sexuality,
-                                    c.id, u.privacy_country, u.new'}
+                                    c.name, u.privacy_country, u.new'}
 
 genders_other = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:GENDER]->(g:gender {type: ''nonbinary''})
                                     RETURN g.name ORDER BY g.order'}
@@ -14,10 +14,10 @@ sexualities = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-
                                   RETURN s.name ORDER BY s.order'}
 
 languages = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:KNOWS]->(l:language)
-                                RETURN l.id'}
+                                     RETURN l.name ORDER BY l.name'}
 
 platforms = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:USES]->(p:platform)
-                                RETURN p.name'}
+                                RETURN p.name ORDER BY p.order'}
 
 for (g = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:PLAYS]->(g:game) RETURN g.name'}) {
     games = ($games $g)
@@ -135,6 +135,7 @@ if {!~ $dob *-*} {
         ],
         maxTags: 3,
         skipInvalid: true,
+        editTags: false,
         originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
         dropdown: {
             enabled: 0,
@@ -161,6 +162,7 @@ if {!~ $dob *-*} {
         ],
         maxTags: 3,
         skipInvalid: true,
+        editTags: false,
         originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
         dropdown: {
             enabled: 0,
@@ -177,9 +179,9 @@ if {!~ $dob *-*} {
                                 <x title='remove tag' class='tagify__tag__removeBtn'></x>
                                 <div>
                                     ${tagData.value ?
-                                    `<img onerror="this.style.visibility='hidden'" src='/img/flags/${tagData.value.toLowerCase()}.svg'>` : ''
+                                    `<img onerror="this.style.visibility='hidden'" src='/img/flags/${tagData.id.toLowerCase()}.svg'>` : ''
                                     }
-                                    <span class='tagify__tag-text'>${tagData.searchBy}</span>
+                                    <span class='tagify__tag-text'>${tagData.value.replace(/_/g, ' ')}</span>
                                 </div>
                             </tag>`
                 } catch(err) {}
@@ -188,26 +190,29 @@ if {!~ $dob *-*} {
                 try {
                     return `<div class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}' tagifySuggestionIdx="${tagData.tagifySuggestionIdx}">
                                 <img onerror="this.style.visibility = 'hidden'"
-                                      src='/img/flags/${tagData.value.toLowerCase()}.svg'>
-                                <span>${tagData.searchBy}</span>
+                                      src='/img/flags/${tagData.id.toLowerCase()}.svg'>
+                                <span>${tagData.value.replace(/_/g, ' ')}</span>
                             </div>`
                 } catch(err) {}
             }
         },
         enforceWhitelist: true,
         whitelist: [
-%           for (country = `{redis graph read 'MATCH (c:country) RETURN c.id ORDER BY c.id'}) {
-                { value:'%($country%)', searchBy: new Intl.DisplayNames([], {type: 'region'}).of('%($country%)') },
+%           country_names = `` \n {redis graph read 'MATCH (c:country) RETURN c.name ORDER BY c.name'}
+%           country_ids = `` \n {redis graph read 'MATCH (c:country) RETURN c.id ORDER BY c.name'}
+%           for (name = $country_names; id = $country_ids) {
+                { value:'%(`{/bin/echo -en $name}%)', id: '%($id%)' },
 %           }
         ],
         maxTags: 1,
         skipInvalid: true,
-        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
+        editTags: false,
         dropdown: {
             enabled: 0,
             maxItems: 0,
             classname: 'extra-properties'
-        }
+        },
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
     })
 
     var tagify_language = new Tagify(document.querySelector('input[name=language]'), {
@@ -218,7 +223,7 @@ if {!~ $dob *-*} {
                     return `<tag title='${tagData.value}' contenteditable='false' spellcheck="false" class='tagify__tag ${tagData.class ? tagData.class : ""}' ${this.getAttributes(tagData)}>
                                 <x title='remove tag' class='tagify__tag__removeBtn'></x>
                                 <div>
-                                    <span class='tagify__tag-text'>${tagData.searchBy}</span>
+                                    <span class='tagify__tag-text'>${tagData.value.replace(/_/g, ' ')}</span>
                                 </div>
                             </tag>`
                 } catch(err) {}
@@ -226,21 +231,20 @@ if {!~ $dob *-*} {
             dropdownItem: function(tagData) {
                 try {
                     return `<div class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}' tagifySuggestionIdx="${tagData.tagifySuggestionIdx}">
-                                <span>${tagData.searchBy}</span>
+                                <span>${tagData.value.replace(/_/g, ' ')}</span>
                             </div>`
                 } catch(err) {}
             }
         },
         enforceWhitelist: true,
         whitelist: [
-%           for (language = `{redis graph read 'MATCH (l:language) RETURN l.id ORDER BY l.id'}) {
-                { value:'%($language%)', searchBy: new Intl.DisplayNames([], {type: 'language'}).of('%($language%)') },
+%           for (language = `{redis graph read 'MATCH (l:language) RETURN l.name ORDER BY l.name'}) {
+                '%(`{/bin/echo -en $language}%)',
 %           }
         ],
         maxTags: 5,
         skipInvalid: true,
         editTags: false,
-	transformTag: transformLanguage,
         dropdown: {
             enabled: 0,
             maxItems: 0
@@ -248,13 +252,9 @@ if {!~ $dob *-*} {
         originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
     })
 
-    function transformLanguage(tagData) {
-        tagData.innerHTML = new Intl.DisplayNames([navigator.language.slice(0, 2)], {type: 'language'}).of(tagData.value);
-    }
-
 %   if {! isempty $languages} {
 %       for (language = $languages) {
-            tagify_language.addTags(new Intl.DisplayNames([navigator.language.slice(0, 2)], {type: 'language'}).of('%($language%)'));
+            tagify_language.addTags('%(`{/bin/echo -en $language}%)');
 %       }
 %   }
 
