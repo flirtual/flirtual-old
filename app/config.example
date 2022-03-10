@@ -3,6 +3,9 @@ domain = 'example.com'
 email = 'noreply@example.com'
 debug = 'false'
 
+BETA_SITE = 'beta.example.com'
+BETA_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
 REDISCLI_HOST = 'redis.example.com'
 REDISCLI_PORT = '12345'
 REDISCLI_AUTH = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'

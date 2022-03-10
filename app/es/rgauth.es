@@ -50,11 +50,16 @@ fn login_user username password {
             expiry = `{+ $dateun $session_length}
             expiryabs = `{+ $dateun 86400}
         }
-        onboarding = `{redis graph write 'MATCH (u:user {username: '''$username'''})
-                                          CREATE (u)-[:SESSION]->(s:session {id: '''$sessionid''', length: '$session_length', expiry: '$expiry', expiryabs: '$expiryabs'}),
-                                                 (u)-[:LOGIN]->(l:login {date: '''`{date -ui}^'''})
-                                          SET u.lastlogin = '$dateun'
-                                          RETURN u.onboarding'} # While we're in redis, get $onboarding so we know where to redirect
+        (onboarding beta) = `{redis graph write 'MATCH (u:user {username: '''$username'''})
+                                                 CREATE (u)-[:SESSION]->
+                                                        (s:session {id: '''$sessionid''',
+                                                                    length: '$session_length',
+                                                                    expiry: '$expiry',
+                                                                    expiryabs: '$expiryabs'}),
+                                                        (u)-[:LOGIN]->
+                                                        (l:login {date: '''`{date -ui}^'''})
+                                                 SET u.lastlogin = '$dateun'
+                                                 RETURN u.onboarding, exists(u.beta)'}
 
         dprint $logged_user logged in from $HTTP_USER_AGENT on $REMOTE_ADDR
     } {! isempty `{get_cookie id}} {
@@ -75,15 +80,27 @@ fn login_user username password {
         }
 
         # We are logged in! Update inactive expiry and get info we'll need later
-        (logged_user session_length expiry expiryabs onboarding) = \
+        (logged_user session_length expiry expiryabs onboarding beta) = \
             `` \n {redis graph write 'MATCH (u:user)-[:SESSION]->(s:session {id: '''$sessionid'''})
                                       SET s.expiry = s.expiry + s.length,
                                           u.lastlogin = '$dateun'
-                                      RETURN u.username, s.length, s.expiry, s.expiryabs, u.onboarding'}
+                                      RETURN u.username, s.length, s.expiry, s.expiryabs,
+                                             u.onboarding, exists(u.beta)'}
     } {
         # The user has not requested to log in
         set_cookie id logout 'Thu, 01 Jan 1970 00:00:00 GMT'
         return 0
+    }
+
+    # Beta testing cookie
+    if {~ $site $BETA_SITE} {
+        if {~ $beta true} {
+            set_cookie beta $BETA_SECRET `{cookiedate `{date -u `{+ $dateun 2592000}}}
+        } {!~ `{get_cookie beta} $BETA_SECRET} {
+            set_cookie id logout 'Thu, 01 Jan 1970 00:00:00 GMT'
+            dprint Failed beta login to $username from $HTTP_USER_AGENT on $REMOTE_ADDR
+            throw error 'You don''t have access to the beta'
+        }
     }
 
     # "Stay logged in" unchecked -> delete cookie when the browser closes
