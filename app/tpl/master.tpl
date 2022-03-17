@@ -142,8 +142,8 @@ if {logged_in} {
 %       # Converse.js Messaging
 %       if {logged_in} {
             <audio id="message_audio">
-                <source src="/audio/message.ogg" type="audio/ogg">
                 <source src="/audio/message.mp3" type="audio/mpeg">
+                <source src="/audio/message.ogg" type="audio/ogg">
             </audio>
             <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8"></script>
             <script type="text/javascript">
