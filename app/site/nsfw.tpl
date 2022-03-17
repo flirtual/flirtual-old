@@ -37,7 +37,7 @@ for (var = nsfw domsub kinks) {
 
             <label>Privacy: Who can see your NSFW tags?</label>
             <select name="privacy">
-                <option value="everyone" %(`{if {~ $privacy everyone} { echo 'selected' }}%)>Anyone on Flirtual</option>
+                <option value="everyone" %(`{if {~ $privacy everyone} { echo 'selected' }}%)>Anyone with NSFW enabled on Flirtual</option>
                 <option value="matches" %(`{if {~ $privacy matches} { echo 'selected' }}%)>Matches only</option>
                 <option value="me" %(`{if {~ $privacy me} { echo 'selected' }}%)>Just me</option>
             </select>

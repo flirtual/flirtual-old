@@ -83,7 +83,7 @@
 %       if {~ $nsfw true} {
             <label>Who can see your NSFW tags?</label>
             <select name="kinks">
-                <option value="everyone" %(`{if {~ $kinks everyone} { echo 'selected' }}%)>Anyone on Flirtual</option>
+                <option value="everyone" %(`{if {~ $kinks everyone} { echo 'selected' }}%)>Anyone with NSFW enabled on Flirtual</option>
                 <option value="matches" %(`{if {~ $kinks matches} { echo 'selected' }}%)>Matches only</option>
                 <option value="me" %(`{if {~ $kinks me} { echo 'selected' }}%)>Just me</option>
             </select>
