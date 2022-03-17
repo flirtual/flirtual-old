@@ -1,4 +1,6 @@
 % profile = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[m:DAILYMATCH]->(p:user)
+%                               WHERE (NOT exists(p.onboarding) OR exists(p.vrlfp)) AND
+%                                     NOT exists(p.banned)
 %                               RETURN p.username
 %                               ORDER BY m.score DESC
 %                               LIMIT 1'}
@@ -13,7 +15,9 @@
           <a href="/" class="btn btn-gradient">Refresh</a>
       </div>
 % } {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:MATCH]->(p:user)
-%                          RETURN exists(p)'} true} {
+%                          WHERE NOT (u)-[:LIKED]->(p) AND
+%                                NOT (u)-[:PASSED]->(p)
+%                          RETURN DISTINCT exists(p)'} true} {
       <div class="box">
           <h1>That's all</h1>
           <h2>You are out of matches for today.</h2>
