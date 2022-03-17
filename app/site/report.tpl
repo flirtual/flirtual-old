@@ -1,12 +1,11 @@
 %{
-if {! isempty $q_user && echo $q_user | grep -s '^'$allowed_user_chars'+$'} {
-    id = $q_user
-    displayname = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$id'''})
+if {! isempty $p_user && echo $p_user | grep -s '^'$allowed_user_chars'+$'} {
+    displayname = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
                                                    RETURN u.displayname'}}
 }
 %}
 
-% if {~ $REQUEST_METHOD POST} {
+% if {~ $REQUEST_METHOD POST && ! isempty $p_id} {
       <div class="box">
           <h1>Thanks!</h1>
           <p>We've received your report and will review it as soon as possible.</p>
@@ -15,7 +14,7 @@ if {! isempty $q_user && echo $q_user | grep -s '^'$allowed_user_chars'+$'} {
       <div class="box">
           <h1>Report</h1>
           <form action="" method="POST" accept-charset="utf-8">
-              <input type="hidden" name="id" value="%($id%)">
+              <input type="hidden" name="id" value="%($p_user%)">
 
               <label for="displayname">User</label>
               <input type="text" id="displayname" value="%($^displayname%)" disabled>

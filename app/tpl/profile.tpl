@@ -488,7 +488,10 @@ fn isvisible field {
                         <button type="submit" class="btn btn-normal">Ban user</button>
                     </form>
 %               } {
-                    <a href="/report?user=%($profile%)" class="btn btn-normal">Report user</a>
+                    <form action="/report" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Report user</button>
+                    </form>
 %               }
 %           }
         </div>

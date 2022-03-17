@@ -2,6 +2,8 @@ require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
+if {isempty $p_id} { return 0 }
+
 # Validate ID
 if {! echo $p_id | grep -s '^'$allowed_user_chars'+$'} {
     throw error 'Invalid user'
