@@ -42,7 +42,7 @@
         <label for="newsletter">Product updates (we won't spam you)</label><br style="margin-bottom: 1em; display: block; content: ''" />
 
         <label for="volume">Message notification volume</label><a onclick="document.getElementById('message_audio').currentTime = 0; document.getElementById('message_audio').play()" class="btn btn-small" style="transform: translate(-12px, 12px)">Test</a><br />
-        <input type="range" min="0" max="1" step="0.01" id="volume" name="volume" value="%($volume%)" onchange="document.getElementById('message_audio').volume = this.value" style="width: 100%"><br /><br />
+        <input type="range" min="0" max="1" step="0.01" id="volume" name="volume" value="%($volume%)" onchange="document.getElementById('message_audio').volume = this.value"><br /><br />
 
         <button type="submit" name="changenotifications" value="true" class="btn btn-gradient">Save</button>
     </form>
