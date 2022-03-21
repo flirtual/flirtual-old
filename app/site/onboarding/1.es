@@ -38,27 +38,19 @@ if {~ $genderset false} {
 }
 
 # Age range preference
-if {! isempty $p_agemin && ge $p_agemin 18 && le $p_agemin 125} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.agemin = '$p_agemin
-} {
+if {isempty $p_agemin || lt $p_agemin 18 || gt $p_agemin 125 ||
+    isempty $p_agemax || lt $p_agemax 18 || gt $p_agemax 125} {
     throw error 'Missing/invalid age range'
 }
-if {! isempty $p_agemax && ge $p_agemax 18 && le $p_agemax 125} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.agemax = '$p_agemax
-} {
-    throw error 'Missing/invalid age range'
-}
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.agemin = '$p_agemin', u.agemax = '$p_agemax
 
 # Open to serious dating?
-if {~ $p_serious true} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.serious = true'
-} {
-    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.serious = false'
+if {!~ $p_serious true} {
+    p_serious = false
 }
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                   SET u.serious = '$p_serious
 
 # (Non-)Monogamous
 if {~ $p_monopoly Monogamous || ~ $p_monopoly Non-monogamous} {
