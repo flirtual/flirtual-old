@@ -32,10 +32,11 @@ fn compute_matches a b {
     for (b = $users) {
         (count_aliked count_bliked count_apassed count_bpassed count_custom_interests \
          count_strong_interests count_default_interests count_games count_country count_monopoly \
-         count_serious personality a_weight_custom_interests a_weight_default_interests \
-         a_weight_games a_weight_country a_weight_monopoly a_weight_serious a_weight_personality \
-         b_weight_custom_interests b_weight_default_interests b_weight_games b_weight_country \
-         b_weight_monopoly b_weight_serious b_weight_personality) = \
+         count_serious personality a_weight_likes a_weight_custom_interests \
+         a_weight_default_interests a_weight_games a_weight_country a_weight_monopoly \
+         a_weight_serious a_weight_personality b_weight_likes b_weight_custom_interests \
+         b_weight_default_interests b_weight_games b_weight_country b_weight_monopoly \
+         b_weight_serious b_weight_personality) = \
             `` \n {redis replica graph read 'MATCH (a:user {username: '''$a'''}),
                                                    (b:user {username: '''$b'''})
 
@@ -83,10 +84,11 @@ fn compute_matches a b {
                                                            abs(a.conscientiousness - b.conscientiousness) +
                                                            abs(a.agreeableness - b.agreeableness))),
 
-                                                    a.weight_custom_interests, a.weight_default_interests,
-                                                    a.weight_games, a.weight_country, a.weight_monopoly,
+                                                    a.weight_likes, a.weight_custom_interests,
+                                                    a.weight_default_interests, a.weight_games,
+                                                    a.weight_country, a.weight_monopoly,
                                                     a.weight_serious, a.weight_personality,
-                                                    b.weight_custom_interests,
+                                                    b.weight_likes, b.weight_custom_interests,
                                                     b.weight_default_interests, b.weight_games,
                                                     b.weight_country, b.weight_monopoly,
                                                     b.weight_serious, b.weight_personality'}
@@ -100,27 +102,27 @@ fn compute_matches a b {
             }
         }
 
-        ascore = `{awk 'BEGIN { printf "%f", '$count_aliked' * 10 + \
+        ascore = `{awk 'BEGIN { printf "%f", '$count_aliked' * 10 * '$a_weight_likes' + \
                                              '$count_bpassed' * -100 + \
-                                             '$count_custom_interests' * '$a_weight_custom_interests' + \
-                                             '$count_strong_interests' * '$a_weight_default_interests' * 1.7 + \
-                                             '$count_default_interests' * '$a_weight_default_interests' + \
-                                             '$count_games' * '$a_weight_games' + \
-                                             '$count_country' * '$a_weight_country' + \
-                                             '$count_monopoly' * '$a_weight_monopoly' + \
-                                             '$count_serious' * '$a_weight_serious' + \
-                                             '$personality' * '$a_weight_personality' }' | sed 's/\.?0*$//'}
+                                             '$count_custom_interests' * 5 * '$a_weight_custom_interests' + \
+                                             '$count_strong_interests' * 5 * '$a_weight_default_interests' + \
+                                             '$count_default_interests' * 3 * '$a_weight_default_interests' + \
+                                             '$count_games' * 3 * '$a_weight_games' + \
+                                             '$count_country' * 3 * '$a_weight_country' + \
+                                             '$count_monopoly' * 5 * '$a_weight_monopoly' + \
+                                             '$count_serious' * 5 * '$a_weight_serious' + \
+                                             '$personality' * 0.5 * '$a_weight_personality' }' | sed 's/\.?0*$//'}
 
-        bscore = `{awk 'BEGIN { printf "%f", '$count_bliked' * 10 + \
-                                             '$count_apassed' * -30 + \
-                                             '$count_custom_interests' * '$b_weight_custom_interests' + \
-                                             '$count_strong_interests' * '$b_weight_default_interests' * 1.7 + \
-                                             '$count_default_interests' * '$b_weight_default_interests' + \
-                                             '$count_games' * '$b_weight_games' + \
-                                             '$count_country' * '$b_weight_country' + \
-                                             '$count_monopoly' * '$b_weight_monopoly' + \
-                                             '$count_serious' * '$b_weight_serious' + \
-                                             '$personality' * '$b_weight_personality' }' | sed 's/\.?0*$//'}
+        bscore = `{awk 'BEGIN { printf "%f", '$count_bliked' * 10 * '$b_weight_likes' + \
+                                             '$count_apassed' * -100 + \
+                                             '$count_custom_interests' * 5 * '$b_weight_custom_interests' + \
+                                             '$count_strong_interests' * 5 * '$b_weight_default_interests' + \
+                                             '$count_default_interests' * 3 * '$b_weight_default_interests' + \
+                                             '$count_games' * 3 * '$b_weight_games' + \
+                                             '$count_country' * 3 * '$b_weight_country' + \
+                                             '$count_monopoly' * 5 * '$b_weight_monopoly' + \
+                                             '$count_serious' * 5 * '$b_weight_serious' + \
+                                             '$personality' * 0.5 * '$b_weight_personality' }' | sed 's/\.?0*$//'}
 
         redis graph write 'MATCH (a:user {username: '''$a'''}),
                                  (b:user {username: '''$b'''})

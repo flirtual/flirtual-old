@@ -61,6 +61,30 @@ if {~ $p_monopoly Monogamous || ~ $p_monopoly Non-monogamous} {
                        SET u.monopoly = NULL'
 }
 
+# Weights
+if {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
+                          RETURN exists(u.supporter)'} true} {
+    for (factor = likes default_interests custom_interests personality games country serious \
+                  monopoly domsub kinks) {
+        if {isempty $(p_weight_$factor) ||
+            ! echo $(p_weight_$factor) | grep -s '^[0-2](\.[0-9]+)?$' ||
+            gt $(p_weight_$factor) 2.004} {
+            p_weight_$factor = 1
+        }
+    }
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.weight_likes = '$p_weight_likes',
+                           u.weight_default_interests = '$p_weight_default_interests',
+                           u.weight_custom_interests = '$p_weight_custom_interests',
+                           u.weight_personality = '$p_weight_personality',
+                           u.weight_games = '$p_weight_games',
+                           u.weight_country = '$p_weight_country',
+                           u.weight_serious = '$p_weight_serious',
+                           u.weight_monopoly = '$p_weight_monopoly',
+                           u.weight_domsub = '$p_weight_domsub',
+                           u.weight_kinks = '$p_weight_kinks
+}
+
 # Proceed
 if {! isempty $onboarding} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})

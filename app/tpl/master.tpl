@@ -1,9 +1,9 @@
 %{
 if {logged_in} {
-    (onboarded volume konami optout premium) = \
+    (onboarded volume konami optout premium supporter) = \
         `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
                                  RETURN NOT exists(u.onboarding), u.volume, u.konami, u.optout,
-                                        exists(u.premium)'}
+                                        exists(u.premium), exists(u.supporter)'}
 }
 %}
 
