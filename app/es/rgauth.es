@@ -74,7 +74,7 @@ fn login_user username password {
                                          s.expiry >= '$dateun' AND
                                          s.expiryabs >= '$dateun} false} {
             user = `{redis graph read 'MATCH (u:user)-[:SESSION]->(s:session {id: '''$sessionid'''}) RETURN u.username'}
-            xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
+            #xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
             set_cookie id logout 'Thu, 01 Jan 1970 00:00:00 GMT'
             throw error 'Session expired. Please log in again'
         }
@@ -136,7 +136,7 @@ fn logout_user {
     user = `{redis graph read 'MATCH (u:user)-[:SESSION]->(s:session {id: '''$session'''}) RETURN u.username'}
     if {! isempty $user} {
         redis graph write 'MATCH (u:user {username: '''$user'''})-[:SESSION]->(s:session) DELETE s'
-        xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
+        #xmpp kick_user '{"user": "'$user'", "host": "'$XMPP_HOST'"}'
     }
     post_redirect /login
 }

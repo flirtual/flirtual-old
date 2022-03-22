@@ -11,7 +11,7 @@ if {! kryptgo checkhash -b $rpassword -p $p_password} {
 
 # Delete account
 redis graph write 'MATCH (u:user {username: '''$logged_user'''}) DELETE u'
-xmpp unregister '{"user": "'$logged_user'", "host": "'$XMPP_HOST'"}'
+#xmpp unregister '{"user": "'$logged_user'", "host": "'$XMPP_HOST'"}'
 
 # Logout
 post_redirect /logout

@@ -15,11 +15,11 @@ if {~ $p_back true} {
 if {!isempty $p_displayname} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.displayname = '''$^p_displayname''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$^p_displayname'"}'
+    #xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$^p_displayname'"}'
 } {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.displayname = '''$logged_user''''
-    xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$logged_user'"}'
+    #xmpp set_vcard '{"user": "'$logged_user'", "host": "'$XMPP_HOST'", "name": "FN", "content": "'$logged_user'"}'
 }
 
 # Add profile pics
