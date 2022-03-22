@@ -45,8 +45,14 @@ redis graph write 'MATCH (a:user {username: '''$logged_user'''})-[u:UNDO]->(b:us
                                                ORDER BY p.date DESC
                                                LIMIT 1'}
 
+(lasthpass lasthpass_date) = `{redis graph read 'MATCH (a:user {username: '''$logged_user'''})
+                                                       -[p:HPASSED]->(b:user)
+                                                 RETURN b.username, p.date
+                                                 ORDER BY p.date DESC
+                                                 LIMIT 1'}
+
 # Remove the like/pass and get ready to render their profile in undo.tpl
-if {gt $lastlike_date $lastpass_date} {
+if {gt $lastlike_date $lastpass_date && gt $lastlike_date $lasthpass_date} {
     redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                              -[l:LIKED]->
                              (b:user {username: '''$lastlike'''})
@@ -54,12 +60,20 @@ if {gt $lastlike_date $lastpass_date} {
     redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                              (b:user {username: '''$lastlike'''})
                        MERGE (a)-[:UNDO]->(b)'
-} {
+} {gt $lastpass_date $lasthpass_date} {
     redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                              -[p:PASSED]->
                              (b:user {username: '''$lastpass'''})
                        DELETE p'
     redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
                              (b:user {username: '''$lastpass'''})
+                       MERGE (a)-[:UNDO]->(b)'
+} {
+    redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                             -[p:HPASSED]->
+                             (b:user {username: '''$lasthpass'''})
+                       DELETE p'
+    redis graph write 'MATCH (a:user {username: '''$logged_user'''}),
+                             (b:user {username: '''$lasthpass'''})
                        MERGE (a)-[:UNDO]->(b)'
 }
