@@ -4,7 +4,7 @@
 %                                     NOT (u)-[:PASSED]->(p) AND
 %                                     NOT (u)-[:HPASSED]->(p)
 %                               RETURN p.username
-%                               ORDER BY rand()
+%                               ORDER BY p.lastlogin DESC
 %                               LIMIT 1'}
 
 <div class="notice center">✌&#xFE0F; Homie Mode activated ✌&#xFE0F;</div>
