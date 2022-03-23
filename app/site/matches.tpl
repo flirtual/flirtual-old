@@ -62,11 +62,11 @@
             </a>
 %       }
         <br /><form action="" method="POST" accept-charset="utf-8" style="display: inline-block"
-                    onsubmit="return confirm('Are you sure you want to reset the profiles you\'ve liked and homied? This won\'t affect your matches.')">
+                    onsubmit="return confirm('Are you sure you want to reset all of your likes/homies? This won\'t affect your matches.')">
             <button type="submit" class="btn btn-gradient btn-normal" name="reset" value="likes">Reset likes/homies</button>
         </form>
         <form action="" method="POST" accept-charset="utf-8" style="display: inline-block"
-              onsubmit="return confirm('Are you sure you want to reset the profiles you\'ve passed on?')">
+              onsubmit="return confirm('Are you sure you want to reset all of your passes?')">
             <button type="submit" class="btn btn-gradient btn-normal" name="reset" value="passes">Reset passes</button>
         </form>
 %   } {
