@@ -88,7 +88,7 @@ if {~ $p_changeemail true &&
     # Email confirmation
     sed 's/\$confirm/'$confirm'/' < mail/confirm | email $logged_user 'Please confirm your email'
 
-    post_redirect /onboarding/7
+    post_redirect /onboarding/5
 }
 
 # Change password
