@@ -1,16 +1,16 @@
 <p>$user liked you back&mdash;they want to meet you too!</p>
 
-<p><a href="https://flirtu.al/$user" class="btn">Send them a message</a></p>
+<p><a href="https://flirtu.al/$user" class="btn">Check out their profile</a></p>
 
 <script type="application/ld+json">
 {
   "@context": "http://schema.org",
   "@type": "EmailMessage",
-  "description": "Send them a message",
+  "description": "Check out their profile",
   "potentialAction": {
     "@type": "ViewAction",
     "url": "https://flirtu.al/$user",
-    "name": "Message"
+    "name": "Profile"
   },
   "publisher": {
     "@type": "Organization",

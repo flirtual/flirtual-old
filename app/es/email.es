@@ -22,8 +22,6 @@ Content-Type: text/plain; charset=utf-8
 
 $plaintext
 
-Happy matching!
-
 Twitter: https://twitter.com/getflirtual
 Discord: https://$domain/discord
 Unsubscribe: https://$domain/settings#notifications
@@ -99,7 +97,6 @@ Content-Type: text/html; charset=utf-8
                                             <div data-slot="text"><table align="center" border="0" cellpadding="0" cellspacing="0" style="max-width: 550px;background: #ffffff;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%"><tbody><tr><td height="30" style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">&nbsp;<br></td></tr><tr><td align="center" style="padding: 0 30px;text-align: left;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top">
 <h1 style="font-family: filicudi-solid, Roboto, Verdana, Arial, sans-serif;">$subject^</h1>
 $html
-<p>Happy matching!</p>
 </td></tr><tr><td style="font-size: 30px;line-height: 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" height="30">&nbsp;<br></td></tr><tr><td style="padding: 0 30px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" valign="top" align="center"><table style="max-width: 550px;background: #ffffff;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr><td style="font-size: 0px;line-height: 0px;border-bottom: 1px solid #e8e8e8;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" height="0">&nbsp;<br></td></tr></tbody></table>
 </td></tr></tbody></table></div>
                                         </td>
