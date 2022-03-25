@@ -11,9 +11,9 @@ if {~ $p_changeprivacy true &&
     {~ $p_optout true || ~ $p_optout false}} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.privacy_personality = '''$p_personality''',
-                           u.privacy_socials = '''$p_personality''',
+                           u.privacy_socials = '''$p_socials''',
                            u.privacy_sexuality = '''$p_sexuality''',
-                           u.privacy_country= '''$p_gender''',
+                           u.privacy_country= '''$p_country''',
                            u.optout = '$p_optout
 
     # Kinks can be missing if the user has nsfw tags disabled, so set separately

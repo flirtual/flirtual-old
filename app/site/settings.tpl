@@ -95,7 +95,7 @@
             <option value="true" %(`{if {~ $optout true} { echo 'selected' }}%)>Do not include me in statistics</option>
         </select>
 
-        <button type="submit" class="btn btn-gradient">Save</button>
+        <button type="submit" name="changeprivacy" value="true" class="btn btn-gradient">Save</button>
     </form>
 </div>
 
