@@ -7,7 +7,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=0">
-        <link rel="manifest" href="/site.webmanifest?v=0">
+        <link rel="manifest" href="/site.webmanifest?v=1">
         <link rel="mask-icon" href="/safari-pinned-tab.svg?v=0" color="#e9658b">
         <link rel="shortcut icon" href="/favicon.ico?v=0">
 
@@ -620,6 +620,16 @@
         <script src="https://media.flirtu.al/libs/blinkloader/3.x/blinkloader.min.js"></script>
 
         <script>
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", function() {
+                    navigator.serviceWorker.register("/sw.js").then(function(registration) {
+                        console.log("ServiceWorker registration successful with scope: ", registration.scope);
+                    }, function(err) {
+                        console.log("ServiceWorker registration failed: ", err);
+                    });
+                });
+            }
+
             var swiper = new Swiper(".landing", {
                 direction: "vertical",
                 pagination: {
