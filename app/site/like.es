@@ -3,10 +3,14 @@ require_login
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
 # Validate users, like type
-if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
-    !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true ||
+p_user = `{echo $p_user | grep '^[a-zA-Z0-9_\-]+$'}
+(p_user id) = `` \n {redis graph read 'MATCH (u:user)
+                                       WHERE u.username = '''$p_user''' OR
+                                             u.id = '''$p_user'''
+                                       RETURN u.username, u.id'}
+if {isempty $p_user ||
     !{~ $p_type like || ~ $p_type homie}} {
-    if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
+    if {echo $p_return | grep -s '^/[a-zA-Z0-9_\-]+$'} {
         # Follow redirect
         post_redirect $p_return
     } {
@@ -52,11 +56,11 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
     if {~ $p_return /matches } {
         post_redirect /matches
     } {
-        post_redirect /$p_user
+        post_redirect /$id
     }
 }
 
-if {echo $p_return | grep -s '^/'$allowed_user_chars'+$'} {
+if {echo $p_return | grep -s '^/[a-zA-Z0-9_\-]+$'} {
     # Follow redirect
     post_redirect $p_return
 } {

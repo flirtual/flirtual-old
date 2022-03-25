@@ -5,30 +5,32 @@ if {! isempty $targ} {
     profile = `{echo $req_path | sed 's/\/$//; s/.*\///'}
 }
 
-(profile serious luserious monopoly lumonopoly displayname dob country country_id ismatch passed \
- uliked luliked lastlogin new lunew open luopen conscientious luconscientious agreeable \
+(id profile serious luserious monopoly lumonopoly displayname dob country country_id ismatch \
+ passed uliked luliked lastlogin new lunew open luopen conscientious luconscientious agreeable \
  luagreeable bio vrchat discord domsub ludomsub onboarding vrlfp privacy_personality \
  privacy_socials privacy_sexuality privacy_kinks nsfw luadmin admin mod verified earlysupporter \
  banned email) = \
     `` \n {redis graph read 'MATCH (u:user)
-                             WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^'''
+                             WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^''' OR
+                                   u.id = '''$profile'''
                              OPTIONAL MATCH (lu:user {username: '''$^logged_user'''})
                              OPTIONAL MATCH (u)-[matched:MATCHED]-(lu)
                              OPTIONAL MATCH (u)-[uliked:LIKED]->(lu)
                              OPTIONAL MATCH (lu)-[luliked:LIKED]->(u)
                              OPTIONAL MATCH (lu)-[passed:PASSED]->(u)
                              OPTIONAL MATCH (u)-[:COUNTRY]->(c:country)
-                             RETURN u.username, u.serious, lu.serious, u.monopoly, lu.monopoly,
-                                    u.displayname, u.dob, c.name, toLower(c.id), exists(matched),
-                                    exists(passed), exists(uliked), exists(luliked), u.lastlogin,
-                                    u.new, u.lunew, sign(u.openness), sign(lu.openness),
-                                    sign(u.conscientiousness), sign(lu.conscientiousness),
-                                    sign(u.agreeableness), sign(lu.agreeableness), u.bio, u.vrchat,
-                                    u.discord, u.domsub, lu.domsub, exists(u.onboarding),
-                                    exists(u.vrlfp), u.privacy_personality, u.privacy_socials,
-                                    u.privacy_sexuality, u.privacy_kinks, lu.nsfw, exists(lu.admin),
-                                    exists(u.admin), exists(u.mod), exists(u.verified),
-                                    exists(u.earlysupporter), exists(u.banned), u.email'}
+                             RETURN u.id, u.username, u.serious, lu.serious, u.monopoly,
+                                    lu.monopoly, u.displayname, u.dob, c.name, toLower(c.id),
+                                    exists(matched), exists(passed), exists(uliked),
+                                    exists(luliked), u.lastlogin, u.new, u.lunew, sign(u.openness),
+                                    sign(lu.openness), sign(u.conscientiousness),
+                                    sign(lu.conscientiousness), sign(u.agreeableness),
+                                    sign(lu.agreeableness), u.bio, u.vrchat, u.discord, u.domsub,
+                                    lu.domsub, exists(u.onboarding), exists(u.vrlfp),
+                                    u.privacy_personality, u.privacy_socials, u.privacy_sexuality,
+                                    u.privacy_kinks, lu.nsfw, exists(lu.admin), exists(u.admin),
+                                    exists(u.mod), exists(u.verified), exists(u.earlysupporter),
+                                    exists(u.banned), u.email'}
 
 # User-provided profile data needs formatting + sanitization
 for (var = displayname vrchat discord) {
@@ -70,7 +72,7 @@ fn isvisible field {
                 <div class="notice">You liked %($displayname%).</div>
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Undo</button>
                     </form>
 %               }
@@ -78,7 +80,7 @@ fn isvisible field {
                 <div class="notice">You passed on %($displayname%).</div>
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Undo</button>
                     </form>
 %               }
@@ -97,7 +99,7 @@ fn isvisible field {
 %                       } {
                             <input type="hidden" name="return" value="%($req_path%)">
 %                       }
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="like">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
                     </form>
@@ -109,7 +111,7 @@ fn isvisible field {
 %                       } {
                             <input type="hidden" name="return" value="%($req_path%)">
 %                       }
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
                     </form>
@@ -121,7 +123,7 @@ fn isvisible field {
 %                       } {
                             <input type="hidden" name="return" value="%($req_path%)">
 %                       }
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Pass</button>
                     </form>
 %               } {
@@ -132,13 +134,13 @@ fn isvisible field {
 %                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
                     </form>
                     <form action="/hpass" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Pass</button>
                     </form>
 %               }
@@ -469,7 +471,7 @@ fn isvisible field {
 %           if {~ $ismatch true} {
                 <form action="/unmatch" method="POST" accept-charset="utf-8" style="display: inline-block; margin-right: 1em">
                     <input type="hidden" name="return" value="%($req_path%)">
-                    <input type="hidden" name="user" value="%($profile%)">
+                    <input type="hidden" name="user" value="%($id%)">
                     <button type="submit" class="btn btn-normal">Unmatch</button>
                 </form>
 %           }
@@ -489,7 +491,7 @@ fn isvisible field {
                     </form>
 %               } {
                     <form action="/report" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="user" value="%($profile%)">
+                        <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Report user</button>
                     </form>
 %               }

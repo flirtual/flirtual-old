@@ -1,6 +1,6 @@
 %{
-if {! isempty $p_user && echo $p_user | grep -s '^'$allowed_user_chars'+$'} {
-    displayname = `{redis_html `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
+if {! isempty $p_user && echo $p_user | grep -s '^[a-zA-Z0-9_\-]+$'} {
+    displayname = `{redis_html `{redis graph read 'MATCH (u:user {id: '''$p_user'''})
                                                    RETURN u.displayname'}}
 }
 %}

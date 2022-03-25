@@ -46,7 +46,8 @@ if {! hcaptcha $p_hcaptcharesponse} {
 # Create user and confirmation
 confirm = `{kryptgo genid}
 
-redis graph write 'MERGE (u:user {username: '''$p_username''',
+redis graph write 'MERGE (u:user {id: '''`{uuidgen}^''',
+                                  username: '''$p_username''',
                                   displayname:  '''$p_username''',
                                   email: '''$p_email''',
                                   password: '''`{kryptgo genhash -p $p_password}^''',

@@ -10,21 +10,25 @@ if {!~ $REQUEST_METHOD POST} { return 0 }
 # Direct profile (not browsing)
 if {! isempty $p_user} {
     # Validate user
-    if {! echo $p_user | grep -s '^'$allowed_user_chars'+$' ||
-        !~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''}) RETURN exists(u)'} true} {
+    p_user = `{echo $p_user | grep '^[a-zA-Z0-9_\-]+$'}
+    (p_user id) = `` \n {redis graph read 'MATCH (u:user)
+                                           WHERE u.username = '''$p_user''' OR
+                                                 u.id = '''$p_user'''
+                                           RETURN u.username, u.id'}
+    if {isempty $p_user} {
         post_redirect /
-    } {
-        # Unlike/unpass
-        redis graph write 'MATCH (a:user {username: '''$logged_user'''})
-                                 -[l:LIKED]->
-                                 (b:user {username: '''$p_user'''})
-                           DELETE l'
-        redis graph write 'MATCH (a:user {username: '''$logged_user'''})
-                                 -[p:PASSED]->
-                                 (b:user {username: '''$p_user'''})
-                           DELETE p'
-        post_redirect /$p_user
     }
+
+    # Unlike/unpass
+    redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                             -[l:LIKED]->
+                             (b:user {username: '''$p_user'''})
+                       DELETE l'
+    redis graph write 'MATCH (a:user {username: '''$logged_user'''})
+                             -[p:PASSED]->
+                             (b:user {username: '''$p_user'''})
+                       DELETE p'
+    post_redirect /$id
 }
 
 # Clean up old undone profiles
