@@ -104,6 +104,7 @@ fn compute_matches a b {
 
         ascore = `{awk 'BEGIN { printf "%f", '$count_aliked' * 10 * '$a_weight_likes' + \
                                              '$count_bpassed' * -100 + \
+                                             '$count_apassed' * -50 + \
                                              '$count_custom_interests' * 5 * '$a_weight_custom_interests' + \
                                              '$count_strong_interests' * 5 * '$a_weight_default_interests' + \
                                              '$count_default_interests' * 3 * '$a_weight_default_interests' + \
@@ -115,6 +116,7 @@ fn compute_matches a b {
 
         bscore = `{awk 'BEGIN { printf "%f", '$count_bliked' * 10 * '$b_weight_likes' + \
                                              '$count_apassed' * -100 + \
+                                             '$count_bpassed' * -50 + \
                                              '$count_custom_interests' * 5 * '$b_weight_custom_interests' + \
                                              '$count_strong_interests' * 5 * '$b_weight_default_interests' + \
                                              '$count_default_interests' * 3 * '$b_weight_default_interests' + \
