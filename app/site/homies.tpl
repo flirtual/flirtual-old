@@ -7,8 +7,6 @@
 %                               ORDER BY p.lastlogin DESC
 %                               LIMIT 1'}
 
-<div class="notice center">✌&#xFE0F; Homie Mode activated ✌&#xFE0F;</div>
-
 % if {! isempty $profile} {
 %     template tpl/profile.tpl $profile
 % } {

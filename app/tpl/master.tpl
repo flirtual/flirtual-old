@@ -22,11 +22,20 @@ if {logged_in} {
 %       if {logged_in} {
             <link rel="stylesheet" href="/dist/converse.min.css" media="screen" onload="this.media='all'; this.onload=null;">
 %       }
+%       if {~ $req_path /homies} {
+            <style>
+                :root {
+                    --gradient-l: #82bf72;
+                    --gradient-r: #4d8888;
+                    --bg: #e9f7ef;
+                }
+            </style>
+%       }
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=0">
-        <link rel="manifest" href="/site.webmanifest?v=1">
+        <link rel="manifest" href="/site.webmanifest?v=2">
         <link rel="mask-icon" href="/safari-pinned-tab.svg?v=0" color="#e9658b">
         <link rel="shortcut icon" href="/favicon.ico?v=0">
 
@@ -80,6 +89,7 @@ if {logged_in} {
                 <span>☰</span>
                 <ul>
                     <li><a href="/">Browse</a></li>
+                    <li><a href="/homies">Homies</a></li>
                     <li><a href="/matches">Matches</a></li>
                     <li><a href="/%($logged_user%)">Profile</a></li>
                     <li><a href="/settings">Settings</a></li>
