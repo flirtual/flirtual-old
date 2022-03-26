@@ -15,10 +15,12 @@ if {isempty $p_details} {
     p_details = 'None'
 }
 
-(username avatar) = `` \n {redis graph read 'MATCH (u:user {id: '''$p_id'''})
-                                                   -[:AVATAR]->
-                                                   (a:avatar {order: 0})
-                                             RETURN u.username, a.url' | sed 's/\/.*//'}
+username = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})
+                               RETURN u.username'}
+avatar = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})
+                                   -[:AVATAR]->
+                                   (a:avatar {order: 0})
+                             RETURN a.url' | sed 's/\/.*//'}
 if {isempty $avatar} {
     avatar = 'e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'
 }
