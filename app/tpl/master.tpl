@@ -88,12 +88,12 @@ if {logged_in} {
                 <a onclick="toggle_nav()"></a>
                 <span>☰</span>
                 <ul>
-                    <li><a href="/">Browse</a></li>
-                    <li><a href="/homies">Homies</a></li>
-                    <li><a href="/matches">Matches</a></li>
-                    <li><a href="/%($logged_user%)">Profile</a></li>
-                    <li><a href="/settings">Settings</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/" aria-label="Find new dates" role="tooltip" data-microtip-position="right">Browse</a></li>
+                    <li><a href="/homies" aria-label="Find new homies" role="tooltip" data-microtip-position="right">Homies</a></li>
+                    <li><a href="/matches" aria-label="Message your matches" role="tooltip" data-microtip-position="right">Matches</a></li>
+                    <li><a href="/%($logged_user%)" aria-label="View your profile" role="tooltip" data-microtip-position="right">Profile</a></li>
+                    <li><a href="/settings" aria-label="Update settings & profile" role="tooltip" data-microtip-position="right">Settings</a></li>
+                    <li><a href="/logout" aria-label="Bye!" role="tooltip" data-microtip-position="right">Logout</a></li>
                 </ul>
             </nav>
 %       }
