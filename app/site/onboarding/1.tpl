@@ -30,7 +30,7 @@ for (var = women men other serious monopoly agemin agemax) {
 <link rel="stylesheet" href="/css/quill.css">
 
 <div class="box" style="margin-top: 0">
-    <h1>Matchmaking</h1>
+    <h1>Matching</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label>I want to meet...<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label><br />

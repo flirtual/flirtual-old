@@ -21,10 +21,10 @@
 
 <span id="edit"></span>
 <div class="box">
-    <h1>Edit profile</h1><br />
+    <h1>Profile</h1><br />
     <a href="/onboarding/1" class="btn btn-normal">Matchmaking</a>
     <a href="/onboarding/2" class="btn btn-normal">Basic info</a>
-    <a href="/onboarding/3" class="btn btn-normal">Profile</a>
+    <a href="/onboarding/3" class="btn btn-normal">Bio & pics</a>
     <a href="/onboarding/4" class="btn btn-normal">Personality</a>
     <a href="/nsfw" class="btn btn-normal">NSFW</a>
     <a href="/%($logged_user%)" class="btn btn-gradient">View profile</a>
