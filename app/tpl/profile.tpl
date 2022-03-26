@@ -250,15 +250,17 @@ fn isvisible field {
 %               # Last online
 %               if {! isempty $lastlogin} {
 %                   since_lastlogin = `{- $dateun $lastlogin}
-                    <span class="lastonline">Active
-%                       if {lt $since_lastlogin 172800} {
-                            today
-%                       } {lt $since_lastlogin 691200} {
-                            this week
-%                       } {lt $since_lastlogin 2764800} {
-                            this month
-%                       }
-                    </span>
+%                   if {lt $since_lastlogin 2764800} {
+                        <span class="lastonline">Active
+%                           if {lt $since_lastlogin 172800} {
+                                today
+%                           } {lt $since_lastlogin 691200} {
+                                this week
+%                           } {
+                                this month
+%                           }
+                        </span>
+%                   }
 %               }
             </div>
         </div>
