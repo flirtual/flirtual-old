@@ -170,8 +170,13 @@ fn isvisible field {
 
 %   # Contact
 %   if {~ $ismatch true} {
-        <p class="center">It's a match!</p>
-        <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn btn-gradient" style="margin-left: 50%; transform: translateX(-50%)">Message</a><br />
+        <div class="center">
+            <p style="margin-top: -100px">It's a match!</p>
+            <a href="#converse/chat?jid=%($profile%)@%($XMPP_HOST%)" class="btn btn-gradient">Message</a>
+%           if {~ $q_return /} {
+                <a href="/" class="btn">Keep browsing</a>
+%           }
+        </div>
 %   }
 %   if {isvisible socials && {! isempty $vrchat || ! isempty $discord}} {
         <div class="box contact">

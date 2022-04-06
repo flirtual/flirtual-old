@@ -56,7 +56,7 @@ if {~ `{redis graph read 'MATCH (a:user {username: '''$p_user'''})
     if {~ $p_return /matches } {
         post_redirect /matches
     } {
-        post_redirect /$id
+        post_redirect /$id'?return=/'
     }
 }
 
