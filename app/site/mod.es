@@ -1,7 +1,7 @@
 require_login
 
 if {!~ $REQUEST_METHOD POST ||
-    !~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.admin'} true} {
+    !~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.mod'} true} {
     return 0
 }
 
@@ -19,7 +19,7 @@ if {~ $p_action ban} {
 } {~ $p_action unban} {
     redis graph write 'MATCH (u:user {username: '''$p_user'''})
                        SET u.banned = NULL'
-} {~ $p_action verify} {
+} {~ $p_action verify && ~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.admin'} true} {
     if {~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
                               RETURN exists(u.verified)'} false} {
         redis graph write 'MATCH (u:user {username: '''$p_user'''})
