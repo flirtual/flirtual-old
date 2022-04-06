@@ -1,5 +1,8 @@
 % profile = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}), (p:user)
 %                               WHERE u <> p AND
+%                                     (NOT exists(p.onboarding) OR
+%                                      exists(p.vrlfp)) AND
+%                                     NOT exists(p.banned) AND
 %                                     NOT (u)-[:LIKED]->(p) AND
 %                                     NOT (u)-[:PASSED]->(p) AND
 %                                     NOT (u)-[:HPASSED]->(p)
