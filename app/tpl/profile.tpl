@@ -211,6 +211,15 @@ fn isvisible field {
                                 <img data-blink-ops="scale-crop: 1920x1920; scale-crop-position: smart_faces_points"
                                      data-blink-uuid="%($avatar%)" />
                             </div>
+
+%                           if {~ $lumod true && !~ $avatar 'e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'} {
+                                <form action="/mod" method="POST" accept-charset="utf-8">
+                                    <input type="hidden" name="action" value="rmpfp">
+                                    <input type="hidden" name="user" value="%($profile%)">
+                                    <input type="hidden" name="avatar" value="%($avatar%)">
+                                    <button type="submit" class="rmpfp" aria-label="Ban image" role="tooltip" data-microtip-position="left">🗑️</button>
+                                </form>
+%                           }
                         </div>
 %                   }
                 </div>
