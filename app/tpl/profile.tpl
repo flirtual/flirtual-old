@@ -66,9 +66,9 @@ fn isvisible field {
     </div>
 % } {
 %   # Like/matched info as applicable
-    <div class="buttons_top">
-%       if {!~ $profile $logged_user && !~ $ismatch true} {
-%           if {~ $luliked true && !~ $req_path /} {
+%   if {!~ $profile $logged_user && !~ $ismatch true} {
+%       if {~ $luliked true && !~ $req_path /} {
+            <div class="match_info">
                 <div class="notice">You liked %($displayname%).</div>
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
@@ -79,7 +79,9 @@ fn isvisible field {
                         </button>
                     </form>
 %               }
-%           } {~ $passed true && !~ $req_path /} {
+            </div>
+%       } {~ $passed true && !~ $req_path /} {
+            <div class="match_info">
                 <div class="notice">You passed on %($displayname%).</div>
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
@@ -90,7 +92,9 @@ fn isvisible field {
                         </button>
                     </form>
 %               }
-%           } {
+            </div>
+%       } {
+            <div class="buttons_top">
 %               if {!~ $req_path /homies} {
 %                   if {~ $req_path / && ~ $premium true} {
                         <form action="/undo" method="POST" accept-charset="utf-8">
@@ -110,7 +114,10 @@ fn isvisible field {
 %                       }
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="like">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/like.svg" /> Like</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">
+                            <img src="/img/like.svg" />
+                            <span>Like</span>
+                        </button>
                     </form>
                     <form action="/like" method="POST" accept-charset="utf-8">
 %                       if {~ $q_return /likes} {
@@ -122,7 +129,10 @@ fn isvisible field {
 %                       }
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/homie.svg" /> Homie</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">
+                            <img src="/img/homie.svg" />
+                            <span>Homie</span>
+                        </button>
                     </form>
                     <form action="/pass" method="POST" accept-charset="utf-8">
 %                       if {~ $q_return /likes} {
@@ -151,7 +161,10 @@ fn isvisible field {
                         <input type="hidden" name="return" value="%($req_path%)">
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/homie.svg" /> Homie</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">
+                            <img src="/img/homie.svg" />
+                            <span>Homie</span>
+                        </button>
                     </form>
                     <form action="/hpass" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
@@ -162,11 +175,11 @@ fn isvisible field {
                         </button>
                     </form>
 %               }
-%           }
-%       } {~ $profile $logged_user} {
-            <a href="/settings#edit" class="btn">Edit profile</a>
+            </div>
 %       }
-    </div>
+%   } {~ $profile $logged_user} {
+        <div class="center" style="margin-top: -100px"><a href="/settings#edit" class="btn center">Edit profile</a></div>
+%   }
 
 %   # Contact
 %   if {~ $ismatch true} {
