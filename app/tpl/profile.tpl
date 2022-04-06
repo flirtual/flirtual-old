@@ -507,6 +507,10 @@ fn isvisible field {
                     <form action="/mod" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="action" value="ban">
                         <input type="hidden" name="user" value="%($profile%)">
+                        <div style="display: inline-block; margin-right: 1em; transform: translateY(-25px)">
+                            <label for="reason">Reason:</label>
+                            <input type="text" name="reason" id="reason" style="width: auto">
+                        </div>
                         <button type="submit" class="btn btn-normal">Ban user</button>
                     </form>
 %               } {
