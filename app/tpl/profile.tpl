@@ -8,8 +8,8 @@ if {! isempty $targ} {
 (id profile serious luserious monopoly lumonopoly displayname dob country country_id ismatch \
  passed uliked luliked lastlogin new lunew open luopen conscientious luconscientious agreeable \
  luagreeable bio vrchat discord domsub ludomsub onboarding vrlfp privacy_personality \
- privacy_socials privacy_sexuality privacy_kinks nsfw luadmin admin mod verified earlysupporter \
- banned email) = \
+ privacy_socials privacy_sexuality privacy_kinks nsfw luadmin admin lumod mod verified \
+ earlysupporter banned email) = \
     `` \n {redis graph read 'MATCH (u:user)
                              WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^''' OR
                                    u.id = '''$profile'''
@@ -29,8 +29,8 @@ if {! isempty $targ} {
                                     lu.domsub, exists(u.onboarding), exists(u.vrlfp),
                                     u.privacy_personality, u.privacy_socials, u.privacy_sexuality,
                                     u.privacy_kinks, lu.nsfw, exists(lu.admin), exists(u.admin),
-                                    exists(u.mod), exists(u.verified), exists(u.earlysupporter),
-                                    exists(u.banned), u.email'}
+                                    exists(lu.mod), exists(u.mod), exists(u.verified),
+                                    exists(u.earlysupporter), exists(u.banned), u.email'}
 
 # User-provided profile data needs formatting + sanitization
 for (var = displayname vrchat discord) {
@@ -73,7 +73,10 @@ fn isvisible field {
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">Undo</button>
+                        <button type="submit" class="btn btn-normal">
+                            <img src="/img/undo.svg" />
+                            <span class="desktop">Undo</span>
+                        </button>
                     </form>
 %               }
 %           } {~ $passed true && !~ $req_path /} {
@@ -81,14 +84,20 @@ fn isvisible field {
 %               if {~ $premium true} {
                     <form action="/undo" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">Undo</button>
+                        <button type="submit" class="btn btn-normal">
+                            <img src="/img/undo.svg" />
+                            <span class="desktop">Undo</span>
+                        </button>
                     </form>
 %               }
 %           } {
 %               if {!~ $req_path /homies} {
 %                   if {~ $req_path / && ~ $premium true} {
                         <form action="/undo" method="POST" accept-charset="utf-8">
-                            <button type="submit" class="btn btn-normal">Undo</button>
+                            <button type="submit" class="btn btn-normal">
+                                <img src="/img/undo.svg" />
+                                <span class="desktop">Undo</span>
+                            </button>
                         </form>
 %                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
@@ -101,7 +110,7 @@ fn isvisible field {
 %                       }
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="like">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">❤️ Like</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/like.svg" /> Like</button>
                     </form>
                     <form action="/like" method="POST" accept-charset="utf-8">
 %                       if {~ $q_return /likes} {
@@ -113,7 +122,7 @@ fn isvisible field {
 %                       }
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/homie.svg" /> Homie</button>
                     </form>
                     <form action="/pass" method="POST" accept-charset="utf-8">
 %                       if {~ $q_return /likes} {
@@ -124,24 +133,33 @@ fn isvisible field {
                             <input type="hidden" name="return" value="%($req_path%)">
 %                       }
                         <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">Pass</button>
+                        <button type="submit" class="btn btn-normal">
+                            <img src="/img/pass.svg" />
+                            <span class="desktop">Pass</span>
+                        </button>
                     </form>
 %               } {
 %                   if {~ $premium true} {
                         <form action="/undo" method="POST" accept-charset="utf-8">
-                            <button type="submit" class="btn btn-normal">Undo</button>
+                            <button type="submit" class="btn btn-normal">
+                                <img src="/img/undo.svg" />
+                                <span class="desktop">Undo</span>
+                            </button>
                         </form>
 %                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
-                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">✌&#xFE0F; Homie</button>
+                        <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px"><img src="/img/homie.svg" /> Homie</button>
                     </form>
                     <form action="/hpass" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="return" value="%($req_path%)">
                         <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">Pass</button>
+                        <button type="submit" class="btn btn-normal">
+                            <img src="/img/pass.svg" />
+                            <span class="desktop">Pass</span>
+                        </button>
                     </form>
 %               }
 %           }
@@ -480,12 +498,7 @@ fn isvisible field {
 
 %           # Report/ban button
 %           if {!~ $profile $logged_user} {
-%               if {~ $luadmin true} {
-                    <form action="/mod" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="action" value="verify">
-                        <input type="hidden" name="user" value="%($profile%)">
-                        <button type="submit" class="btn btn-normal">Verify user</button>
-                    </form>
+%               if {~ $lumod true} {
                     <form action="/mod" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="action" value="ban">
                         <input type="hidden" name="user" value="%($profile%)">
@@ -495,6 +508,13 @@ fn isvisible field {
                     <form action="/report" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">Report user</button>
+                    </form>
+%               }
+%               if {~ $luadmin true} {
+                    <form action="/mod" method="POST" accept-charset="utf-8">
+                        <input type="hidden" name="action" value="verify">
+                        <input type="hidden" name="user" value="%($profile%)">
+                        <button type="submit" class="btn btn-normal">Verify user</button>
                     </form>
 %               }
 %           }
