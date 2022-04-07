@@ -17,7 +17,7 @@ fn login_user username password {
             `` \n {redis graph read 'MATCH (u:user)
                                      WHERE toLower(u.username) = '''$username''' OR
                                          toLower(u.email) = '''$username'''
-                                     RETURN u.username, u.password, u.banned'}
+                                     RETURN u.username, u.password, exists(u.banned)'}
 
         # Goodbye
         if {isempty $username ||

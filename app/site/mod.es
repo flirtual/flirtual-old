@@ -16,7 +16,7 @@ if {~ $p_action ban} {
         throw error 'Missing reason'
     }
     redis graph write 'MATCH (u:user {username: '''$p_user'''})
-                       SET u.banned = true'
+                       SET u.banned = '$dateun
     redis graph write 'MATCH (a:user)-[m:DAILYMATCH]->(b:user {username: '''$p_user'''})
                        DELETE m'
 
