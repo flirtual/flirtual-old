@@ -72,6 +72,7 @@ if {~ $local_path */} {
 setup_handlers
 
 echo 'Content-Type: '^$http_content_type
+echo 'Content-Security-Policy: worker-src https://'$domain'/;'
 echo # End of HTTP headers
 
 # Logging
