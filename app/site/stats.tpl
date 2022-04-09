@@ -29,6 +29,56 @@
                        set timefmt ''%Y-%m-%d'';
                        plot "/dev/stdin" using 2:1 with lines'
 
+    cat /var/log/flirtual/dau |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "DAU";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 1:2 with lines'
+
+    cat /var/log/flirtual/wau |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "WAU";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 1:2 with lines'
+
+    cat /var/log/flirtual/mau |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "MAU";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 1:2 with lines'
+
+    cat /var/log/flirtual/yau |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "YAU";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 1:2 with lines'
+
+    cat /var/log/flirtual/registrations |
+        gnuplot -p -e 'set term svg enhanced mouse;
+                       set xlabel "Date";
+                       set ylabel "Registrations";
+                       set key off;
+                       set autoscale fix;
+                       set xdata time;
+                       set timefmt ''%Y-%m-%d'';
+                       plot "/dev/stdin" using 1:2 with lines'
+
     users = `{redis graph read 'MATCH (u:user)
                                 RETURN count(u)'}
 
