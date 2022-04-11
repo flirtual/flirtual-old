@@ -24,7 +24,7 @@ if {logged_in} {
 %       if {logged_in} {
             <link rel="stylesheet" href="/dist/converse.min.css" media="screen" onload="this.media='all'; this.onload=null;">
 %       }
-%       if {~ $req_path /homies} {
+%       if {~ $req_path /homies || {~ $req_path /undo && ~ $p_return /homies}} {
             <style>
                 :root {
                     --gradient-l: #82bf72;
