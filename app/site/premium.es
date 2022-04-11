@@ -2,8 +2,6 @@ require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
-if {!~ $beta true} { post_redirect / }
-
 (customer vrlfp lifetime) = `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
                                                      RETURN u.customer, exists(u.vrlfp),
                                                             exists(u.lifetime_premium)'}

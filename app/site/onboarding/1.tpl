@@ -75,7 +75,7 @@ for (var = women men other serious monopoly agemin agemax) {
             <label for="both">Open to both</label>
         </div>
 
-%       if {isempty $onboarding && ~ $beta true} {
+%       if {isempty $onboarding} {
             <br /><br /><h2>Matchmaking weights</h2>
             <p>
                 Flirtual Supporters can personalize their matchmaking algorithm.
