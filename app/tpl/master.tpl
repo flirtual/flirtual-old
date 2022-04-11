@@ -1,9 +1,11 @@
 %{
 if {logged_in} {
-    (onboarded volume konami optout premium supporter) = \
+    (onboarded volume konami optout premium supporter avatar) = \
         `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
+                                 OPTIONAL MATCH (u)-[:AVATAR]->(a:avatar)
                                  RETURN NOT exists(u.onboarding), u.volume, u.konami, u.optout,
-                                        exists(u.premium), exists(u.supporter)'}
+                                        exists(u.premium), exists(u.supporter),
+                                        a.url ORDER BY a.order LIMIT 1'}
 }
 %}
 
@@ -93,9 +95,17 @@ if {logged_in} {
                     <li><a href="/" aria-label="Find new dates" role="tooltip" data-microtip-position="right">Browse</a></li>
                     <li><a href="/homies" aria-label="Find new homies" role="tooltip" data-microtip-position="right">Homies</a></li>
                     <li><a href="/matches" aria-label="Message your matches" role="tooltip" data-microtip-position="right">Matches</a></li>
-                    <li><a href="/%($logged_user%)" aria-label="View your profile" role="tooltip" data-microtip-position="right">Profile</a></li>
-                    <li><a href="/settings" aria-label="Update settings & profile" role="tooltip" data-microtip-position="right">Settings</a></li>
-                    <li><a href="/logout" aria-label="Bye!" role="tooltip" data-microtip-position="right">Logout</a></li>
+                    <li><a href="/premium" aria-label="Get Premium features" role="tooltip" data-microtip-position="right">Premium</a></li>
+                    <li>
+                        <div>
+                            <a href="/me">Profile</a>
+                            <a href="/settings">Settings</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                        <img data-blink-ops="scale-crop: 64x64; scale-crop-position: smart_faces_points"
+                             data-blink-uuid="%($avatar%)"
+                             onclick="toggle_personal()" />
+                    </li>
                 </ul>
             </nav>
 %       }
