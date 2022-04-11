@@ -42,7 +42,7 @@ if {~ $lifetime true} {
             <li><a href="/likes">See who likes you</a></li>
             <li><a href="/">Browse unlimited profiles</a></li>
 %           if {~ $supporter true} {
-                <li><a href="/onboarding/1">Customizable matchmaking preferences</a></li>
+                <li><a href="/onboarding/1">Custom matchmaking weights</a></li>
 %           }
         </ul>
 %   }
@@ -113,7 +113,7 @@ if {~ $lifetime true} {
     <h2>Pay what you want</h2>
     <ul>
         <li>All Premium features</li>
-        <li>Customizable matchmaking preferences</li>
+        <li>Custom matchmaking weights</li>
         <li>Experimental features as they are developed</li>
     </ul>
 %   if {~ $supporter true} {
