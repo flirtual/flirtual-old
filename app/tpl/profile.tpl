@@ -70,33 +70,29 @@ fn isvisible field {
 %       if {~ $luliked true && !~ $req_path /} {
             <div class="match_info">
                 <div class="notice">You liked %($displayname%).</div>
-%               if {~ $premium true} {
-                    <form action="/undo" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">
-                            <img src="/img/undo.svg" />
-                            <span class="desktop">Undo</span>
-                        </button>
-                    </form>
-%               }
+                <form action="/undo" method="POST" accept-charset="utf-8">
+                    <input type="hidden" name="user" value="%($id%)">
+                    <button type="submit" class="btn btn-normal">
+                        <img src="/img/undo.svg" />
+                        <span class="desktop">Undo</span>
+                    </button>
+                </form>
             </div>
 %       } {~ $passed true && !~ $req_path /} {
             <div class="match_info">
                 <div class="notice">You passed on %($displayname%).</div>
-%               if {~ $premium true} {
-                    <form action="/undo" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="user" value="%($id%)">
-                        <button type="submit" class="btn btn-normal">
-                            <img src="/img/undo.svg" />
-                            <span class="desktop">Undo</span>
-                        </button>
-                    </form>
-%               }
+                <form action="/undo" method="POST" accept-charset="utf-8">
+                    <input type="hidden" name="user" value="%($id%)">
+                    <button type="submit" class="btn btn-normal">
+                        <img src="/img/undo.svg" />
+                        <span class="desktop">Undo</span>
+                    </button>
+                </form>
             </div>
 %       } {
             <div class="buttons_top">
-%               if {!~ $req_path /homies} {
-%                   if {~ $req_path / && ~ $premium true} {
+%               if {!~ $req_path /homies && !~ $p_return /homies} {
+%                   if {~ $req_path / || ~ $req_path /undo} {
                         <form action="/undo" method="POST" accept-charset="utf-8">
                             <button type="submit" class="btn btn-normal">
                                 <img src="/img/undo.svg" />
@@ -149,16 +145,15 @@ fn isvisible field {
                         </button>
                     </form>
 %               } {
-%                   if {~ $premium true} {
                         <form action="/undo" method="POST" accept-charset="utf-8">
+                            <input type="hidden" name="return" value="/homies">
                             <button type="submit" class="btn btn-normal">
                                 <img src="/img/undo.svg" />
                                 <span class="desktop">Undo</span>
                             </button>
                         </form>
-%                   }
                     <form action="/like" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="return" value="/homies">
                         <input type="hidden" name="user" value="%($id%)">
                         <input type="hidden" name="type" value="homie">
                         <button type="submit" class="btn btn-gradient btn-normal" style="padding-left: 13px">
@@ -167,7 +162,7 @@ fn isvisible field {
                         </button>
                     </form>
                     <form action="/hpass" method="POST" accept-charset="utf-8">
-                        <input type="hidden" name="return" value="%($req_path%)">
+                        <input type="hidden" name="return" value="/homies">
                         <input type="hidden" name="user" value="%($id%)">
                         <button type="submit" class="btn btn-normal">
                             <img src="/img/pass.svg" />
