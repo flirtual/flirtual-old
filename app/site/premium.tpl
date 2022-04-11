@@ -147,6 +147,19 @@ if {~ $lifetime true} {
 %   }
 </div>
 
+% if {~ $supporter true} {
+      <div class="box">
+          <h1>Badge</h1>
+          <h2>Supporter profile badge 🌟</h2>
+          <p>Display Supporter badge on your profile?</p>
+          <form action="" method="POST" accept-charset="utf-8">
+              <input type="hidden" name="action" value="badge">
+              <button type="submit" class="btn btn-back" name="nobadge" value="true">Hide</button>
+              <button type="submit" class="btn btn-gradient" name="badge" value="true">Show</button>
+          </form>
+      </div>
+% }
+
 <script>
     if ((window.matchMedia("(display-mode: standalone)").matches) ||
         (window.navigator.standalone) ||

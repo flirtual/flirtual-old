@@ -9,7 +9,7 @@ if {! isempty $targ} {
  passed uliked luliked lastlogin new lunew open luopen conscientious luconscientious agreeable \
  luagreeable bio vrchat discord domsub ludomsub onboarding vrlfp privacy_personality \
  privacy_socials privacy_sexuality privacy_kinks nsfw luadmin admin lumod mod verified \
- earlysupporter banned email) = \
+ earlysupporter supporter_badge banned email) = \
     `` \n {redis graph read 'MATCH (u:user)
                              WHERE toLower(u.username) = '''`{echo $profile | tr 'A-Z' 'a-z'}^''' OR
                                    u.id = '''$profile'''
@@ -30,7 +30,8 @@ if {! isempty $targ} {
                                     u.privacy_personality, u.privacy_socials, u.privacy_sexuality,
                                     u.privacy_kinks, lu.nsfw, exists(lu.admin), exists(u.admin),
                                     exists(lu.mod), exists(u.mod), exists(u.verified),
-                                    exists(u.earlysupporter), exists(u.banned), u.email'}
+                                    exists(u.earlysupporter), exists(u.supporter_badge),
+                                    exists(u.banned), u.email'}
 
 # User-provided profile data needs formatting + sanitization
 for (var = displayname vrchat discord) {
@@ -283,6 +284,9 @@ fn isvisible field {
 %                       }
 %                       if {~ $earlysupporter true} {
                             <span aria-label="Early Supporter" role="tooltip" data-microtip-position="top">💖</span>
+%                       }
+%                       if {~ $supporter_badge true} {
+                            <span aria-label="Supporter" role="tooltip" data-microtip-position="top">🌟</span>
 %                       }
                     </span>
 %               }

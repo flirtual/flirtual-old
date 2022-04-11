@@ -76,4 +76,13 @@ if {~ $p_action manage} {
                                          'automatic_tax[enabled]=true' \
                                          'customer_update[address]=auto' | jq -r '.url'}
     post_redirect $session
+} {~ $p_action badge} {
+    if {~ $p_badge true} {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.supporter_badge = true'
+    } {
+        redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                           SET u.supporter_badge = NULL'
+    }
+    post_redirect /$logged_user
 }
