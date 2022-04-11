@@ -10,6 +10,7 @@ LANG = 'C.UTF-8'
 . ./email.es
 . ./hcaptcha.es
 . ./ejabberd.es
+. ./stripe.es
 . ./matchmaking.es
 cd ..
 

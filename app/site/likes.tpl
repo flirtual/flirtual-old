@@ -2,12 +2,6 @@
     <h1>Likes</h1>
     <a href="/matches" class="btn btn-gradient">Matches</a>
 
-    <style>
-        .match:nth-child(3) .right {
-            transform: translate(-20px, 22px);
-        }
-    </style>
-
 %   likes = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 %                                     <-[l:LIKED]-(p:user)
 %                               WHERE NOT (u)-[:LIKED]->(p) AND

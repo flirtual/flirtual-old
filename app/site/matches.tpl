@@ -4,13 +4,17 @@
 
 <div class="box">
     <h1>Matches</h1>
-    <!--
 %   if {~ $premium true} {
         <a href="/likes" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
 %   } {
         <a href="/premium" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
 %   }
-    -->
+
+    <style>
+        .match:nth-child(4) .right {
+            transform: translate(-185px, 22px);
+        }
+    </style>
 
 %   matches = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 %                                       -[m:MATCHED]-
