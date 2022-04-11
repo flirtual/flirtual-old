@@ -64,5 +64,7 @@ if {! isempty $onboarding} {
                        SET u.onboarding = 4'
     post_redirect /onboarding/4
 } {
+    redis graph write 'MATCH (u:user {username: '''$logged_user'''})
+                       SET u.update_embed = true'
     post_redirect '/settings#edit'
 }

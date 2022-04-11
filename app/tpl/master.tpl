@@ -50,6 +50,47 @@ if {logged_in} {
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=600, user-scalable=no" />
 
+%       # Open Graph
+%       if {isempty $q_redirect} {
+%           og_url = https://$domain$req_path
+%       } {
+%           og_url = https://$domain$q_redirect
+%       }
+        <meta property="og:url" content="%($og_url%)" />
+        <meta name="twitter:site" content="@getflirtual" />
+%       (exists displayname bio id) = \
+%           `` \n {redis graph read 'MATCH (u:user {username: '''`{echo $og_url | sed 's/^https:\/\/'$domain'\///'}^'''})
+%                                    OPTIONAL MATCH (u)-[:AVATAR]->(a:avatar)
+%                                    WITH DISTINCT u, a ORDER BY a.order LIMIT 1
+%                                    RETURN (exists(u) AND
+%                                            (NOT exists(u.onboarding) OR
+%                                             exists(u.vrlfp)) AND
+%                                            NOT exists(u.banned)),
+%                                           u.displayname, u.bio, u.id'}
+%       if {~ $exists true} {
+            <meta property="og:type" content="profile" />
+            <meta property="og:title" content="%($displayname%)" />
+            <meta property="profile:username" content="%($displayname%)" />
+            <meta property="og:site_name" content="Flirtual" />
+%           bio = `{/bin/echo -en `{echo $bio | sed 's/\\"/"/g'} | sed 's//''/g' |
+%                   html2text -utf8 -style pretty | sed 's/"/\&quot;/g'}
+%           if {! isempty $bio} {
+                <meta property="og:description" content="%($bio%)" />
+%           }
+            <meta property="og:image" content="https://storage.googleapis.com/flirtual-og/%($id%).png" />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta name="twitter:card" content="summary_large_image" />
+%       } {
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="Flirtual" />
+            <meta property="og:description" content="The first and largest VR dating app. Join thousands for dates in VR apps like VRChat." />
+            <meta property="og:image" content="https://flirtu.al/android-chrome-512x512.png" />
+            <meta property="og:image:width" content="512" />
+            <meta property="og:image:width" content="512" />
+            <meta name="twitter:card" content="summary" />
+%       }
+
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
             <script type="text/javascript" src="/js/tagify.js"></script>
 %       }

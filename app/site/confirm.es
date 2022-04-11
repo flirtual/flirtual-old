@@ -37,7 +37,7 @@ onboarding = `{redis graph read 'MATCH (u:user {username: '''$user'''})
 if {isempty $onboarding || ~ $onboarding 5} {
     redis graph write 'MATCH (u:user {username: '''$user'''})
                        SET u.recompute_matches = true, u.initial_matches = true,
-                           u.onboarding = NULL'
+                           u.update_embed = true, u.onboarding = NULL'
 }
 
 confirm_success = true

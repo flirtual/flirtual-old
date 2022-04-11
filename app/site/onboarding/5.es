@@ -7,7 +7,7 @@ if {!~ $onboarding 5} {
 if {~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.confirmed'} true} {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.recompute_matches = true, u.initial_matches = true,
-                           u.onboarding = NULL'
+                           u.update_embed = true, u.onboarding = NULL'
     post_redirect /
 }
 

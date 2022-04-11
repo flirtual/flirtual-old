@@ -104,6 +104,6 @@ if {! isempty $onboarding} {
     post_redirect /onboarding/5
 } {
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                       SET u.recompute_matches = true'
+                       SET u.recompute_matches = true, u.update_embed = true'
     post_redirect '/settings#edit'
 }
