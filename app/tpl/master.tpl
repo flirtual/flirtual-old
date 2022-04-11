@@ -179,6 +179,7 @@ if {logged_in} {
             </audio>
             <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8" defer></script>
             <script type="text/javascript" src="/js/converseconfig.js?v=2" charset="utf-8" defer></script>
+            <script>
                 document.getElementById("message_audio").volume = %($volume%);
             </script>
 
