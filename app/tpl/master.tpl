@@ -72,6 +72,8 @@ if {logged_in} {
                 });
             })
         </script>
+
+        <script src="/js/main.js?v=%($dateun%)"></script>
     </head>
 
     <body>
@@ -139,8 +141,6 @@ if {logged_in} {
             </div>
         </footer>
 
-        <script src="/js/main.js?v=%($dateun%)" defer></script>
-
         <script>
             if ("serviceWorker" in navigator) {
                 window.addEventListener("load", function() {
@@ -167,59 +167,8 @@ if {logged_in} {
                 <source src="/audio/message.mp3" type="audio/mpeg">
                 <source src="/audio/message.ogg" type="audio/ogg">
             </audio>
-            <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8"></script>
-            <script type="text/javascript">
-                converse.initialize({
-                    discover_connection_methods: false,
-                    websocket_url: 'wss://%($domain%)/ws/',
-                    auto_login: true,
-                    credentials_url: '/api/auth/xmpp_credentials',
-                    loglevel: 'fatal',
-                    default_domain: '%($XMPP_HOST%)',
-                    enable_smacks: true,
-                    allow_adhoc_commands: false,
-                    allow_bookmarks: false,
-                    allow_contact_removal: false,
-                    allow_contact_requests: false,
-                    allow_logout: false,
-                    allow_non_roster_messaging: true,
-                    allow_registration: false,
-                    allow_user_trust_override: false,
-                    autocomplete_add_contact: false,
-                    auto_reconnect: true,
-                    auto_register_muc_nickname: true,
-                    auto_join_on_invite: true,
-                    clear_messages_on_reconnection: false,
-                    locked_domain: '%($XMPP_HOST%)',
-                    locked_muc_domain: 'hidden',
-                    muc_domain: '%($XMPP_HOST%)',
-                    muc_hats: [],
-                    message_archiving: 'always',
-                    message_limit: 2000,
-                    muc_show_info_messages: [],
-                    notification_icon: '/img/notification.png',
-                    notify_nicknames_without_references: true,
-                    play_sounds: true,
-                    roster_groups: false,
-                    show_client_info: false,
-                    show_controlbox_by_default: false,
-                    show_retraction_warning: false,
-                    time_format: 'hh:mm a',
-                    use_system_emojis: true,
-                    emoji_categories:
-                        {
-                            "smileys": ":heart_eyes:",
-                            "people": ":thumbsup:",
-                            "activity": ":saxophone:",
-                            "travel": ":helicopter:",
-                            "objects": ":bulb:",
-                            "nature": ":cat:",
-                            "food": ":pizza:",
-                            "symbols": ":yellow_heart:",
-                            "flags": ":rainbow_flag:"
-                        }
-                });
-
+            <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8" defer></script>
+            <script type="text/javascript" src="/js/converseconfig.js?v=2" charset="utf-8" defer></script>
                 document.getElementById("message_audio").volume = %($volume%);
             </script>
 
