@@ -271,7 +271,8 @@ fn isvisible field {
 %               }
 
 %               # Badges
-%               if {~ $admin true || ~ $mod true || ~ $verified true || ~ $earlysupporter true} {
+%               if {~ $admin true || ~ $mod true || ~ $verified true || ~ $earlysupporter true ||
+%                   ~ $supporter_badge true} {
                     <span class="tag badges">
 %                       if {~ $admin true} {
                             <span aria-label="Flirtual Staff" role="tooltip" data-microtip-position="top">👑</span>
