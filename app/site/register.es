@@ -65,7 +65,8 @@ redis graph write 'MERGE (u:user {id: '''`{uuidgen}^''',
                                   optout: false,
                                   nsfw: false,
                                   volume: 0.5,
-                                  registered: '''`{date -ui}^'''})
+                                  registered: '''`{date -ui}^''',
+                                  registered_unix: '$dateun'})
                    MERGE (c:confirm {id: '''$confirm''', expiry: '`{+ $dateun 86400}^'})
                    MERGE (u)-[:CONFIRM]->(c)'
 
