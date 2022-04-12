@@ -19,6 +19,7 @@
 %   matches = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 %                                       -[m:MATCHED]-
 %                                       (p:user)
+%                                 WHERE NOT exists(p.banned)
 %                                 RETURN p.username
 %                                 ORDER BY m.date DESC, p.displayname' | uniq}
 %   if {! isempty $matches} {

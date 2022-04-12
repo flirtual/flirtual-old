@@ -5,7 +5,8 @@
 %   likes = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
 %                                     <-[l:LIKED]-(p:user)
 %                               WHERE NOT (u)-[:LIKED]->(p) AND
-%                                     NOT (u)-[:PASSED]->(p)
+%                                     NOT (u)-[:PASSED]->(p) AND
+%                                     NOT exists(p.banned)
 %                               RETURN p.username
 %                               ORDER BY l.date DESC, p.displayname' | uniq}
 %   if {! isempty $likes} {
