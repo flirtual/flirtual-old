@@ -6,7 +6,7 @@
 
 if {isempty $customer} {
     customer = `{stripe customers 'description='$logged_user \
-                                  'email='$email | jq -r '.id'}
+                                  'email='`^{echo $email | urlencode} | jq -r '.id'}
 
     redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        SET u.customer = '''$customer''''
