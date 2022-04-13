@@ -14,6 +14,11 @@
         .match:nth-child(4) .right {
             transform: translate(-185px, 22px);
         }
+        @media only screen and (max-width: 991px) {
+            .match:nth-child(4) .right {
+                transform: translate(-91px, 22px)
+            }
+        }
     </style>
 
 %   matches = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})
