@@ -2,7 +2,7 @@
 %                               WHERE (NOT exists(p.onboarding) OR exists(p.vrlfp)) AND
 %                                     NOT exists(p.banned)
 %                               RETURN p.username
-%                               ORDER BY m.score DESC
+%                               ORDER BY m.score DESC, rand()
 %                               LIMIT 1'}
 % if {! isempty $profile} {
 %     template tpl/profile.tpl $profile
