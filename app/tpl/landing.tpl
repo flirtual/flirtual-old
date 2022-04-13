@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-        <title>Flirtual</title>
+        <title>Flirtual - The First VR Dating App 💘🥽</title>
         <meta name="description" content="Flirtual is the First VR Dating App. Join thousands for dates in Virtual Reality. We support VR dates in VR apps like VRChat. Formerly VRLFP.">
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
@@ -19,6 +19,16 @@
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+        <meta property="og:url" content="https://%($domain%)" />
+        <meta name="twitter:site" content="@getflirtual" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Flirtual" />
+        <meta property="og:description" content="The first and largest VR dating app. Join thousands for dates in VR apps like VRChat." />
+        <meta property="og:image" content="https://flirtu.al/android-chrome-512x512.png" />
+        <meta property="og:image:width" content="512" />
+        <meta property="og:image:width" content="512" />
+        <meta name="twitter:card" content="summary" />
 
         <link rel="stylesheet" href="/css/swiper.css?v=2">
 
