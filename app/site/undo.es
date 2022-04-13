@@ -1,3 +1,9 @@
+if {~ $p_return /homies} {
+    title = 'Homie Mode'
+} {
+    title = 'Browsing'
+}
+
 require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }

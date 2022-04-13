@@ -1,3 +1,5 @@
+title = 'Delete Account'
+
 require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }

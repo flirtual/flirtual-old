@@ -1,3 +1,5 @@
+title = 'Basic Info'
+
 require_login
 if {! isempty $onboarding && !~ $onboarding 2} {
     post_redirect /

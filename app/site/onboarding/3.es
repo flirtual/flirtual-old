@@ -1,3 +1,5 @@
+title = 'Bio & Pics'
+
 require_login
 if {! isempty $onboarding && !~ $onboarding 3} {
     post_redirect /

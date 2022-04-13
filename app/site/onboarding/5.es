@@ -1,3 +1,5 @@
+title = 'Confirm Email'
+
 require_login
 if {!~ $onboarding 5} {
     post_redirect /

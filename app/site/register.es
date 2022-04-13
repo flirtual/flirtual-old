@@ -1,3 +1,5 @@
+title = 'Register'
+
 if {!~ $REQUEST_METHOD POST ||
     ~ $p_from_landingpage true} {
     return 0

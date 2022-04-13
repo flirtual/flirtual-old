@@ -1,3 +1,5 @@
+title = 'Reset Password'
+
 # Missing reset ID -> bye
 if {isempty $q_id} { return 0 }
 

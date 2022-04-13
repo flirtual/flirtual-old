@@ -1,3 +1,5 @@
+title = 'Matchmaking'
+
 require_login
 if {! isempty $onboarding && !~ $onboarding 1} {
     post_redirect /

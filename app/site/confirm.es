@@ -1,3 +1,5 @@
+title = 'Confirm Email'
+
 # Missing confirmation ID -> bye
 if {isempty $q_id} { return 0 }
 

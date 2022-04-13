@@ -1,3 +1,5 @@
+title = 'Personality'
+
 require_login
 if {! isempty $onboarding && !~ $onboarding 4} {
     post_redirect /

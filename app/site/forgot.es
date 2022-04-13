@@ -1,3 +1,5 @@
+title = 'Forgot Password'
+
 if {!~ $REQUEST_METHOD POST} { return 0 }
 
 # Did they give us their email?

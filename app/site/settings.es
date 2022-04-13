@@ -1,3 +1,5 @@
+title = 'Settings'
+
 require_login
 
 if {!~ $REQUEST_METHOD POST} { return 0 }

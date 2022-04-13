@@ -1,3 +1,5 @@
+title = 'Likes'
+
 require_login
 
 if {!~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})

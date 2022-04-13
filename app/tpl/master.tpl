@@ -12,7 +12,14 @@ if {logged_in} {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Flirtual</title>
+%{
+        if {!isempty $title} {
+            title = $title' - Flirtual'
+        } {
+            title = `{basename $req_path}^' - Flirtual'
+        }
+%}
+        <title>%($title%)</title>
         <meta name="description" content="Flirtual is the First VR Dating App. Join thousands for dates in Virtual Reality. We support VR dates in VR apps like VRChat. Formerly VRLFP.">
 
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
@@ -83,7 +90,7 @@ if {logged_in} {
             <meta name="twitter:card" content="summary_large_image" />
 %       } {
             <meta property="og:type" content="website" />
-            <meta property="og:title" content="Flirtual" />
+            <meta property="og:title" content="%($title%)" />
             <meta property="og:description" content="The first and largest VR dating app. Join thousands for dates in VR apps like VRChat." />
             <meta property="og:image" content="https://flirtu.al/android-chrome-512x512.png" />
             <meta property="og:image:width" content="512" />
