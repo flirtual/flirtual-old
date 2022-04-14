@@ -92,7 +92,7 @@ if {~ $p_action ban} {
                     "color": 15295883
                 }]
             }' \
-        $DISCORD_WEBHOOK
+        $DISCORD_WEBHOOK_PICS
 } {~ $p_action verify && ~ `{redis graph read 'MATCH (u:user {username: '''$logged_user'''}) RETURN u.admin'} true} {
     if {~ `{redis graph read 'MATCH (u:user {username: '''$p_user'''})
                               RETURN exists(u.verified)'} false} {
