@@ -22,7 +22,7 @@ for (var = displayname vrchat discord privacy bio) {
 <link rel="stylesheet" href="/css/quill.css">
 
 <div class="box" style="margin-top: 0">
-    <h1>Profile</h1>
+    <h1>Bio & pics</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label for="displayname">Display name</label>

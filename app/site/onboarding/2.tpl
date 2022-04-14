@@ -46,7 +46,7 @@ if {!~ $dob *-*} {
 <script src="/js/intlpolyfill.js"></script>
 
 <div class="box" style="margin-top: 0">
-    <h1>Basic info</h1>
+    <h1>Info & tags</h1>
 
     <form id="form" action="" method="POST" accept-charset="utf-8">
         <label for="dob">Date of birth (only your age will be visible)<span class="required" aria-label="Required" role="tooltip" data-microtip-position="top">*</span></label>

@@ -1,4 +1,4 @@
-title = 'Basic Info'
+title = 'Info & Tags'
 
 require_login
 if {! isempty $onboarding && !~ $onboarding 2} {
