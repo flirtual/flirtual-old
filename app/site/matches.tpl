@@ -5,9 +5,9 @@
 <div class="box">
     <h1>Matches</h1>
 %   if {~ $premium true} {
-        <a href="/likes" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
+        <a href="/likes" class="btn btn-gradient" style="padding-right: 13px">Likes you <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
 %   } {
-        <a href="/premium" class="btn btn-gradient" style="padding-right: 13px">Likes <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
+        <a href="/premium" class="btn btn-gradient" style="padding-right: 13px">Likes you <span aria-label="Premium" role="tooltip" data-microtip-position="top" style="font-family: Nunito, sans-serif">⭐</span></a>
 %   }
 
     <style>
