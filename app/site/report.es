@@ -29,6 +29,10 @@ if {isempty $p_details} {
     p_details = 'None'
 }
 
+if {! in $^p_reason (spam nsfw offensive underage impersonation illegal other)} {
+    p_reason = 'other'
+}
+
 username = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})
                                RETURN u.username'}
 avatar = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})
@@ -38,9 +42,6 @@ avatar = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})
 if {isempty $avatar} {
     avatar = 'e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'
 }
-
-# Email
-sed 's/\$id/'$p_id'/; s/\$details/'$^p_details'/' < mail/report | email mod 'New report'
 
 # Discord webhook
 curl -H 'Content-Type: application/json' \
@@ -55,6 +56,9 @@ curl -H 'Content-Type: application/json' \
                  "fields": [{
                      "name": "Reporter",
                      "value": "'$logged_user'"
+                 }, {
+                     "name": "Reason",
+                     "value": "'$^p_reason'"
                  }, {
                      "name": "Details",
                      "value": "'$^p_details'"
