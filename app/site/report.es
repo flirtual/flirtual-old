@@ -12,6 +12,18 @@ if {! echo $p_id | grep -s '^[a-zA-Z0-9_\-]+$' ||
     throw error 'Invalid user'
 }
 
+# Create report, temp shadowban if >1 unreviewed
+redis graph write 'MATCH (u:user {id: '''$p_id'''}),
+                         (lu:user {username: '''$logged_user'''})
+                   MERGE (lu)-[:REPORTED {reviewed: false}]->(u)'
+shadowbanned = `{redis graph write 'MATCH (r:user)
+                                          -[:REPORTED {reviewed: false}]->
+                                          (u:user {id: '''$p_id'''})
+                                    WITH u, count(r) AS c
+                                    WHERE c > 1
+                                    SET u.shadowbanned = true
+                                    RETURN u.shadowbanned'}
+
 p_details = `{echo $p_details | tr $NEWLINE ' '}
 if {isempty $p_details} {
     p_details = 'None'
@@ -41,8 +53,14 @@ curl -H 'Content-Type: application/json' \
                  },
                  "title": "New report",
                  "fields": [{
+                     "name": "Reporter",
+                     "value": "'$logged_user'"
+                 }, {
                      "name": "Details",
                      "value": "'$^p_details'"
+                 '`^{if {~ $shadowbanned true} { echo '}, {
+                     "name": "User has been shadowbanned! ⚠️",
+                     "value": "This user has received multiple reports, so they''ve been removed from matchmaking. Please clear reports to unban if appropriate."'}}^'
                  }],
                  "color": 15295883
              }]

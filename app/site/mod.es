@@ -56,6 +56,13 @@ if {~ $p_action ban} {
 } {~ $p_action unban} {
     redis graph write 'MATCH (u:user {username: '''$p_user'''})
                        SET u.banned = NULL'
+} {~ $p_action clear} {
+    redis graph write 'MATCH (u:user {username: '''$p_user'''})
+                       SET u.shadowbanned = NULL'
+    redis graph write 'MATCH (a:user)
+                             -[r:REPORTED]->
+                             (b:user {username: '''$p_user'''})
+                       SET r.reviewed = true'
 } {~ $p_action rmpfp} {
     if {isempty $p_avatar || ~ $p_avatar 'e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'} {
         post_redirect /

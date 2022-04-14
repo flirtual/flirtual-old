@@ -535,6 +535,17 @@ fn isvisible field {
                         </div>
                         <button type="submit" class="btn btn-normal">Ban user</button>
                     </form>
+%                   reports = `{redis graph read 'MATCH (r:user)
+%                                                       -[:REPORTED {reviewed: false}]->
+%                                                       (u:user {username: '''$profile'''})
+%                                                 RETURN count(r)'}
+%                   if {! isempty $reports && gt $reports 0} {
+                        <form action="/mod" method="POST" accept-charset="utf-8">
+                            <input type="hidden" name="action" value="clear">
+                            <input type="hidden" name="user" value="%($profile%)">
+                            <button type="submit" class="btn btn-normal">Clear %($reports%) reports</button>
+                        </form>
+%                   }
 %               } {
                     <form action="/report" method="POST" accept-charset="utf-8">
                         <input type="hidden" name="user" value="%($id%)">
