@@ -25,7 +25,8 @@
 %                                       -[m:MATCHED]-
 %                                       (p:user)
 %                                 WHERE NOT exists(p.banned) AND
-%                                       NOT exists(p.shadowbanned)
+%                                       NOT exists(p.shadowbanned) AND
+%                                       NOT (u)-[:REPORTED]->(p)
 %                                 RETURN p.username
 %                                 ORDER BY m.date DESC, p.displayname' | uniq}
 %   if {! isempty $matches} {

@@ -4,6 +4,7 @@
 %                                      exists(p.vrlfp)) AND
 %                                     NOT exists(p.banned) AND
 %                                     NOT exists(p.shadowbanned) AND
+%                                     NOT (u)-[:REPORTED]->(p) AND
 %                                     NOT (u)-[:LIKED]->(p) AND
 %                                     NOT (u)-[:PASSED]->(p) AND
 %                                     NOT (u)-[:HPASSED]->(p)

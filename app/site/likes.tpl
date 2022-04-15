@@ -7,7 +7,8 @@
 %                               WHERE NOT (u)-[:LIKED]->(p) AND
 %                                     NOT (u)-[:PASSED]->(p) AND
 %                                     NOT exists(p.banned) AND
-%                                     NOT exists(p.shadowbanned)
+%                                     NOT exists(p.shadowbanned) AND
+%                                     NOT (u)-[:REPORTED]->(p)
 %                               RETURN p.username
 %                               ORDER BY l.date DESC, p.displayname' | uniq}
 %   if {! isempty $likes} {
