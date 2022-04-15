@@ -20,7 +20,7 @@ if {logged_in} {
         }
 %}
         <title>%($title%)</title>
-        <meta name="description" content="Flirtual is the First VR Dating App. Join thousands for dates in Virtual Reality. We support VR dates in VR apps like VRChat. Formerly VRLFP.">
+        <meta name="description" content="Meet new people in Virtual Reality! Flirtual helps you go on dates in VR and VRChat. Formerly VRLFP.">
 
 %       if {~ $req_path /onboarding/* || ~ $req_path /nsfw} {
             <link rel="stylesheet" href="/css/tagify.css" media="print" onload="this.media='all'; this.onload=null;">
@@ -44,7 +44,7 @@ if {logged_in} {
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=0">
-        <link rel="manifest" href="/site.webmanifest?v=4">
+        <link rel="manifest" href="/site.webmanifest?v=5">
         <link rel="mask-icon" href="/safari-pinned-tab.svg?v=0" color="#e9658b">
         <link rel="shortcut icon" href="/favicon.ico?v=0">
 
