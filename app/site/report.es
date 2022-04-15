@@ -29,8 +29,18 @@ if {isempty $p_details} {
     p_details = 'None'
 }
 
-if {! in $^p_reason (spam nsfw offensive underage impersonation illegal other)} {
-    p_reason = 'other'
+if {!~ $^p_reason 'Spam or troll account' &&
+    !~ $^p_reason 'Hateful content' &&
+    !~ $^p_reason 'Violent or disturbing content' &&
+    !~ $^p_reason 'Nude or NSFW pictures' &&
+    !~ $^p_reason 'Harassment' &&
+    !~ $^p_reason 'Impersonating me or someone else' &&
+    !~ $^p_reason 'Scam, malware, or harmful links' &&
+    !~ $^p_reason 'Advertising' &&
+    !~ $^p_reason 'Underage user' &&
+    !~ $^p_reason 'Illegal content' &&
+    !~ $^p_reason 'Self-harm content'} {
+    p_reason = 'Other'
 }
 
 username = `{redis graph read 'MATCH (u:user {id: '''$p_id'''})

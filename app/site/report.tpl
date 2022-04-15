@@ -21,13 +21,18 @@ if {! isempty $p_user && echo $p_user | grep -s '^[a-zA-Z0-9_\-]+$'} {
 
               <label for="reason">Reason</label>
               <select name="reason">
-                  <option value="spam">Spam</option>
-                  <option value="nsfw">NSFW</option>
-                  <option value="offensive">Offensive</option>
-                  <option value="underage">Underage</option>
-                  <option value="impersonation">Impersonation</option>
-                  <option value="illegal">Illegal</option>
-                  <option value="other">Other</option>
+                  <option value="Spam or troll account">Spam or troll account</option>
+                  <option value="Hateful content">Hateful content</option>
+                  <option value="Violent or disturbing content">Violent or disturbing content</option>
+                  <option value="Nude or NSFW pictures">Nude or NSFW pictures</option>
+                  <option value="Harassment">Harassment</option>
+                  <option value="Impersonating me or someone else">Impersonating me or someone else</option>
+                  <option value="Scam, malware, or harmful links">Scam, malware, or harmful links</option>
+                  <option value="Advertising">Advertising</option>
+                  <option value="Underage user">Underage user</option>
+                  <option value="Illegal content">Illegal content</option>
+                  <option value="Self-harm content">Self-harm content</option>
+                  <option value="Other">Other</option>
               </select>
 
               <label for="details">Details</label>
