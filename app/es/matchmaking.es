@@ -19,6 +19,12 @@ fn compute_matches a b {
                                               NOT (a)-[:MATCHED]-(b) AND
                                               (NOT exists(a.onboarding) OR exists(a.vrlfp)) AND
                                               (NOT exists(b.onboarding) OR exists(b.vrlfp)) AND
+                                              (((a)-[:AVATAR]->(:avatar) AND
+                                                NOT (a)-[:AVATAR]->(:avatar {url: ''e8212f93-af6f-4a2c-ac11-cb328bbc4aa4''})) OR
+                                               exists(a.bio)) AND
+                                              (((b)-[:AVATAR]->(:avatar) AND
+                                                NOT (b)-[:AVATAR]->(:avatar {url: ''e8212f93-af6f-4a2c-ac11-cb328bbc4aa4''})) OR
+                                               exists(b.bio)) AND
                                               NOT exists(a.banned) AND NOT exists(b.banned) AND
                                               floor(('$date' - b.dob) / 10000) >= a.agemin AND
                                               floor(('$date' - b.dob) / 10000) <= a.agemax AND
