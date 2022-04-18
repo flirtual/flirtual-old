@@ -222,7 +222,8 @@ fn isvisible field {
                             </div>
 
 %                           if {~ $lumod true && !~ $avatar 'e8212f93-af6f-4a2c-ac11-cb328bbc4aa4'} {
-                                <form action="/mod" method="POST" accept-charset="utf-8">
+                                <form action="/mod" method="POST" accept-charset="utf-8"
+                                      onsubmit="return confirm('Are you sure you want to ban this image?')">
                                     <input type="hidden" name="action" value="rmpfp">
                                     <input type="hidden" name="user" value="%($profile%)">
                                     <input type="hidden" name="avatar" value="%($avatar%)">
