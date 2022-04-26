@@ -67,8 +67,6 @@ if {logged_in} {
         <meta name="twitter:site" content="@getflirtual" />
 %       (exists displayname bio id) = \
 %           `` \n {redis graph read 'MATCH (u:user {username: '''`{echo $og_url | sed 's/^https:\/\/'$domain'\///'}^'''})
-%                                    OPTIONAL MATCH (u)-[:AVATAR]->(a:avatar)
-%                                    WITH DISTINCT u, a ORDER BY a.order LIMIT 1
 %                                    RETURN (exists(u) AND
 %                                            (NOT exists(u.onboarding) OR
 %                                             exists(u.vrlfp)) AND
