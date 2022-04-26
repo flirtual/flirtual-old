@@ -44,7 +44,7 @@ for (var = survey_1 survey_2 survey_3 survey_4 survey_5 survey_6 survey_7 survey
                 </td>
             </tr>
             <tr>
-                <td><p>I don't like it when things change</p></td>
+                <td><p>I dislike it when things change</p></td>
                 <td>
                     <div class="tags">
                         <input id="3_yes" type="radio" name="3" value="true" %(`{if {~ $survey_3 true} { echo checked }}%)>
