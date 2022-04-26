@@ -44,7 +44,7 @@ for (var = displayname vrchat discord privacy bio) {
         <div id="pfplist">
 %           avatars = `{redis graph read 'MATCH (u:user {username: '''$logged_user'''})-[:AVATAR]->(a:avatar)
 %                                         WHERE NOT a.url = ''e8212f93-af6f-4a2c-ac11-cb328bbc4aa4''
-%                                         RETURN a.url ORDER BY a.order LIMIT 15'}
+%                                         RETURN DISTINCT a.url ORDER BY a.order LIMIT 15'}
 %           if {! isempty $avatars} {
 %               order = 0
 %               for (avatar = $avatars) {

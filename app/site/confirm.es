@@ -42,4 +42,6 @@ if {isempty $onboarding || ~ $onboarding 5} {
                            u.update_embed = true, u.onboarding = NULL'
 }
 
+profanity $user
+
 confirm_success = true

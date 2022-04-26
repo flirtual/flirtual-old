@@ -3,6 +3,8 @@
 
 %{
     redis graph read 'MATCH (u:user)
+                      WHERE NOT exists(u.banned) AND
+                            NOT exists(u.shadowbanned)
                       RETURN u.registered
                       ORDER BY u.registered' |
         awk '{print NR " " $s}' |
@@ -16,6 +18,8 @@
                        plot "/dev/stdin" using 2:1 with lines'
 
     redis graph read 'MATCH (u:user)
+                      WHERE NOT exists(u.banned) AND
+                            NOT exists(u.shadowbanned)
                       RETURN u.registered
                       ORDER BY u.registered' |
         tail -n 1000 |
@@ -80,24 +84,34 @@
                        plot "/dev/stdin" using 1:2 with lines'
 
     users = `{redis graph read 'MATCH (u:user)
+                                WHERE NOT exists(u.banned) AND
+                                      NOT exists(u.shadowbanned)
                                 RETURN count(u)'}
 
     vrlfpusers = `{redis graph read 'MATCH (u:user)
-                                     WHERE exists(u.vrlfp)
+                                     WHERE exists(u.vrlfp) AND
+                                           NOT exists(u.banned) AND
+                                           NOT exists(u.shadowbanned)
                                      RETURN count(u)'}
 
     vrlfponboarded = `{redis graph read 'MATCH (u:user)
                                          WHERE exists(u.vrlfp) AND
-                                               NOT exists(u.onboarding)
+                                               NOT exists(u.onboarding) AND
+                                               NOT exists(u.banned) AND
+                                               NOT exists(u.shadowbanned)
                                          RETURN count(u)'}
 
     newusers = `{redis graph read 'MATCH (u:user)
-                                   WHERE NOT exists(u.vrlfp)
+                                   WHERE NOT exists(u.vrlfp) AND
+                                         NOT exists(u.banned) AND
+                                         NOT exists(u.shadowbanned)
                                    RETURN count(u)'}
 
     onboarded = `{redis graph read 'MATCH (u:user)
                                     WHERE NOT exists(u.vrlfp) AND
-                                          NOT exists(u.onboarding)
+                                          NOT exists(u.onboarding) AND
+                                          NOT exists(u.banned) AND
+                                          NOT exists(u.shadowbanned)
                                     RETURN count(u)'}
 
     likes = `{redis graph read 'MATCH (a:user)-[l:LIKED]->(b:user)

@@ -12,6 +12,7 @@ LANG = 'C.UTF-8'
 . ./ejabberd.es
 . ./stripe.es
 . ./matchmaking.es
+. ./profanity.es
 cd ..
 
 kwerc_root = `{pwd}

@@ -25,7 +25,7 @@ if {!isempty $p_displayname} {
 }
 
 # Add profile pics
-redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:AVATAR]->(a:avatar)
+redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[a:AVATAR]->(:avatar)
                    DELETE a'
 pfpset = false
 for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
@@ -33,7 +33,10 @@ for (avatar = `{echo $post_args | tr ' ' $NEWLINE | grep '^p_pfp_[0-9]*$'}) {
         pfpset = true
         order = `{echo $avatar | sed 's/^p_pfp_//'}
         redis graph write 'MATCH (u:user {username: '''$logged_user'''})
-                           MERGE (u)-[:AVATAR]->(a:avatar {url: '''$$avatar''', order: '$order'})'
+                           MERGE (a:avatar {url: '''$$avatar'''})
+                           ON CREATE SET a.scanned = false
+                           CREATE (u)-[:AVATAR]->(a)
+                           SET a.order = '$order
     }
 }
 if {~ $pfpset false} {
@@ -59,6 +62,9 @@ redis graph write 'MATCH (u:user {username: '''$logged_user'''})
                        u.vrchat = '''`^{echo $^p_vrchat | escape_redis}^''',
                        u.discord = '''`^{echo $^p_discord | escape_redis}^''',
                        u.privacy_socials = '''$p_privacy''''
+
+profanity $p_displayname
+profanity $p_bio
 
 # Proceed
 if {! isempty $onboarding} {

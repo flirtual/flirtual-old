@@ -23,10 +23,14 @@ if {~ $uexists true || ~ $reserved true || test -e site/$p_username || test -e s
 if {isempty $p_email} {
     throw error 'Missing email address'
 }
-p_email = `{echo $p_email | tr 'A-Z' 'a-z' | escape_redis}
 if {~ $eexists true} {
     throw error 'An account already exists with this email address'
 }
+if {echo $p_email | grep -s $SPAMDOMAINS} {
+    throw error 'Sorry, your email domain has been blocked due to abuse'
+}
+p_email = `{echo $p_email | tr 'A-Z' 'a-z' | escape_redis}
+
 # Validate password
 if {isempty $p_password ||
     le `{echo $p_password | wc -c} 8} {

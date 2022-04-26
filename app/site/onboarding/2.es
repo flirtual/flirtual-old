@@ -167,6 +167,8 @@ for (tag = `{echo $^p_interests | sed 's/ /_/g; s/,/ /g' | escape_redis}) {
                                  (i:interest {name: '''$existingtag'''})
                            MERGE (u)-[:TAGGED]->(i)'
     }
+
+    profanity $tag
 }
 
 # Proceed
