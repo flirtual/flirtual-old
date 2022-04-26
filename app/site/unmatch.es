@@ -28,7 +28,7 @@ redis graph write 'MATCH (a:user {username: '''$logged_user'''})
                          (b:user {username: '''$p_user'''})
                    DELETE m'
 redis graph write 'MATCH (a:user {username: '''$logged_user'''})
-                         -[l:LIKED]-
+                         -[l:LIKED]->
                          (b:user {username: '''$p_user'''})
                    DELETE l'
 
