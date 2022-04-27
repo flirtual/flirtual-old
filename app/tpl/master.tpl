@@ -44,7 +44,7 @@ if {logged_in} {
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=0">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=0">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=0">
-        <link rel="manifest" href="/site.webmanifest?v=5">
+        <link rel="manifest" href="/site.webmanifest?v=6">
         <link rel="mask-icon" href="/safari-pinned-tab.svg?v=0" color="#e9658b">
         <link rel="shortcut icon" href="/favicon.ico?v=0">
 
@@ -171,7 +171,7 @@ if {logged_in} {
             <div class="center">
                 <div class="appbadges">
                     <a href="https://play.google.com/store/apps/details?id=zone.homie.flirtual.pwa&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" target="_blank">
-                        <img alt="Google Play" src="/img/appbadges/googleplay.png" />
+                        <img alt="Google Play" src="/img/appbadges/googleplay.png?v=2" />
                     </a>
                 </div>
 
