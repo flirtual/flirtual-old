@@ -20,6 +20,7 @@ if {~ $uexists true || ~ $reserved true || test -e site/$p_username || test -e s
 }
 
 # Validate email, availability
+p_email = `{echo $p_email | tr 'A-Z' 'a-z' | escape_redis}
 if {isempty $p_email} {
     throw error 'Missing email address'
 }
@@ -29,7 +30,6 @@ if {~ $eexists true} {
 if {echo $p_email | grep -s $SPAMDOMAINS} {
     throw error 'Sorry, your email domain has been blocked due to abuse'
 }
-p_email = `{echo $p_email | tr 'A-Z' 'a-z' | escape_redis}
 
 # Validate password
 if {isempty $p_password ||

@@ -69,10 +69,13 @@ if {~ $p_changeemail true &&
         throw error 'Wrong password'
     }
 
-    # Format email, check availability
+    # Format email, validate email
     p_newemail = `{echo $p_newemail | tr 'A-Z' 'a-z' | escape_redis}
     if {~ `{redis graph read 'MATCH (u:user {email: '''$p_newemail'''}) RETURN exists(u)'} true} {
         throw error 'An account already exists with this email address'
+    }
+    if {echo $p_newemail | grep -s $SPAMDOMAINS} {
+        throw error 'Sorry, your email domain has been blocked due to abuse'
     }
 
     # Generate confirm ID
