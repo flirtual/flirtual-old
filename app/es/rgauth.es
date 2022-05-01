@@ -88,7 +88,6 @@ fn login_user username password {
                                              u.onboarding, exists(u.beta)'}
     } {
         # The user has not requested to log in
-        set_cookie id logout 'Thu, 01 Jan 1970 00:00:00 GMT'
         return 0
     }
 
