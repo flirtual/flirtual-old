@@ -4,8 +4,8 @@ if {logged_in} {
         `` \n {redis graph read 'MATCH (u:user {username: '''$logged_user'''})
                                  OPTIONAL MATCH (u)-[:AVATAR]->(a:avatar)
                                  RETURN NOT exists(u.onboarding), u.volume, u.konami, u.optout,
-                                        exists(u.premium), exists(u.supporter),
-                                        u.email, a.url ORDER BY a.order LIMIT 1'}
+                                        exists(u.premium), exists(u.supporter), u.email,
+                                        a.url ORDER BY a.order LIMIT 1'}
 }
 %}
 
@@ -29,7 +29,7 @@ if {logged_in} {
         <link rel="stylesheet" href="/css/swiper.css" media="print" onload="this.media='all'; this.onload=null;">
         <link rel="stylesheet" href="/css/style.css?v=%($dateun%)" onload="this.media='all'; this.onload=null;">
 %       if {logged_in} {
-            <link rel="stylesheet" href="/dist/converse.min.css" media="screen" onload="this.media='all'; this.onload=null;">
+            <link rel="stylesheet" href="/converse/converse.min.css?v=3" media="screen" onload="this.media='all'; this.onload=null;">
 %       }
 %       if {~ $req_path /homies || {~ $req_path /undo && ~ $p_return /homies}} {
             <style>
@@ -187,6 +187,7 @@ if {logged_in} {
                     </a>
                 </div>
 
+                <a href="/events">Events</a>
                 <a onclick="FreshworksWidget('open');">Support</a>
                 <a href="mailto:press@flirtu.al">Press</a>
                 <a href="/developers">Developers</a><br />
@@ -217,6 +218,12 @@ if {logged_in} {
                     });
                 });
             }
+
+            if ((window.matchMedia("(display-mode: standalone)").matches) ||
+                (window.navigator.standalone) ||
+                document.referrer.includes("android-app://")) {
+                document.querySelector(".appbadges").style.display = "none";
+            }
         </script>
 
 %       if {~ $konami true} {
@@ -233,8 +240,8 @@ if {logged_in} {
                 <source src="/audio/message.mp3" type="audio/mpeg">
                 <source src="/audio/message.ogg" type="audio/ogg">
             </audio>
-            <script type="text/javascript" src="/dist/converse.min.js" charset="utf-8" defer></script>
-            <script type="text/javascript" src="/js/converseconfig.js?v=2" charset="utf-8" defer></script>
+            <script type="text/javascript" src="/converse/converse.min.js?v=8" charset="utf-8" defer></script>
+            <script type="text/javascript" src="/js/converseconfig.js?v=8" charset="utf-8" defer></script>
             <script>
                 document.getElementById("message_audio").volume = %($volume%);
             </script>

@@ -434,7 +434,7 @@
             footer .appbadges img {
                 height: 42px;
                 width: auto;
-                margin: 0 -8px 4px -8px;
+                margin: 0 auto -8px auto;
             }
             footer .socials img {
                 display: inline-block !important;
@@ -616,6 +616,7 @@
                                 </a>
                             </div>
 
+                            <a href="/events">Events</a>
                             <a onclick="FreshworksWidget('open');">Support</a>
                             <a href="mailto:press@flirtu.al">Press</a>
                             <a href="/developers">Developers</a><br />
@@ -652,6 +653,12 @@
                         console.log("ServiceWorker registration failed: ", err);
                     });
                 });
+            }
+
+            if ((window.matchMedia("(display-mode: standalone)").matches) ||
+                (window.navigator.standalone) ||
+                document.referrer.includes("android-app://")) {
+                document.querySelector(".appbadges").style.display = "none";
             }
 
             var swiper = new Swiper(".landing", {
