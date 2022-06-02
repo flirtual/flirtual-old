@@ -122,6 +122,75 @@ if {logged_in} {
         </script>
 
         <script src="/js/main.js?v=%($dateun%)"></script>
+
+        <style>
+            nav li {
+                animation: nav 0.1s linear 0s;
+            }
+            
+            nav li:last-child div.open {
+                transition: opacity 50ms linear;
+            }
+            
+            nav li:last-child div {
+                transition: opacity 50ms linear;
+            }
+            
+            #blob {
+                bottom: 0;
+                left: 0;
+                transform: translateX(-560px) translateY(580px) scaleY(-1);
+                
+                transition: transform 0.1s;
+            }
+            
+            #blob.open {
+                bottom: 0;
+                left: 0;
+                transform: translateX(-260px) translateY(280px) scaleY(-1);
+            }
+            
+            @media only screen and (min-width: 992px) {
+                #blob {
+                left: 0;
+                top: 0;
+                transform: translateX(-560px) translateY(-580px);
+                }
+            }
+            
+            @media only screen and (min-width: 992px) {
+                #blob.open {
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-260px) translateY(-280px);
+                }
+            }
+            
+            nav > a {
+                box-shadow: none;
+                filter: drop-shadow(0 11px 13px rgba(0, 0, 0, 0.4));
+                transition: opacity 0.2s, filter 0.15s ease-out;
+            }
+            
+            nav > a:hover {
+                box-shadow: none;
+                filter: drop-shadow(0 11px 14px rgba(0, 0, 0, 0.45));
+            }
+            
+            @keyframes nav {
+                0% {
+                opacity: 0%;
+                transform: translateX(-10px);
+                }
+                50% {
+                opacity: 0;
+                }
+                100% {
+                opacity: 100%;
+                }
+            }
+        </style>
     </head>
 
     <body>
